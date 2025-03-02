@@ -14,8 +14,8 @@ public class DBServer {
 
     public static void main(String args[]) throws IOException {
         DBServer server = new DBServer();
-        server.readInFileAndPrint();
-        server.blockingListenOn(8888);
+//        server.readInFileAndPrint("people.tab");
+//        server.blockingListenOn(8888);
     }
 
     /**
@@ -23,12 +23,12 @@ public class DBServer {
     */
     public DBServer() {
         storageFolderPath = Paths.get("databases").toAbsolutePath().toString();
-        try {
-            // Create the database storage folder if it doesn't already exist !
-            Files.createDirectories(Paths.get(storageFolderPath));
-        } catch(IOException ioe) {
-            System.out.println("Can't seem to create database storage folder " + storageFolderPath);
-        }
+//        try {
+//            // Create the database storage folder if it doesn't already exist !
+//            Files.createDirectories(Paths.get(storageFolderPath));
+//        } catch(IOException ioe) {
+//            System.out.println("Can't seem to create database storage folder " + storageFolderPath);
+//        }
     }
 
     /**
@@ -42,17 +42,6 @@ public class DBServer {
         return "";
     }
 
-    public void readInFileAndPrint() throws IOException {
-        String name = "people.tab";
-        File fileToOpen = new File(name);
-        FileReader reader = new FileReader(fileToOpen);
-        BufferedReader buffReader = new BufferedReader(reader);
-        String line;
-        while((line = buffReader.readLine()) != null) {
-            System.out.println(line);
-        }
-        buffReader.close();
-    }
     //  === Methods below handle networking aspects of the project - you will not need to change these ! ===
 
     public void blockingListenOn(int portNumber) throws IOException {

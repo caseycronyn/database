@@ -1,40 +1,41 @@
-* relational database server
-** details
-*** functionality
+* summary of readme
+** relational database server
+*** details
+**** functionality
 - receive incoming requests (conforming to a standard query language)
 - interrogate and manipulate a set of stored records.
 - maintain persistent data as a number of files on your filesystem.
-*** provided
-**** client application
+**** provided
+***** client application
 (to allow you to connect to your server and check that is it working correctly).
-**** Maven project
+***** Maven project
 to help get you started with the assignment.
-**** template test script
+***** template test script
 make sure you add suitable test cases to this script to ensure that your application is fully and systematically tested.
-*** assessment details
+**** assessment details
 Your submission will be assessed on:
-**** the success with which it implements the described query language
-**** the flexibility, error handling and robustness with which your server operates
-**** Code Quality
+***** the success with which it implements the described query language
+***** the flexibility, error handling and robustness with which your server operates
+***** Code Quality
 
-** tasks
-**** 1. (task 3)
+*** tasks
+***** 1. (task 3)
 write a method that reads in the data from the sample data file using the Java File IO API
-**** 2. (task 5)
+***** 2. (task 5)
 a) define a set of appropriate classes to store the data in memory
 b) use the file reading methods to populate instances of your classes with data read in from the sample data files
 c) write additional data files to augment those given to you
 d) write a method to save these structures back out to the filesystem again
-**** 3. (task 6)
+***** 3. (task 6)
 add to the `handleCommand` method to respond to the commands.
-**** 4. (task 7)
+***** 4. (task 7)
 a) write a handler for the incoming messages which will:
    - parse the incoming command
    - perform the specified query
    - update the data stored in the database
    - return an appropriate result to the client.
 b) write tests
-**** 5. (task 8)
+***** 5. (task 8)
 a) The server should return an error if the user attempts to misuse a reserved keyword
 b) If the user attempts to perform a `LIKE` query on non-string data your server should not return an error, but just perform the query as though the data were a string
 c) when performing a `JOIN` query, we must ensure that the ordering of the specified tables is the same as the ordering of the specified attributes.
@@ -46,7 +47,7 @@ d)
    4. attribute names containing `.` characters are not permitted by the BNF and are therefore not valid for use in queries
    5. The joined table should NOT contain the ID columns from the original tables, but rather should include a new ID column containing freshly generated IDs
 
-**** 6. (task 9)
+***** 6. (task 9)
 a) Your query interpreter should identify any errors in the structure and content of incoming queries. The response returned from your server back to the client must begin with one of the following two "status" tags:
    - `[OK]` for valid and successful queries, followed by the results of the query.
    - `[ERROR]` if the query is invalid, followed by a suitable human-readable message that provides information about the nature of the error.
@@ -68,3 +69,10 @@ c) Errors should NOT be returned in situations where the user performs:
 d) ensure that only numerical data is stored in numerical attributes and string data is stored in string attributes etc.
 
 e) make use of exceptions to handle errors internally within your server, however these should NOT be returned to the client.
+
+* notes
+Classes:
+- entry = row
+- attribute = column
+
+I prefer these as they are a little more descriptive and less dependent on 'visual' ideas
