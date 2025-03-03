@@ -23,12 +23,12 @@ public class DBServer {
     */
     public DBServer() {
         storageFolderPath = Paths.get("databases").toAbsolutePath().toString();
-//        try {
-//            // Create the database storage folder if it doesn't already exist !
-//            Files.createDirectories(Paths.get(storageFolderPath));
-//        } catch(IOException ioe) {
-//            System.out.println("Can't seem to create database storage folder " + storageFolderPath);
-//        }
+        try {
+            // Create the database storage folder if it doesn't already exist !
+            Files.createDirectories(Paths.get(storageFolderPath));
+        } catch(IOException ioe) {
+            System.out.println("Can't seem to create database storage folder " + storageFolderPath);
+        }
     }
 
     /**

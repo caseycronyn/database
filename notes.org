@@ -76,3 +76,17 @@ Classes:
 - attribute = column
 
 I prefer these as they are a little more descriptive and less dependent on 'visual' ideas
+* sion 03/03/2025
+
+recursive descent parsing using abtract class DBCMD
+
+subclasses of dbcmd are returned to dbserver. start doing the first bits of grammar and the rest follows
+
+1. tokenisation
+2. parsing
+
+loading in from tab files, then represent data using a hash map
+
+serialising from memory into a directory and the other way.
+write to disk each time.
+parsing then interpreting is probably simpler than trying to do both at the same time

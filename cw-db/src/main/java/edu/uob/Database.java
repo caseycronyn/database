@@ -17,6 +17,8 @@ public class Database {
         database.readInFileAndPopulateArray("people.tab");
         table.populateAttributes(commandHolder.get(0));
         table.populateEntriesAndMapAttributes(commandHolder);
+//        table.printEntriesHashMap();
+        table.writeTableToFile();
     }
 
     public void readInFileAndPrint(String name) throws IOException {
