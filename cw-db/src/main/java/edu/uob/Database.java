@@ -11,12 +11,12 @@ import java.util.ArrayList;
 public class Database {
 
     public static void main(String[] args) throws IOException {
-        Table table = new Table("sheds");
-        table.readInFileAndPopulateArray();
-        table.populateAttributes();
-        table.populateEntriesAndMapAttributes();
-//        table.printEntriesHashMap();
-        table.writeTableToFile();
+//        Table table = new Table("sheds");
+//        table.readInFileAndPopulateArray();
+//        table.populateAttributes();
+//        table.populateEntriesAndMapAttributes();
+//        table.writeTableToFile();
+        Tokenizer tokenizer = new Tokenizer("CREATE DATABASE ALPACAS;");
     }
 
 }
