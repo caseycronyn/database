@@ -1,7 +1,6 @@
 package edu.uob;
 
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
 import java.lang.reflect.Array;
 import java.util.*;
 
@@ -10,14 +9,42 @@ import java.util.*;
 public class Table {
     ArrayList<String> attributes = new ArrayList<>();
     ArrayList<HashMap<String, String>> entries = new ArrayList<>();
+    static ArrayList<String> commandHolder = new ArrayList<String>();
+    String name;
 
-    public void populateAttributes(String command) {
+    Table(String name) {
+        this.name = name;
+    }
+    public void populateAttributes() {
+        String command = commandHolder.get(0);
         String[] attributeArray = command.split("\t");
         attributes.addAll(List.of(attributeArray));
 //        System.out.println(attributes);
     }
 
-    public void populateEntriesAndMapAttributes(ArrayList<String> commandHolder) {
+    public void readInFileAndPrint() throws IOException {
+        File fileToOpen = new File(this.name + ".tab");
+        FileReader reader = new FileReader(fileToOpen);
+        BufferedReader buffReader = new BufferedReader(reader);
+        String line;
+        while((line = buffReader.readLine()) != null) {
+            System.out.println(line);
+        }
+        buffReader.close();
+    }
+
+    public void readInFileAndPopulateArray() throws IOException {
+        File fileToOpen = new File(this.name + ".tab");
+        FileReader reader = new FileReader(fileToOpen);
+        BufferedReader buffReader = new BufferedReader(reader);
+        String line;
+        while ((line = buffReader.readLine()) != null) {
+            commandHolder.add(line);
+//            System.out.println(line);
+        }
+        buffReader.close();
+    }
+    public void populateEntriesAndMapAttributes() {
 //        loop through each line:
         for (int i = 1; i < commandHolder.size(); i++) {
 //            split words into separate terms add to word_array
@@ -47,7 +74,7 @@ public class Table {
     }
 
     public void writeTableToFile() throws IOException {
-        PrintWriter writer = new PrintWriter("databases/people.tab");
+        PrintWriter writer = new PrintWriter("databases" + File.separator + this.name + ".tab");
         String tabJoinedLine = String.join("\t", attributes);
         writer.println(tabJoinedLine);
         /*
