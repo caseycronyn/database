@@ -6,23 +6,8 @@ import java.util.Arrays;
 // Maybe use regular expressions for a subset of this
 // normalise this input so that it's all the same. takes a string and turns it into an array of token
 public class Tokeniser {
-//    ArrayList<String> tokenArray = new ArrayList<>();
-
-//    Tokenizer (String query) {
-//        tokenArray.addAll(Arrays.asList(query.split(" ")));
-////        remove semicolon ';' at the end
-//        tokenArray.remove(tokenArray.size() - 1);
-////        System.out.println(tokenArray);
-//    }
-
-//    String query = "  INSERT  INTO  people   VALUES(  'Simon Lock'  ,35, 'simon@bristol.ac.uk' , 1.8  ) ; ";
     String[] specialCharacters = {"(", ")", ",", ";"};
     ArrayList<String> tokens = new ArrayList<String>();
-
-//    public static void main(String [] args) {
-//        Test t = new Test();
-//        t.setup();
-//    }
 
     // Treats text inside single quotes as a single token
     // Breaks non-quoted text on spaces and special punctuation
@@ -58,5 +43,21 @@ public class Tokeniser {
         // Finally split on the space char (since there will now ALWAYS be a SINGLE space between tokens)
         return input.split(" ");
     }
+
+//    ArrayList<String> tokenArray = new ArrayList<>();
+
+//    Tokenizer (String query) {
+//        tokenArray.addAll(Arrays.asList(query.split(" ")));
+////        remove semicolon ';' at the end
+//        tokenArray.remove(tokenArray.size() - 1);
+////        System.out.println(tokenArray);
+//    }
+
+//    String query = "  INSERT  INTO  people   VALUES(  'Simon Lock'  ,35, 'simon@bristol.ac.uk' , 1.8  ) ; ";
+
+//    public static void main(String [] args) {
+//        Test t = new Test();
+//        t.setup();
+//    }
 
 }

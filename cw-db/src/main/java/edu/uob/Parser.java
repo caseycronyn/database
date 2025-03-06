@@ -1,4 +1,7 @@
 package edu.uob;
+
+import java.util.ArrayList;
+
 /*
 Parser builds subclass of
 DBcmd as it parses. This is
@@ -12,4 +15,8 @@ types facilitates error
 handling and command building
  */
 public class Parser {
+    public DBCmd parse(ArrayList<String> tokens) {
+
+        return null;
+    }
 }

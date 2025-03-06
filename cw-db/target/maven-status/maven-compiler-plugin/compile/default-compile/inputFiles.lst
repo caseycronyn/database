@@ -1,2 +1,11 @@
-/Users/sl17668/Documents/Work/Teaching/Units/JAV/2025/JavaWorkbookDevelopment/Weekly Workbooks/07 DB assignment/resources/cw-db/src/main/java/edu/uob/DBServer.java
-/Users/sl17668/Documents/Work/Teaching/Units/JAV/2025/JavaWorkbookDevelopment/Weekly Workbooks/07 DB assignment/resources/cw-db/src/main/java/edu/uob/DBClient.java
+/home/mt24200/Developer/java/assignments/db/cw-db/src/main/java/edu/uob/Database.java
+/home/mt24200/Developer/java/assignments/db/cw-db/src/main/java/edu/uob/Entry.java
+/home/mt24200/Developer/java/assignments/db/cw-db/src/main/java/edu/uob/DBCmd.java
+/home/mt24200/Developer/java/assignments/db/cw-db/src/main/java/edu/uob/Token.java
+/home/mt24200/Developer/java/assignments/db/cw-db/src/main/java/edu/uob/Parser.java
+/home/mt24200/Developer/java/assignments/db/cw-db/src/main/java/edu/uob/Table.java
+/home/mt24200/Developer/java/assignments/db/cw-db/src/main/java/edu/uob/DBClient.java
+/home/mt24200/Developer/java/assignments/db/cw-db/src/main/java/edu/uob/Attribute.java
+/home/mt24200/Developer/java/assignments/db/cw-db/src/main/java/edu/uob/Test.java
+/home/mt24200/Developer/java/assignments/db/cw-db/src/main/java/edu/uob/DBServer.java
+/home/mt24200/Developer/java/assignments/db/cw-db/src/main/java/edu/uob/Tokeniser.java

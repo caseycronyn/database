@@ -47,10 +47,11 @@ public class DBServer {
     * <p>This method handles all incoming DB commands and carries out the required actions.
     */
     public String handleCommand(String command) {
-//        String query = "  INSERT  INTO  people   VALUES(  'Simon Lock'  ,35, 'simon@bristol.ac.uk' , 1.8  ) ; ";
-//        Tokeniser tokeniser = new Tokeniser();
-//        tokeniser.setup(query);
-        System.out.println("hello you silly sosij!!!!" + command);
+        String query = "  INSERT  INTO  people   VALUES(  'Simon Lock'  ,35, 'simon@bristol.ac.uk' , 1.8  ) ; ";
+        Tokeniser tokeniser = new Tokeniser();
+        tokeniser.setup(query);
+        Parser parser = new Parser();
+        parser.parse(tokeniser.tokens);
         return "";
     }
 
