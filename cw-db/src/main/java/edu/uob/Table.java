@@ -4,7 +4,7 @@ import java.io.*;
 import java.lang.reflect.Array;
 import java.util.*;
 
-//populates the tables rows and columns by passing in the formatted string.
+//populates the tables rows and columns by passing in the formatted string. this class also holds the data for rows and columns
 //the columns are ordered
 public class Table {
     ArrayList<String> attributes = new ArrayList<>();
@@ -15,6 +15,12 @@ public class Table {
     public Table(String name) {
         this.name = name;
     }
+
+    public void createNewTable() {
+        readInFileAndPopulateArrayWithAllLines();
+
+    }
+
     public void populateAttributes() {
         String command = commandHolder.get(0);
         String[] attributeArray = command.split("\t");
@@ -33,16 +39,30 @@ public class Table {
         buffReader.close();
     }
 
-    public void readInFileAndPopulateArray() throws IOException {
-        File fileToOpen = new File(this.name + ".tab");
-        FileReader reader = new FileReader(fileToOpen);
-        BufferedReader buffReader = new BufferedReader(reader);
-        String line;
-        while ((line = buffReader.readLine()) != null) {
-            commandHolder.add(line);
+    //        TODO this is shit
+    public void readInFileAndPopulateArrayWithAllLines() {
+        BufferedReader buffReader = null;
+        try {
+            File fileToOpen = new File(this.name + ".tab");
+            FileReader reader = new FileReader(fileToOpen);
+            buffReader = new BufferedReader(reader);
+            String line;
+            while ((line = buffReader.readLine()) != null) {
+                commandHolder.add(line);
 //            System.out.println(line);
+            }
         }
-        buffReader.close();
+        catch (IOException e) {
+            System.out.println("error: " + e.getMessage());
+        }
+        finally {
+            try {
+                buffReader.close();
+            }
+            catch (IOException e) {
+                System.out.println("error: " + e.getMessage());
+            }
+        }
     }
     public void populateEntriesAndMapAttributes() {
 //        loop through each line:

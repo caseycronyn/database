@@ -15,8 +15,8 @@ public class DBServer {
     public static void main(String args[]) throws IOException {
         DBServer server = new DBServer();
 //        server.blockingListenOn(8888);
-
-
+        Database db = new Database();
+        db.createTable("people");
     }
 
     /**
