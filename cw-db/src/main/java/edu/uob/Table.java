@@ -11,13 +11,36 @@ public class Table {
     ArrayList<HashMap<String, String>> entries = new ArrayList<>();
     static ArrayList<String> commandHolder = new ArrayList<String>();
     String name;
+    String databaseName;
 
-    public Table(String name) {
-        this.name = name;
+//    TODO this looks a bit crap
+    public Table(String tableName, String databaseName) {
+        this.name = tableName;
+        this.databaseName = databaseName;
+        try {
+            readInFileAndPopulateArrayWithAllLines();
+        }
+        catch (IOException e) {
+            System.out.println("Error reading file: " + e.getMessage());
+        }
+        populateAttributesAndEntries();
+        try {
+            writeTableToFile();
+        }
+        catch (IOException e) {
+            System.out.println("Error writing to file: " + e.getMessage());
+        }
     }
 
-    public void createNewTable() {
-        readInFileAndPopulateArrayWithAllLines();
+    public void populateAttributesAndEntries() {
+        try {
+            populateAttributes();
+            populateEntriesAndMapAttributes();
+        }
+//        TODO is this ok?
+        catch (Exception e) {
+            System.out.println("error: " + e);
+        }
 
     }
 
@@ -39,31 +62,19 @@ public class Table {
         buffReader.close();
     }
 
-    //        TODO this is shit
-    public void readInFileAndPopulateArrayWithAllLines() {
+    public void readInFileAndPopulateArrayWithAllLines() throws IOException {
         BufferedReader buffReader = null;
-        try {
-            File fileToOpen = new File(this.name + ".tab");
-            FileReader reader = new FileReader(fileToOpen);
-            buffReader = new BufferedReader(reader);
-            String line;
-            while ((line = buffReader.readLine()) != null) {
-                commandHolder.add(line);
+        File fileToOpen = new File(name + ".tab");
+        FileReader reader = new FileReader(fileToOpen);
+        buffReader = new BufferedReader(reader);
+        String line;
+        while ((line = buffReader.readLine()) != null) {
+            commandHolder.add(line);
 //            System.out.println(line);
-            }
         }
-        catch (IOException e) {
-            System.out.println("error: " + e.getMessage());
+        buffReader.close();
         }
-        finally {
-            try {
-                buffReader.close();
-            }
-            catch (IOException e) {
-                System.out.println("error: " + e.getMessage());
-            }
-        }
-    }
+
     public void populateEntriesAndMapAttributes() {
 //        loop through each line:
         for (int i = 1; i < commandHolder.size(); i++) {
@@ -94,7 +105,7 @@ public class Table {
     }
 
     public void writeTableToFile() throws IOException {
-        PrintWriter writer = new PrintWriter("databases" + File.separator + this.name + ".tab");
+        PrintWriter writer = new PrintWriter("databases" + File.separator + databaseName + File.separator + name + ".tab");
         String tabJoinedLine = String.join("\t", attributes);
         writer.println(tabJoinedLine);
         /*

@@ -15,7 +15,7 @@ public class Tokeniser {
 ////        System.out.println(tokenArray);
 //    }
 
-    String query = "  INSERT  INTO  people   VALUES(  'Simon Lock'  ,35, 'simon@bristol.ac.uk' , 1.8  ) ; ";
+//    String query = "  INSERT  INTO  people   VALUES(  'Simon Lock'  ,35, 'simon@bristol.ac.uk' , 1.8  ) ; ";
     String[] specialCharacters = {"(", ")", ",", ";"};
     ArrayList<String> tokens = new ArrayList<String>();
 
@@ -27,7 +27,7 @@ public class Tokeniser {
     // Treats text inside single quotes as a single token
     // Breaks non-quoted text on spaces and special punctuation
     // Assembles all tokens into a list and prints them out
-    public Tokeniser() {
+    public void setup(String query) {
         // Split the query on single quotes (to separate out query text from string literals)
         String[] fragments = query.split("'");
         for (int i = 0; i < fragments.length; i++) {
