@@ -6,6 +6,17 @@
   <component name="ChangeListManager">
     <list default="true" id="2d90ba92-bec0-4de5-a887-3e7b80d82938" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BNF.txt" beforeDir="false" afterPath="$PROJECT_DIR$/BNF.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cw-db/src/main/java/edu/uob/DBCmd.java" beforeDir="false" afterPath="$PROJECT_DIR$/cw-db/src/main/java/edu/uob/DBCmd.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cw-db/src/main/java/edu/uob/DBServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/cw-db/src/main/java/edu/uob/DBServer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cw-db/src/main/java/edu/uob/Database.java" beforeDir="false" afterPath="$PROJECT_DIR$/cw-db/src/main/java/edu/uob/Database.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cw-db/src/main/java/edu/uob/Table.java" beforeDir="false" afterPath="$PROJECT_DIR$/cw-db/src/main/java/edu/uob/Table.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cw-db/src/main/java/edu/uob/Tokenizer.java" beforeDir="false" afterPath="$PROJECT_DIR$/cw-db/src/main/java/edu/uob/Tokeniser.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/db/edu/uob/DBCmd.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/db/edu/uob/DBCmd.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/db/edu/uob/DBServer.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/db/edu/uob/DBServer.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/db/edu/uob/Table.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/db/edu/uob/Table.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/db/edu/uob/Tokenizer.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/db/edu/uob/Tokenizer.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/~$ample-transcript.docx" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -38,13 +49,16 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "Application.DBServer.executor": "Run",
-    "Application.Database.executor": "Run",
+    "Application.Database.executor": "Debug",
+    "Application.Test.executor": "Run",
+    "Application.Tokeniser.executor": "Run",
     "Downloaded.Files.Path.Enabled": "false",
     "JUnit.ExampleDBTests.executor": "Run",
     "Repository.Attach.Annotations": "false",
     "Repository.Attach.JavaDocs": "false",
     "Repository.Attach.Sources": "false",
     "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
     "git-widget-placeholder": "main",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "/home/mt24200/Developer/java/assignments/db",
@@ -56,7 +70,7 @@
     "project.structure.last.edited": "Project",
     "project.structure.proportion": "0.15",
     "project.structure.side.proportion": "0.0",
-    "settings.editor.selected.configurable": "preferences.pluginManager",
+    "settings.editor.selected.configurable": "settings.sync",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
@@ -64,8 +78,11 @@
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$" />
     </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="edu.uob" />
+    </key>
   </component>
-  <component name="RunManager" selected="Application.Database">
+  <component name="RunManager" selected="Application.DBServer">
     <configuration name="DBServer" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="edu.uob.DBServer" />
       <module name="db" />
@@ -81,6 +98,32 @@
     </configuration>
     <configuration name="Database" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="edu.uob.Database" />
+      <module name="db" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="edu.uob.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Test" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="edu.uob.Test" />
+      <module name="db" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="edu.uob.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Tokeniser" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="edu.uob.Tokeniser" />
       <module name="db" />
       <extension name="coverage">
         <pattern>
@@ -109,17 +152,19 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.DBServer" />
+        <item itemvalue="Application.Tokeniser" />
+        <item itemvalue="Application.Test" />
         <item itemvalue="Application.Database" />
         <item itemvalue="JUnit.ExampleDBTests" />
-        <item itemvalue="Application.DBServer" />
       </list>
     </recent_temporary>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-9f38398b9061-39b83d9b5494-intellij.indexing.shared.core-IU-241.18034.62" />
-        <option value="bundled-js-predefined-1d06a55b98c1-0b3e54e931b4-JavaScript-IU-241.18034.62" />
+        <option value="bundled-jdk-9823dce3aa75-a94e463ab2e7-intellij.indexing.shared.core-IU-243.25659.39" />
+        <option value="bundled-js-predefined-d6986cc7102b-1632447f56bf-JavaScript-IU-243.25659.39" />
       </set>
     </attachedChunks>
   </component>
@@ -133,11 +178,16 @@
       <updated>1741014752411</updated>
       <workItem from="1741014753439" duration="6557000" />
       <workItem from="1741113588166" duration="5326000" />
+      <workItem from="1741121902385" duration="6181000" />
+      <workItem from="1741197735053" duration="12295000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="UnknownFeatures">
+    <option featureType="com.intellij.fileTypeFactory" implementationName="*.tab" />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
@@ -149,5 +199,9 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
   </component>
 </project>

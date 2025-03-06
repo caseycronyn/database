@@ -16,7 +16,7 @@ public class Database {
 //        table.populateAttributes();
 //        table.populateEntriesAndMapAttributes();
 //        table.writeTableToFile();
-        Tokenizer tokenizer = new Tokenizer("CREATE DATABASE ALPACAS;");
+//        Tokenizer tokenizer = new Tokenizer("CREATE DATABASE ALPACAS;");
     }
 
 }

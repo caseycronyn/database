@@ -1,8 +1,13 @@
 package edu.uob;
 
 abstract public class DBCmd {
-    public void parse() {
+    List<Condition> conditions;
+    List<String> colNames;
+    List<String> tableNames;
+    String DBname;
+    String commandType;
 
+    public void parse() {
     }
 
 }

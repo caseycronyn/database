@@ -12,7 +12,7 @@ public class Table {
     static ArrayList<String> commandHolder = new ArrayList<String>();
     String name;
 
-    Table(String name) {
+    public Table(String name) {
         this.name = name;
     }
     public void populateAttributes() {
