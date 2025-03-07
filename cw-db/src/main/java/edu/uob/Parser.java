@@ -1,6 +1,7 @@
 package edu.uob;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /*
 Parser builds subclass of
@@ -14,10 +15,10 @@ The context given by parsing
 types facilitates error
 handling and command building
  */
-public class Parser {
+public class Parser implements DBCommand {
 
-    public String parse(TokenBank tokenBank) {
-
+    @Override
+    public DBCommand parse(TokenBank tokenBank) {
         for (int i = 0; i < tokenBank.tokens.size(); i++) {
             if (tokenBank.tokens.get(i).equals(";")) {
 //                will replace
@@ -26,13 +27,15 @@ public class Parser {
 
             if (tokenBank.tokens.get(i).equals("CREATE")) {
                 tokenBank.nextToken();
-                CreateCommand createCommand = new CreateCommand();
-                return createCommand.test(tokenBank);
+                DBCommand createCommand = new CreateCommand();
+                return createCommand.parse(tokenBank);
             }
         }
         return null;
     }
 
+    @Override
+    public void executeCommand(DBServer server){};
 
 //    public DBCmd parse(ArrayList<String> tokens) {
 //    }

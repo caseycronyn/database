@@ -1,9 +1,26 @@
 package edu.uob;
 
-public class CreateDatabase extends DBCommand {
+import java.util.ArrayList;
 
-    public String test(TokenBank tokenBank) {
-        tokenBank.nextToken();
-        return "CREATE DATABASE " + tokenBank.getCurrentToken();
+public class CreateDatabase extends Parser {
+    TokenBank tokenBankLocal = new TokenBank();
+
+    @Override
+    public DBCommand parse(TokenBank tokenBankIn) {
+        tokenBankLocal = tokenBankIn;
+        tokenBankLocal.nextToken();
+//        return "CREATE DATABASE " + tokenBank.getCurrentToken();
+        return this;
     }
+
+    @Override
+    public void executeCommand(DBServer server){
+//        System.out.println(tokenBankLocal.getCurrentToken());
+        server.createNewDatabase(tokenBankLocal.getCurrentToken());
+    };
+
+//    public void createNewDatabase(String databaseName) {
+//        Database db = new Database(databaseName, storageFolderPath);
+//        databases.add(db);
+//    }
 }

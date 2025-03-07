@@ -3,14 +3,16 @@ package edu.uob;
 import java.util.ArrayList;
 import java.util.List;
 
-abstract public class DBCommand {
-
+public interface DBCommand {
 //    List<Condition> conditions;
-//    List<String> colNames;
-//    List<String> tableNames;
-//    String DatabaseName;
+//    List<String> colNames = null;
+//    List<String> tableNames = null;
+    TokenBank tokenBankLocal = null;
+    String databaseName = null;
+
+    abstract DBCommand parse(TokenBank tokenBank);
+    abstract void executeCommand(DBServer server);
 //    String commandType;
 //
 
-//    abstract String Query (DBServer server);
 }

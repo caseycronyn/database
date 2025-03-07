@@ -14,7 +14,7 @@ public class DBServer {
 
     private static final char END_OF_TRANSMISSION = 4;
     private String storageFolderPath;
-    String commandResult;
+    DBCommand commandResult;
 
     public static void main(String args[]) throws IOException {
         DBServer server = new DBServer();
@@ -38,8 +38,8 @@ public class DBServer {
 
 //    setup database?
     public void setup() {
-        createNewDatabase("firstDB");
-        databases.get(0).createNewTable("people");
+//        createNewDatabase("firstDB");
+//        databases.get(0).createNewTable("people");
 
 //        String query = "  INSERT  INTO  people   VALUES(  'Simon Lock'  ,35, 'simon@bristol.ac.uk' , 1.8  ) ; ";
         String query = "CREATE DATABASE dbGen;";
@@ -49,7 +49,10 @@ public class DBServer {
 
         tokenBank.setTokens(tokeniser.setup(query));
         commandResult = parser.parse(tokenBank);
-        System.out.println(commandResult + ";");
+//        System.out.println(commandResult);
+//        System.out.println(parser.testInt);
+//        commandResult.parse();
+        commandResult.executeCommand(this);
     }
 
     public void createNewDatabase(String databaseName) {
