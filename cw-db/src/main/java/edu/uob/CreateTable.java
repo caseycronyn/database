@@ -21,6 +21,6 @@ public class CreateTable extends Parser {
     @Override
     public void executeCommand(DBServer server){
 //        System.out.println(tokenBankLocal.getCurrentToken());
-        server.createNewDatabase(tokenBankLocal.getCurrentToken());
+        server.createNewTable(tokenBankLocal.getCurrentToken());
     };
 }

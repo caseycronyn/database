@@ -67,6 +67,7 @@ public class DBServer {
     public void createNewTable(String tableName, String databaseName) {
         Table table = new Table(tableName, databaseName);
         table.initialise();
+        databases.get(databaseName).addNewTable(tableName);
 //        databaseName.addNewtable(tableName);
     }
     /**
