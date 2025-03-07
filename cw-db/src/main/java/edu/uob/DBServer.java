@@ -14,12 +14,15 @@ public class DBServer {
 
     private static final char END_OF_TRANSMISSION = 4;
     private String storageFolderPath;
+    String commandResult;
 
     public static void main(String args[]) throws IOException {
         DBServer server = new DBServer();
-        server.blockingListenOn(8888);
+        server.setup();
+//        server.blockingListenOn(8888);
     }
 
+//  NOTE double check the databases location before submission
     /**
     * KEEP this signature otherwise we won't be able to mark your submission correctly.
     */
@@ -31,13 +34,26 @@ public class DBServer {
         } catch(IOException ioe) {
             System.out.println("Can't seem to create database storage folder " + storageFolderPath);
         }
-        setup();
     }
 
 //    setup database?
     public void setup() {
         createNewDatabase("firstDB");
-        databases.get(0).createNewTable("sheds");
+        databases.get(0).createNewTable("people");
+
+//        String query = "  INSERT  INTO  people   VALUES(  'Simon Lock'  ,35, 'simon@bristol.ac.uk' , 1.8  ) ; ";
+        String query = "CREATE DATABASE dbGen";
+        Tokeniser tokeniser = new Tokeniser();
+        Parser parser = new Parser();
+
+        TokenBank.addTokens(tokeniser.setup(query));
+        commandResult = parser.parse(tokeniser.tokens);
+        System.out.println(commandResult + " " + parser.nextToken());
+    }
+
+    public void createNewDatabase(String databaseName) {
+        Database db = new Database(databaseName, storageFolderPath);
+        databases.add(db);
     }
 
     /**
@@ -47,18 +63,9 @@ public class DBServer {
     * <p>This method handles all incoming DB commands and carries out the required actions.
     */
     public String handleCommand(String command) {
-        String query = "  INSERT  INTO  people   VALUES(  'Simon Lock'  ,35, 'simon@bristol.ac.uk' , 1.8  ) ; ";
-        Tokeniser tokeniser = new Tokeniser();
-        tokeniser.setup(query);
-        Parser parser = new Parser();
-        parser.parse(tokeniser.tokens);
         return "";
     }
 
-    public void createNewDatabase(String databaseName) {
-        Database db = new Database(databaseName);
-        databases.add(db);
-    }
 
     //  === Methods below handle networking aspects of the project - you will not need to change these ! ===
 

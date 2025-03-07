@@ -1,5 +1,8 @@
 clean:
-	rm -r databases/firstDB/*
+	rm -r ../databases/*
+
+compile:
+	./mvnw clean compile
 
 server:
 	./mvnw clean compile exec:java@server

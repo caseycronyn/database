@@ -2,6 +2,8 @@ package edu.uob;
 
 import java.io.*;
 import java.lang.reflect.Array;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
 
 //populates the tables rows and columns by passing in the formatted string. this class also holds the data for rows and columns
@@ -17,19 +19,12 @@ public class Table {
     public Table(String tableName, String databaseName) {
         this.name = tableName;
         this.databaseName = databaseName;
-        try {
-            readInFileAndPopulateArrayWithAllLines();
-        }
-        catch (IOException e) {
-            System.out.println("Error reading file: " + e.getMessage());
-        }
+    }
+
+    public void initialise() {
+        readInFileAndPopulateArrayWithAllLines();
         populateAttributesAndEntries();
-        try {
-            writeTableToFile();
-        }
-        catch (IOException e) {
-            System.out.println("Error writing to file: " + e.getMessage());
-        }
+        writeTableToFile();
     }
 
     public void populateAttributesAndEntries() {
@@ -39,7 +34,7 @@ public class Table {
         }
 //        TODO is this ok?
         catch (Exception e) {
-            System.out.println("error: " + e);
+            System.out.println("error in populateAttributesAndEntries: " + e);
         }
 
     }
@@ -52,7 +47,7 @@ public class Table {
     }
 
     public void readInFileAndPrint() throws IOException {
-        File fileToOpen = new File(this.name + ".tab");
+        File fileToOpen = new File(name + ".tab");
         FileReader reader = new FileReader(fileToOpen);
         BufferedReader buffReader = new BufferedReader(reader);
         String line;
@@ -62,17 +57,23 @@ public class Table {
         buffReader.close();
     }
 
-    public void readInFileAndPopulateArrayWithAllLines() throws IOException {
+    public void readInFileAndPopulateArrayWithAllLines() {
         BufferedReader buffReader = null;
+        FileReader reader = null;
         File fileToOpen = new File(name + ".tab");
-        FileReader reader = new FileReader(fileToOpen);
-        buffReader = new BufferedReader(reader);
-        String line;
-        while ((line = buffReader.readLine()) != null) {
-            commandHolder.add(line);
+        try {
+            reader = new FileReader(fileToOpen);
+            buffReader = new BufferedReader(reader);
+            String line;
+            while ((line = buffReader.readLine()) != null) {
+                commandHolder.add(line);
 //            System.out.println(line);
+            }
+            buffReader.close();
         }
-        buffReader.close();
+        catch (Exception e) {
+            System.out.println("error in readInFileAndPopulateArrayWithAllLines: " + e);
+        }
         }
 
     public void populateEntriesAndMapAttributes() {
@@ -104,8 +105,14 @@ public class Table {
         }
     }
 
-    public void writeTableToFile() throws IOException {
-        PrintWriter writer = new PrintWriter("databases" + File.separator + databaseName + File.separator + name + ".tab");
+    public void writeTableToFile() {
+        PrintWriter writer = null;
+        try {
+            writer = new PrintWriter("databases" + File.separator + databaseName + File.separator + name + ".tab");
+        }
+        catch (Exception e) {
+            System.out.println("error in writeTableToFile: " + e);
+        }
         String tabJoinedLine = String.join("\t", attributes);
         writer.println(tabJoinedLine);
         /*

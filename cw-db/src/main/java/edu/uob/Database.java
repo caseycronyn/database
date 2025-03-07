@@ -15,13 +15,12 @@ public class Database {
     String name;
     private String storageFolderPath;
 
-    Database (String name) {
+    Database (String name, String storageFolderPath) {
         this.name = name;
-//        create path
-        storageFolderPath = Paths.get("databases").toAbsolutePath().toString();
+//        create database path
         try {
             // Create the database storage folder if it doesn't already exist !
-            Files.createDirectories(Paths.get(storageFolderPath+ File.separator + name));
+            Files.createDirectories(Paths.get(storageFolderPath + File.separator + name));
         } catch(IOException ioe) {
             System.out.println("Can't seem to create database storage folder " + storageFolderPath);
         }
@@ -29,6 +28,7 @@ public class Database {
 
     public void createNewTable(String tableName) {
         Table table = new Table(tableName, name);
+        table.initialise();
         tables.add(table);
     }
 //    public static void main(String[] args) throws IOException {

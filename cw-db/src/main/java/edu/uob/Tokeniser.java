@@ -12,7 +12,7 @@ public class Tokeniser {
     // Treats text inside single quotes as a single token
     // Breaks non-quoted text on spaces and special punctuation
     // Assembles all tokens into a list and prints them out
-    public void setup(String query) {
+    public ArrayList<String> setup(String query) {
         // Split the query on single quotes (to separate out query text from string literals)
         String[] fragments = query.split("'");
         for (int i = 0; i < fragments.length; i++) {
@@ -26,8 +26,9 @@ public class Tokeniser {
                 tokens.addAll(Arrays.asList(nextBatchOfTokens));
             }
         }
-        // Finally, loop through the result array list, printing out each token a line at a time
-        for (int i = 0; i < tokens.size(); i++) System.out.println(tokens.get(i));
+        return tokens;
+//        // Finally, loop through the result array list, printing out each token a line at a time
+//        for (int i = 0; i < tokens.size(); i++) System.out.println(tokens.get(i));
     }
 
     String[] tokeniseFragment(String input) {

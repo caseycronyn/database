@@ -15,8 +15,29 @@ types facilitates error
 handling and command building
  */
 public class Parser {
-    public DBCmd parse(ArrayList<String> tokens) {
+    int currentToken = 0;
+    ArrayList<String> tokens = new ArrayList<>();
 
+    public String parse(ArrayList<String> tokenArray) {
+        tokens = tokenArray;
+        for (String token : tokens) {
+            if (token.equals(";")) {
+//                will replace
+                break;
+            }
+
+            if (token.equals("CREATE")) {
+                CreateCommand createCommand = new CreateCommand(nextToken());
+                return createCommand.test();
+            }
+        }
         return null;
     }
+
+    String nextToken() {
+        return tokens.get(currentToken + 1);
+    }
+
+//    public DBCmd parse(ArrayList<String> tokens) {
+//    }
 }
