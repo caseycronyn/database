@@ -2,11 +2,8 @@ package edu.uob;
 
 public class CreateDatabase extends DBCommand {
 
-    CreateDatabase() {
-        test();
-    }
-
-    public String test() {
-        return "CREATE DATABASE";
+    public String test(TokenBank tokenBank) {
+        tokenBank.nextToken();
+        return "CREATE DATABASE " + tokenBank.getCurrentToken();
     }
 }

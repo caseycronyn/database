@@ -26,9 +26,9 @@ public class Tokeniser {
                 tokens.addAll(Arrays.asList(nextBatchOfTokens));
             }
         }
-        return tokens;
 //        // Finally, loop through the result array list, printing out each token a line at a time
 //        for (int i = 0; i < tokens.size(); i++) System.out.println(tokens.get(i));
+        return tokens;
     }
 
     String[] tokeniseFragment(String input) {
@@ -44,21 +44,5 @@ public class Tokeniser {
         // Finally split on the space char (since there will now ALWAYS be a SINGLE space between tokens)
         return input.split(" ");
     }
-
-//    ArrayList<String> tokenArray = new ArrayList<>();
-
-//    Tokenizer (String query) {
-//        tokenArray.addAll(Arrays.asList(query.split(" ")));
-////        remove semicolon ';' at the end
-//        tokenArray.remove(tokenArray.size() - 1);
-////        System.out.println(tokenArray);
-//    }
-
-//    String query = "  INSERT  INTO  people   VALUES(  'Simon Lock'  ,35, 'simon@bristol.ac.uk' , 1.8  ) ; ";
-
-//    public static void main(String [] args) {
-//        Test t = new Test();
-//        t.setup();
-//    }
 
 }

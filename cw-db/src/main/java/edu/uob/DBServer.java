@@ -42,13 +42,14 @@ public class DBServer {
         databases.get(0).createNewTable("people");
 
 //        String query = "  INSERT  INTO  people   VALUES(  'Simon Lock'  ,35, 'simon@bristol.ac.uk' , 1.8  ) ; ";
-        String query = "CREATE DATABASE dbGen";
+        String query = "CREATE DATABASE dbGen;";
         Tokeniser tokeniser = new Tokeniser();
         Parser parser = new Parser();
+        TokenBank tokenBank = new TokenBank();
 
-        TokenBank.addTokens(tokeniser.setup(query));
-        commandResult = parser.parse(tokeniser.tokens);
-        System.out.println(commandResult + " " + parser.nextToken());
+        tokenBank.setTokens(tokeniser.setup(query));
+        commandResult = parser.parse(tokenBank);
+        System.out.println(commandResult + ";");
     }
 
     public void createNewDatabase(String databaseName) {

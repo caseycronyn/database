@@ -1,18 +1,12 @@
 package edu.uob;
 
 public class CreateCommand extends DBCommand {
-    String nextToken;
-
-    CreateCommand(String token) {
-        this.nextToken = token;
-        test();
-    }
-
-    String test() {
-        if (nextToken.equals("DATABASE")) {
+    String test(TokenBank tokenBank) {
+        if (tokenBank.getCurrentToken().equals("DATABASE")) {
+//            tokenBank.nextToken();
             CreateDatabase createDatabase = new CreateDatabase();
-            return createDatabase.test();
+            return createDatabase.test(tokenBank);
         }
-        return nextToken;
+        return null;
     }
 }

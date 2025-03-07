@@ -15,28 +15,24 @@ types facilitates error
 handling and command building
  */
 public class Parser {
-    int currentToken = 0;
-    ArrayList<String> tokens = new ArrayList<>();
 
-    public String parse(ArrayList<String> tokenArray) {
-        tokens = tokenArray;
-        for (String token : tokens) {
-            if (token.equals(";")) {
+    public String parse(TokenBank tokenBank) {
+
+        for (int i = 0; i < tokenBank.tokens.size(); i++) {
+            if (tokenBank.tokens.get(i).equals(";")) {
 //                will replace
                 break;
             }
 
-            if (token.equals("CREATE")) {
-                CreateCommand createCommand = new CreateCommand(nextToken());
-                return createCommand.test();
+            if (tokenBank.tokens.get(i).equals("CREATE")) {
+                tokenBank.nextToken();
+                CreateCommand createCommand = new CreateCommand();
+                return createCommand.test(tokenBank);
             }
         }
         return null;
     }
 
-    String nextToken() {
-        return tokens.get(currentToken + 1);
-    }
 
 //    public DBCmd parse(ArrayList<String> tokens) {
 //    }
