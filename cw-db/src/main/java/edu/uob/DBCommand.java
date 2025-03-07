@@ -7,6 +7,7 @@ public interface DBCommand {
 //    List<Condition> conditions;
 //    List<String> colNames = null;
 //    List<String> tableNames = null;
+    String[] specialCharacters = {"(", ")", ",", ";"};
     TokenBank tokenBankLocal = null;
     String databaseName = null;
 

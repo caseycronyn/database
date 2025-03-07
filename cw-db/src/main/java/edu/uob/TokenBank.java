@@ -18,6 +18,10 @@ public class TokenBank {
         return tokens.get(currentToken);
     }
 
+    Integer getCurrentTokenPosition() {
+        return currentToken;
+    }
+
     void nextToken() {
         currentToken++;
     }

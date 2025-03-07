@@ -1,19 +1,19 @@
 package edu.uob;
 
 public class CreateTable extends Parser {
-    TokenBank tokenBankLocal = new TokenBank();
+    String tableName;
+    String databaseName;
 
     @Override
-    public DBCommand parse(TokenBank tokenBankIn) {
-        tokenBankLocal = tokenBankIn;
-        tokenBankIn.nextToken();
-        if (tokenBankIn.getNextToken().equals(";")) {
-//            return "CREATE DATABASE " + tokenBank.getCurrentToken();
+    public DBCommand parse(TokenBank tokenBank) {
+        tokenBank.nextToken();
+        if (tokenBank.getNextToken().equals(";")) {
+            tableName = tokenBank.getCurrentToken();
             return this;
         }
-        else if (tokenBankIn.getNextToken().equals("(")) {
+        else if (tokenBank.getNextToken().equals("(")) {
             DBCommand createTableWithAttributes = new CreateTableWithAttributes();
-            return createTableWithAttributes.parse(tokenBankIn);
+            return createTableWithAttributes.parse(tokenBank);
         }
         return null;
     }
@@ -21,6 +21,8 @@ public class CreateTable extends Parser {
     @Override
     public void executeCommand(DBServer server){
 //        System.out.println(tokenBankLocal.getCurrentToken());
-        server.createNewTable(tokenBankLocal.getCurrentToken());
+        databaseName = server.getCurrentDatabase();
+        server.createNewTable(tableName, databaseName);
+//        System.out.println(server.getCurrentDatabase());
     };
 }

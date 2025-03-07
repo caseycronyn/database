@@ -12,6 +12,7 @@ import java.util.HashMap;
 /** This class implements the DB server. */
 public class DBServer {
     HashMap<String, Database> databases = new HashMap();
+    String currentDatabase = null;
 
     private static final char END_OF_TRANSMISSION = 4;
     private String storageFolderPath;
@@ -19,7 +20,6 @@ public class DBServer {
 
     public static void main(String args[]) throws IOException {
         DBServer server = new DBServer();
-        server.setup();
 //        server.blockingListenOn(8888);
     }
 
@@ -37,31 +37,21 @@ public class DBServer {
         }
     }
 
-//    setup database?
-    public void setup() {
-//        createNewDatabase("firstDB");
-//        databases.get(0).createNewTable("people");
-
-//        String query = "  INSERT  INTO  people   VALUES(  'Simon Lock'  ,35, 'simon@bristol.ac.uk' , 1.8  ) ; ";
-
-//        String query = "CREATE DATABASE dbGen;";
-        String query = "CREATE TABLE students;";
-//        String query = "CREATE TABLE marks (name, mark, pass);";
-        Tokeniser tokeniser = new Tokeniser();
-        Parser parser = new Parser();
-        TokenBank tokenBank = new TokenBank();
-
-        tokenBank.setTokens(tokeniser.setup(query));
-        commandResult = parser.parse(tokenBank);
-//        System.out.println(commandResult);
-//        System.out.println(parser.testInt);
-//        commandResult.parse();
-        commandResult.executeCommand(this);
-    }
+////    setup database?
+//    public void setup() {
+//    }
 
     public void createNewDatabase(String databaseName) {
         Database database = new Database(databaseName, storageFolderPath);
         databases.put(databaseName, database);
+    }
+
+    public void setCurrentDatabase(String databaseName) {
+        currentDatabase = databaseName;
+    }
+
+    public String getCurrentDatabase() {
+        return currentDatabase;
     }
 
     public void createNewTable(String tableName, String databaseName) {
@@ -77,6 +67,13 @@ public class DBServer {
     * <p>This method handles all incoming DB commands and carries out the required actions.
     */
     public String handleCommand(String command) {
+        Tokeniser tokeniser = new Tokeniser();
+        Parser parser = new Parser();
+        TokenBank tokenBank = new TokenBank();
+
+        tokenBank.setTokens(tokeniser.setup(command));
+        commandResult = parser.parse(tokenBank);
+        commandResult.executeCommand(this);
         return "";
     }
 

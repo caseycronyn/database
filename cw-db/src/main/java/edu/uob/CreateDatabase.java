@@ -3,12 +3,14 @@ package edu.uob;
 import java.util.ArrayList;
 
 public class CreateDatabase extends Parser {
-    TokenBank tokenBankLocal = new TokenBank();
+//    TokenBank tokenBankLocal = new TokenBank();
+    String databaseName = null;
 
     @Override
     public DBCommand parse(TokenBank tokenBankIn) {
-        tokenBankLocal = tokenBankIn;
+//        tokenBankLocal = tokenBankIn;
         tokenBankIn.nextToken();
+        databaseName = tokenBankIn.getCurrentToken();
 //        return "CREATE DATABASE " + tokenBank.getCurrentToken();
         return this;
     }
@@ -16,7 +18,7 @@ public class CreateDatabase extends Parser {
     @Override
     public void executeCommand(DBServer server){
 //        System.out.println(tokenBankLocal.getCurrentToken());
-        server.createNewDatabase(tokenBankLocal.getCurrentToken());
+        server.createNewDatabase(databaseName);
     };
 
 //    public void createNewDatabase(String databaseName) {

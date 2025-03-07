@@ -30,6 +30,12 @@ public class Parser implements DBCommand {
                 DBCommand createCommand = new CreateCommand();
                 return createCommand.parse(tokenBank);
             }
+
+            if (tokenBank.tokens.get(i).equals("USE")) {
+                tokenBank.nextToken();
+                DBCommand useCommand = new UseCommand();
+                return useCommand.parse(tokenBank);
+            }
         }
         return null;
     }

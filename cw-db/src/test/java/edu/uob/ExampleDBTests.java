@@ -103,6 +103,11 @@ public class ExampleDBTests {
 //    }
 //
     // my tests
-//    @Test
-//    public void
+    @Test
+    public void testDatabaseCreation() {
+        String randomName = generateRandomName();
+        sendCommandToServer("CREATE DATABASE " + randomName + ";");
+        sendCommandToServer("USE " + randomName + ";");
+        sendCommandToServer("CREATE TABLE marks (name, mark, pass);");
+    }
 }
