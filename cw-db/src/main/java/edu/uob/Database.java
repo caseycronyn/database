@@ -25,12 +25,13 @@ public class Database {
             System.out.println("Can't seem to create database storage folder " + storageFolderPath);
         }
     }
-
-    public void createNewTable(String tableName) {
+//
+    public void addNewTable(String tableName) {
         Table table = new Table(tableName, name);
         table.initialise();
         tables.add(table);
     }
+
 //    public static void main(String[] args) throws IOException {
 //        Table table = new Table("sheds");
 //        table.readInFileAndPopulateArray();

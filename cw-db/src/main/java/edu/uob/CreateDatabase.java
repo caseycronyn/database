@@ -8,7 +8,7 @@ public class CreateDatabase extends Parser {
     @Override
     public DBCommand parse(TokenBank tokenBankIn) {
         tokenBankLocal = tokenBankIn;
-        tokenBankLocal.nextToken();
+        tokenBankIn.nextToken();
 //        return "CREATE DATABASE " + tokenBank.getCurrentToken();
         return this;
     }

@@ -8,10 +8,10 @@ public class CreateCommand extends Parser {
 //        System.out.println(testInteger);
         if (tokenBank.getCurrentToken().equals("DATABASE")) {
 //            tokenBank.nextToken();
-            CreateDatabase createDatabase = new CreateDatabase();
+            DBCommand createDatabase = new CreateDatabase();
             return createDatabase.parse(tokenBank);
         } else if (tokenBank.getCurrentToken().equals("TABLE")) {
-            CreateTable createTable = new CreateTable();
+            DBCommand createTable = new CreateTable();
             return createTable.parse(tokenBank);
         }
         return null;

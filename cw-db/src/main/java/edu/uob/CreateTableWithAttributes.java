@@ -1,4 +1,8 @@
 package edu.uob;
 
-public class CreateTableWithAttributes implements Parser {
+public class CreateTableWithAttributes extends Parser {
+    @Override
+    public DBCommand parse(TokenBank tokenBank) {
+
+    }
 }

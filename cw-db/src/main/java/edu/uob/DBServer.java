@@ -7,10 +7,11 @@ import java.net.Socket;
 import java.nio.file.Paths;
 import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /** This class implements the DB server. */
 public class DBServer {
-    ArrayList<Database> databases = new ArrayList<>();
+    HashMap<String, Database> databases = new HashMap();
 
     private static final char END_OF_TRANSMISSION = 4;
     private String storageFolderPath;
@@ -42,7 +43,10 @@ public class DBServer {
 //        databases.get(0).createNewTable("people");
 
 //        String query = "  INSERT  INTO  people   VALUES(  'Simon Lock'  ,35, 'simon@bristol.ac.uk' , 1.8  ) ; ";
-        String query = "CREATE DATABASE dbGen;";
+
+//        String query = "CREATE DATABASE dbGen;";
+        String query = "CREATE TABLE students;";
+//        String query = "CREATE TABLE marks (name, mark, pass);";
         Tokeniser tokeniser = new Tokeniser();
         Parser parser = new Parser();
         TokenBank tokenBank = new TokenBank();
@@ -56,10 +60,15 @@ public class DBServer {
     }
 
     public void createNewDatabase(String databaseName) {
-        Database db = new Database(databaseName, storageFolderPath);
-        databases.add(db);
+        Database database = new Database(databaseName, storageFolderPath);
+        databases.put(databaseName, database);
     }
 
+    public void createNewTable(String tableName, String databaseName) {
+        Table table = new Table(tableName, databaseName);
+        table.initialise();
+//        databaseName.addNewtable(tableName);
+    }
     /**
     * KEEP this signature (i.e. {@code edu.uob.DBServer.handleCommand(String)}) otherwise we won't be
     * able to mark your submission correctly.
