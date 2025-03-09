@@ -5,13 +5,29 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2d90ba92-bec0-4de5-a887-3e7b80d82938" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/db.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/db.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cw-db/src/main/java/edu/uob/DBCmd.java" beforeDir="false" afterPath="$PROJECT_DIR$/cw-db/src/main/java/edu/uob/DBCmd.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cw-db/src/main/java/edu/uob/CreateTable.java" beforeDir="false" afterPath="$PROJECT_DIR$/cw-db/src/main/java/edu/uob/CreateTable.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cw-db/src/main/java/edu/uob/CreateTableWithAttributes.java" beforeDir="false" afterPath="$PROJECT_DIR$/cw-db/src/main/java/edu/uob/CreateTableWithAttributes.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cw-db/src/main/java/edu/uob/DBServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/cw-db/src/main/java/edu/uob/DBServer.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cw-db/src/main/java/edu/uob/Database.java" beforeDir="false" afterPath="$PROJECT_DIR$/cw-db/src/main/java/edu/uob/Database.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cw-db/src/main/java/edu/uob/Table.java" beforeDir="false" afterPath="$PROJECT_DIR$/cw-db/src/main/java/edu/uob/Table.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/databases/people.tab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/databases/sheds.tab" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cw-db/target/classes/edu/uob/DBClient.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cw-db/target/classes/edu/uob/DBServer.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cw-db/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/cw-db/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cw-db/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/cw-db/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/db/edu/uob/Attribute.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/db/edu/uob/DBClient.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/db/edu/uob/DBClient.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/db/edu/uob/DBCmd.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/db/edu/uob/DBServer.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/db/edu/uob/DBServer.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/db/edu/uob/Database.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/db/edu/uob/Database.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/db/edu/uob/Parser.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/db/edu/uob/Parser.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/db/edu/uob/Table.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/db/edu/uob/Table.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/db/edu/uob/Test.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/db/edu/uob/Test.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/db/edu/uob/Token.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/db/edu/uob/Tokeniser.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/db/edu/uob/Tokeniser.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/test/db/edu/uob/ExampleDBTests.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/test/db/edu/uob/ExampleDBTests.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -29,7 +45,7 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="jrt:///usr/lib/jvm/java-17!/java.base/java/lang/String.class" root0="SKIP_INSPECTION" />
+    <setting file="jar:///opt/homebrew/Cellar/openjdk/23.0.2/libexec/openjdk.jdk/Contents/Home/lib/src.zip!/java.base/java/lang/String.java" root0="SKIP_INSPECTION" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 3
@@ -44,35 +60,40 @@
     <option name="showLibraryContents" value="true" />
     <option name="showScratchesAndConsoles" value="false" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Application.DBServer.executor&quot;: &quot;Run&quot;,
-    &quot;Application.Database.executor&quot;: &quot;Debug&quot;,
-    &quot;Application.Test.executor&quot;: &quot;Run&quot;,
-    &quot;Application.Tokeniser.executor&quot;: &quot;Run&quot;,
-    &quot;Downloaded.Files.Path.Enabled&quot;: &quot;false&quot;,
-    &quot;JUnit.ExampleDBTests.executor&quot;: &quot;Run&quot;,
-    &quot;Repository.Attach.Annotations&quot;: &quot;false&quot;,
-    &quot;Repository.Attach.JavaDocs&quot;: &quot;false&quot;,
-    &quot;Repository.Attach.Sources&quot;: &quot;false&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/home/mt24200/Developer/java/assignments/db&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;settings.sync&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.DBClient.executor": "Run",
+    "Application.DBServer.executor": "Run",
+    "Application.Database.executor": "Debug",
+    "Application.Test.executor": "Run",
+    "Application.Tokeniser.executor": "Run",
+    "Downloaded.Files.Path.Enabled": "false",
+    "JUnit.ExampleDBTests.executor": "Run",
+    "JUnit.ExampleDBTests.testDatabaseCreation.executor": "Run",
+    "Repository.Attach.Annotations": "false",
+    "Repository.Attach.JavaDocs": "false",
+    "Repository.Attach.Sources": "false",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "main",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "/Users/caseycronyn/Developer/bristol/java/assignments/database/cw-db",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Project",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.0",
+    "settings.editor.selected.configurable": "preferences.keymap",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/cw-db" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$" />
     </key>
@@ -80,9 +101,9 @@
       <recent name="edu.uob" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.DBServer">
-    <configuration name="DBServer" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="edu.uob.DBServer" />
+  <component name="RunManager" selected="JUnit.ExampleDBTests.testDatabaseCreation">
+    <configuration name="DBClient" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="edu.uob.DBClient" />
       <module name="db" />
       <extension name="coverage">
         <pattern>
@@ -94,8 +115,8 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="Database" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="edu.uob.Database" />
+    <configuration name="DBServer" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="edu.uob.DBServer" />
       <module name="db" />
       <extension name="coverage">
         <pattern>
@@ -133,7 +154,7 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="ExampleDBTests" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="ExampleDBTests.testDatabaseCreation" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="db" />
       <extension name="coverage">
         <pattern>
@@ -143,26 +164,27 @@
       </extension>
       <option name="PACKAGE_NAME" value="edu.uob" />
       <option name="MAIN_CLASS_NAME" value="edu.uob.ExampleDBTests" />
-      <option name="TEST_OBJECT" value="class" />
+      <option name="METHOD_NAME" value="testDatabaseCreation" />
+      <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.ExampleDBTests.testDatabaseCreation" />
         <item itemvalue="Application.DBServer" />
+        <item itemvalue="Application.DBClient" />
         <item itemvalue="Application.Tokeniser" />
         <item itemvalue="Application.Test" />
-        <item itemvalue="Application.Database" />
-        <item itemvalue="JUnit.ExampleDBTests" />
       </list>
     </recent_temporary>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-9823dce3aa75-a94e463ab2e7-intellij.indexing.shared.core-IU-243.25659.39" />
-        <option value="bundled-js-predefined-d6986cc7102b-1632447f56bf-JavaScript-IU-243.25659.39" />
+        <option value="bundled-jdk-9823dce3aa75-a94e463ab2e7-intellij.indexing.shared.core-IU-243.25659.59" />
+        <option value="bundled-js-predefined-d6986cc7102b-1632447f56bf-JavaScript-IU-243.25659.59" />
       </set>
     </attachedChunks>
   </component>
@@ -178,6 +200,8 @@
       <workItem from="1741113588166" duration="5326000" />
       <workItem from="1741121902385" duration="6181000" />
       <workItem from="1741197735053" duration="12295000" />
+      <workItem from="1741298269321" duration="2678000" />
+      <workItem from="1741300968470" duration="30667000" />
     </task>
     <servers />
   </component>
@@ -197,6 +221,13 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="XDebuggerManager">
+    <watches-manager>
+      <configuration name="Application">
+        <watch expression="tokeniser.getCurrentToken()" language="JAVA" />
+      </configuration>
+    </watches-manager>
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
