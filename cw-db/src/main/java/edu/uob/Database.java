@@ -26,9 +26,9 @@ public class Database {
         }
     }
 //
-    public void addNewTable(String tableName) {
+    public void addNewTableFromFile(String tableName) {
         Table table = new Table(tableName, name);
-        table.initialise();
+        table.initialiseTableFromFile();
         tables.add(table);
     }
 

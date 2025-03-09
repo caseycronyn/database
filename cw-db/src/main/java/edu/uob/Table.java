@@ -21,16 +21,26 @@ public class Table {
         this.databaseName = databaseName;
     }
 
-    public void initialise() {
-        readInFileAndPopulateArrayWithAllLines();
-        populateAttributesAndEntries();
-        writeTableToFile();
+    public void initialiseEmptyTableWithAttributes(ArrayList<String> attributes) {
+        StringBuilder firstLineOfTable = new StringBuilder();
+        for (String attribute : attributes) {
+            firstLineOfTable.append(attribute);
+            firstLineOfTable.append("\t");
+        }
+//        System.out.println(firstLineOfTable);
+        attributes.add(firstLineOfTable.toString());
+        System.out.println(firstLineOfTable);
     }
 
-    public void populateAttributesAndEntries() {
+    public void initialiseTableFromFile() {
+        readInFileAndPopulateArrayWithAllLines();
+        populateAttributesAndEntriesFromFile();
+    }
+
+    public void populateAttributesAndEntriesFromFile() {
         try {
-            populateAttributes();
-            populateEntriesAndMapAttributes();
+            populateAttributesFromFile();
+            populateEntriesAndMapAttributesFromFile();
         }
 //        TODO is this ok?
         catch (Exception e) {
@@ -39,7 +49,7 @@ public class Table {
 
     }
 
-    public void populateAttributes() {
+    public void populateAttributesFromFile() {
         String command = commandHolder.get(0);
         String[] attributeArray = command.split("\t");
         attributes.addAll(List.of(attributeArray));
@@ -76,7 +86,7 @@ public class Table {
         }
         }
 
-    public void populateEntriesAndMapAttributes() {
+    public void populateEntriesAndMapAttributesFromFile() {
 //        loop through each line:
         for (int i = 1; i < commandHolder.size(); i++) {
 //            split words into separate terms add to word_array
@@ -105,7 +115,7 @@ public class Table {
         }
     }
 
-    public void writeTableToFile() {
+    public void writeTableToFileFromMemory() {
         PrintWriter writer = null;
         try {
             writer = new PrintWriter("databases" + File.separator + databaseName + File.separator + name + ".tab");

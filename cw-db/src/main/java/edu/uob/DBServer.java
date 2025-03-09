@@ -54,12 +54,14 @@ public class DBServer {
         return currentDatabase;
     }
 
-    public void createNewTable(String tableName, String databaseName) {
+    public void createNewTableFromFile(String tableName, String databaseName) {
         Table table = new Table(tableName, databaseName);
-        table.initialise();
-        databases.get(databaseName).addNewTable(tableName);
+        table.initialiseTableFromFile();
+        table.writeTableToFileFromMemory();
+        databases.get(databaseName).addNewTableFromFile(tableName);
 //        databaseName.addNewtable(tableName);
     }
+
     /**
     * KEEP this signature (i.e. {@code edu.uob.DBServer.handleCommand(String)}) otherwise we won't be
     * able to mark your submission correctly.

@@ -22,7 +22,8 @@ public class CreateTable extends Parser {
     public void executeCommand(DBServer server){
 //        System.out.println(tokenBankLocal.getCurrentToken());
         databaseName = server.getCurrentDatabase();
-        server.createNewTable(tableName, databaseName);
+        Table table = new Table(databaseName, tableName);
+
 //        System.out.println(server.getCurrentDatabase());
     };
 }
