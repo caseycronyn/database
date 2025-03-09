@@ -12,7 +12,7 @@ import java.util.HashMap;
 // formats the string then passes it into the appropriate table method
 // all these will need to be made more robust at a later point
 public class Database {
-    ArrayList<Table> tables = new ArrayList<>();
+    HashMap<String, Table> tables = new HashMap<>();
     String name;
     private String storageFolderPath;
 
@@ -31,6 +31,6 @@ public class Database {
     public void addNewTableFromFile(String tableName) {
         Table table = new Table(tableName, name, storageFolderPath);
         table.initialiseTableFromFile();
-        tables.add(table);
+        tables.put(tableName, table);
     }
 }

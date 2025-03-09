@@ -23,6 +23,6 @@ public class CreateTableWithAttributes extends Parser {
         Table table = new Table(tableName, server.getCurrentDatabase(), server.getStorageFolderPath());
         table.setAttributes(attributes);
         table.writeTableToFileFromMemory();
-        server.databases.get(databaseName).tables.add(table);
+        server.databases.get(databaseName).tables.put(tableName, table);
     }
 }

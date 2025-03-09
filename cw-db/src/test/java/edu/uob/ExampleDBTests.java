@@ -128,8 +128,16 @@ public class ExampleDBTests {
 
     @Test
     public void testDatabaseDrop() {
-//        sendCommandToServer("CREATE DATABASE test;");
+        sendCommandToServer("CREATE DATABASE test;");
         sendCommandToServer("USE DATABASE test;");
         sendCommandToServer("DROP DATABASE test;");
+    }
+
+    @Test
+    public void testTableDrop() {
+        sendCommandToServer("CREATE DATABASE test;");
+        sendCommandToServer("USE DATABASE test;");
+        sendCommandToServer("CREATE TABLE marks;");
+        sendCommandToServer("DROP TABLE marks;");
     }
 }

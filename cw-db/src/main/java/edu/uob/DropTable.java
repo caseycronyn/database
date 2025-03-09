@@ -1,5 +1,7 @@
 package edu.uob;
 
+import java.io.File;
+
 public class DropTable extends Parser {
     String tableName;
 
@@ -11,6 +13,11 @@ public class DropTable extends Parser {
 
     @Override
     public void executeCommand(DBServer server){
-//        server.removeTable(tableName);
-    };
+//        server.databases.get(server.getCurrentDatabase()).tables.remove(tableName);
+        System.out.println(server.databases.get(server.getCurrentDatabase()).tables);
+//        System.out.println(server.getCurrentDatabase());
+//        System.out.println(server.databases.get(server.getCurrentDatabase()));
+//        File file = new File(server.getStorageFolderPath() + File.separator + server.getCurrentDatabase() + File.separator + tableName);
+//        file.delete();
+    }
 }

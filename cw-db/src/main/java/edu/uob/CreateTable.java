@@ -27,7 +27,7 @@ public class CreateTable extends Parser {
         String databaseName = server.getCurrentDatabase();
         Table table = new Table(tableName, databaseName, server.getStorageFolderPath());
         table.writeEmptyTableToFile();
-        server.databases.get(databaseName).tables.add(table);
+        server.databases.get(databaseName).tables.put(tableName, table);
 
 //        System.out.println(server.getCurrentDatabase());
     };
