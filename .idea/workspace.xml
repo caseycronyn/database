@@ -5,27 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2d90ba92-bec0-4de5-a887-3e7b80d82938" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/db.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/db.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cw-db/src/main/java/edu/uob/CreateTable.java" beforeDir="false" afterPath="$PROJECT_DIR$/cw-db/src/main/java/edu/uob/CreateTable.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cw-db/src/main/java/edu/uob/CreateTableWithAttributes.java" beforeDir="false" afterPath="$PROJECT_DIR$/cw-db/src/main/java/edu/uob/CreateTableWithAttributes.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cw-db/src/main/java/edu/uob/DBServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/cw-db/src/main/java/edu/uob/DBServer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cw-db/src/main/java/edu/uob/Database.java" beforeDir="false" afterPath="$PROJECT_DIR$/cw-db/src/main/java/edu/uob/Database.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cw-db/src/main/java/edu/uob/Table.java" beforeDir="false" afterPath="$PROJECT_DIR$/cw-db/src/main/java/edu/uob/Table.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cw-db/target/classes/edu/uob/DBClient.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cw-db/target/classes/edu/uob/DBServer.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cw-db/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/cw-db/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cw-db/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/cw-db/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/db/edu/uob/Attribute.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/db/edu/uob/DBClient.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/db/edu/uob/DBClient.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/db/edu/uob/DBCmd.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/db/edu/uob/DBServer.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/db/edu/uob/DBServer.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/db/edu/uob/Database.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/db/edu/uob/Database.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/db/edu/uob/Parser.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/db/edu/uob/Parser.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/db/edu/uob/Table.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/db/edu/uob/Table.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/db/edu/uob/Test.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/db/edu/uob/Test.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/db/edu/uob/Token.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/db/edu/uob/Tokeniser.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/db/edu/uob/Tokeniser.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/test/db/edu/uob/ExampleDBTests.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/test/db/edu/uob/ExampleDBTests.class" afterDir="false" />
     </list>
@@ -69,7 +55,12 @@
     "Application.Tokeniser.executor": "Run",
     "Downloaded.Files.Path.Enabled": "false",
     "JUnit.ExampleDBTests.executor": "Run",
+    "JUnit.ExampleDBTests.makeDatabase.executor": "Debug",
+    "JUnit.ExampleDBTests.makeDatabaseAndTable.executor": "Run",
     "JUnit.ExampleDBTests.testDatabaseCreation.executor": "Run",
+    "JUnit.ExampleDBTests.testDatabaseCreationWithEmptyTable.executor": "Run",
+    "JUnit.ExampleDBTests.testDatabaseCreationWithTableAndAttributes.executor": "Run",
+    "JUnit.ExampleDBTests.testDatabaseDrop.executor": "Run",
     "Repository.Attach.Annotations": "false",
     "Repository.Attach.JavaDocs": "false",
     "Repository.Attach.Sources": "false",
@@ -97,13 +88,15 @@
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$" />
     </key>
+    <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="edu.uob" />
+    </key>
     <key name="CopyClassDialog.RECENTS_KEY">
       <recent name="edu.uob" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.ExampleDBTests.testDatabaseCreation">
-    <configuration name="DBClient" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="edu.uob.DBClient" />
+  <component name="RunManager" selected="JUnit.ExampleDBTests.testDatabaseCreationWithTableAndAttributes">
+    <configuration name="ExampleDBTests.makeDatabaseAndTable" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="db" />
       <extension name="coverage">
         <pattern>
@@ -111,45 +104,10 @@
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="DBServer" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="edu.uob.DBServer" />
-      <module name="db" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="edu.uob.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="Test" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="edu.uob.Test" />
-      <module name="db" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="edu.uob.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="Tokeniser" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="edu.uob.Tokeniser" />
-      <module name="db" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="edu.uob.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
+      <option name="PACKAGE_NAME" value="edu.uob" />
+      <option name="MAIN_CLASS_NAME" value="edu.uob.ExampleDBTests" />
+      <option name="METHOD_NAME" value="makeDatabaseAndTable" />
+      <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -170,21 +128,69 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="ExampleDBTests.testDatabaseCreationWithEmptyTable" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="db" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="edu.uob.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="edu.uob" />
+      <option name="MAIN_CLASS_NAME" value="edu.uob.ExampleDBTests" />
+      <option name="METHOD_NAME" value="testDatabaseCreationWithEmptyTable" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="ExampleDBTests.testDatabaseCreationWithTableAndAttributes" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="db" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="edu.uob.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="edu.uob" />
+      <option name="MAIN_CLASS_NAME" value="edu.uob.ExampleDBTests" />
+      <option name="METHOD_NAME" value="testDatabaseCreationWithTableAndAttributes" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="ExampleDBTests.testDatabaseDrop" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="db" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="edu.uob.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="edu.uob" />
+      <option name="MAIN_CLASS_NAME" value="edu.uob.ExampleDBTests" />
+      <option name="METHOD_NAME" value="testDatabaseDrop" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.ExampleDBTests.testDatabaseCreationWithTableAndAttributes" />
+        <item itemvalue="JUnit.ExampleDBTests.testDatabaseCreationWithEmptyTable" />
+        <item itemvalue="JUnit.ExampleDBTests.testDatabaseDrop" />
+        <item itemvalue="JUnit.ExampleDBTests.makeDatabaseAndTable" />
         <item itemvalue="JUnit.ExampleDBTests.testDatabaseCreation" />
-        <item itemvalue="Application.DBServer" />
-        <item itemvalue="Application.DBClient" />
-        <item itemvalue="Application.Tokeniser" />
-        <item itemvalue="Application.Test" />
       </list>
     </recent_temporary>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-9823dce3aa75-a94e463ab2e7-intellij.indexing.shared.core-IU-243.25659.59" />
-        <option value="bundled-js-predefined-d6986cc7102b-1632447f56bf-JavaScript-IU-243.25659.59" />
+        <option value="bundled-jdk-9f38398b9061-39b83d9b5494-intellij.indexing.shared.core-IU-241.18034.62" />
+        <option value="bundled-js-predefined-1d06a55b98c1-0b3e54e931b4-JavaScript-IU-241.18034.62" />
       </set>
     </attachedChunks>
   </component>
@@ -202,6 +208,7 @@
       <workItem from="1741197735053" duration="12295000" />
       <workItem from="1741298269321" duration="2678000" />
       <workItem from="1741300968470" duration="30667000" />
+      <workItem from="1741532384789" duration="7530000" />
     </task>
     <servers />
   </component>
@@ -224,6 +231,11 @@
   </component>
   <component name="XDebuggerManager">
     <watches-manager>
+      <configuration name="JUnit">
+        <watch expression="tokenBank.getCurrentToken()" language="JAVA" />
+        <watch expression="tokenBank.getNextToken()" language="JAVA" />
+        <watch expression="server.getCurrentDatabase()" language="JAVA" />
+      </configuration>
       <configuration name="Application">
         <watch expression="tokeniser.getCurrentToken()" language="JAVA" />
       </configuration>
