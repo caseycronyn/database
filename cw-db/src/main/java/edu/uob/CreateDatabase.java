@@ -9,8 +9,8 @@ public class CreateDatabase extends Parser {
     @Override
     public DBCommand parse(TokenBank tokenBankIn) {
 //        tokenBankLocal = tokenBankIn;
-        tokenBankIn.nextToken();
-        databaseName = tokenBankIn.getCurrentToken();
+//        tokenBankIn.nextToken();
+        databaseName = tokenBankIn.getNextToken();
 //        return "CREATE DATABASE " + tokenBank.getCurrentToken();
         return this;
     }
@@ -18,7 +18,8 @@ public class CreateDatabase extends Parser {
     @Override
     public void executeCommand(DBServer server){
 //        System.out.println(tokenBankLocal.getCurrentToken());
-        server.createNewDatabase(databaseName);
+        Database database = new Database(databaseName, server.getStorageFolderPath());
+        server.databases.put(databaseName, database);
     };
 
 //    public void createNewDatabase(String databaseName) {

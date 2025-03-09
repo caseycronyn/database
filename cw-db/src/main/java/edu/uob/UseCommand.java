@@ -5,7 +5,8 @@ public class UseCommand extends Parser {
 
     @Override
     public DBCommand parse(TokenBank tokenBank) {
-        databaseName = tokenBank.getCurrentToken();
+//        databaseName = tokenBank.getCurrentToken();
+        databaseName = tokenBank.getNextToken();
 //        System.out.println(tokenBank.getCurrentToken());
         return this;
     }

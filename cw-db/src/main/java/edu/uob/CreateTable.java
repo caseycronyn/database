@@ -1,8 +1,11 @@
 package edu.uob;
 
+import java.io.File;
+
 public class CreateTable extends Parser {
     String tableName;
     String databaseName;
+    String storageFolderPath;
 
     @Override
     public DBCommand parse(TokenBank tokenBank) {
@@ -21,8 +24,10 @@ public class CreateTable extends Parser {
     @Override
     public void executeCommand(DBServer server){
 //        System.out.println(tokenBankLocal.getCurrentToken());
-        databaseName = server.getCurrentDatabase();
-        Table table = new Table(databaseName, tableName);
+        String databaseName = server.getCurrentDatabase();
+        Table table = new Table(tableName, databaseName, server.getStorageFolderPath());
+        table.writeEmptyTableToFile();
+        server.databases.get(databaseName).tables.add(table);
 
 //        System.out.println(server.getCurrentDatabase());
     };

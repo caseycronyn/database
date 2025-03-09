@@ -20,8 +20,9 @@ public class CreateTableWithAttributes extends Parser {
     @Override
     public void executeCommand(DBServer server){
         databaseName = server.getCurrentDatabase();
-        Table table = new Table(databaseName, tableName);
-        table.initialiseEmptyTableWithAttributes(attributes);
-//        System.out.println(tableName);
+        Table table = new Table(tableName, server.getCurrentDatabase(), server.getStorageFolderPath());
+        table.setAttributes(attributes);
+        table.writeTableToFileFromMemory();
+        server.databases.get(databaseName).tables.add(table);
     }
 }

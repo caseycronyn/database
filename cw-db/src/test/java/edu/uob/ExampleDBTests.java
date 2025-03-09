@@ -104,10 +104,32 @@ public class ExampleDBTests {
 //
     // my tests
     @Test
-    public void testDatabaseCreation() {
+    public void testDatabaseCreationWithTableAndAttributes() {
         String randomName = generateRandomName();
         sendCommandToServer("CREATE DATABASE " + randomName + ";");
-        sendCommandToServer("USE " + randomName + ";");
+        sendCommandToServer("USE DATABASE " + randomName + ";");
         sendCommandToServer("CREATE TABLE marks (name, mark, pass);");
+    }
+
+    @Test
+    public void testDatabaseCreationWithEmptyTable() {
+        String randomName = generateRandomName();
+        sendCommandToServer("CREATE DATABASE " + randomName + ";");
+        sendCommandToServer("USE DATABASE " + randomName + ";");
+        sendCommandToServer("CREATE TABLE marks;");
+    }
+
+    @Test
+    public void makeDatabaseAndTable() {
+        sendCommandToServer("CREATE DATABASE test;");
+        sendCommandToServer("USE DATABASE test;");
+        sendCommandToServer("CREATE TABLE marks;");
+    }
+
+    @Test
+    public void testDatabaseDrop() {
+//        sendCommandToServer("CREATE DATABASE test;");
+        sendCommandToServer("USE DATABASE test;");
+        sendCommandToServer("DROP DATABASE test;");
     }
 }

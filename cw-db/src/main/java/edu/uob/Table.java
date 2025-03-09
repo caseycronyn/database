@@ -14,22 +14,35 @@ public class Table {
     static ArrayList<String> commandHolder = new ArrayList<String>();
     String name;
     String databaseName;
+    String storageFolderPath;
 
 //    TODO this looks a bit crap
-    public Table(String tableName, String databaseName) {
+    public Table(String tableName, String databaseName, String storageFolderPath) {
         this.name = tableName;
         this.databaseName = databaseName;
+        this.storageFolderPath = storageFolderPath;
     }
 
+//    not sure of the use of this ...
     public void initialiseEmptyTableWithAttributes(ArrayList<String> attributes) {
         StringBuilder firstLineOfTable = new StringBuilder();
         for (String attribute : attributes) {
             firstLineOfTable.append(attribute);
             firstLineOfTable.append("\t");
         }
-//        System.out.println(firstLineOfTable);
+
+        System.out.println(attributes);
+//        System.out.println(firstLineOfTable.toString());
         attributes.add(firstLineOfTable.toString());
-        System.out.println(firstLineOfTable);
+//        System.out.println(attributes);
+    }
+
+    public void setAttributes(ArrayList<String> attributesIn) {
+        attributes = attributesIn;
+    }
+
+    public void setDatabaseName(String databaseNameIn) {
+        databaseName = databaseNameIn;
     }
 
     public void initialiseTableFromFile() {
@@ -118,7 +131,7 @@ public class Table {
     public void writeTableToFileFromMemory() {
         PrintWriter writer = null;
         try {
-            writer = new PrintWriter("databases" + File.separator + databaseName + File.separator + name + ".tab");
+            writer = new PrintWriter(storageFolderPath + File.separator + databaseName + File.separator + name + ".tab");
         }
         catch (Exception e) {
             System.out.println("error in writeTableToFile: " + e);
@@ -146,4 +159,15 @@ public class Table {
 //        writer.println(attribute);
         writer.close();
     }
+
+    public void writeEmptyTableToFile() {
+        try {
+            // Create the database storage folder if it doesn't already exist !
+            Files.createFile(Paths.get(storageFolderPath + File.separator + databaseName + File.separator + name + ".tab"));
+        } catch(IOException ioe) {
+            System.out.println("Can't seem to create file " + storageFolderPath);
+        }
+        
+    }
+
 }

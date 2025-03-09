@@ -17,12 +17,13 @@ handling and command building
  */
 public class Parser implements DBCommand {
 
+    // need to change this so I'm, checking for the first token only
     @Override
     public DBCommand parse(TokenBank tokenBank) {
         for (int i = 0; i < tokenBank.tokens.size(); i++) {
             if (tokenBank.tokens.get(i).equals(";")) {
 //                will replace
-                break;
+                return this;
             }
 
             if (tokenBank.tokens.get(i).equals("CREATE")) {
@@ -35,6 +36,12 @@ public class Parser implements DBCommand {
                 tokenBank.nextToken();
                 DBCommand useCommand = new UseCommand();
                 return useCommand.parse(tokenBank);
+            }
+
+            if (tokenBank.tokens.get(i).equals("DROP")) {
+                tokenBank.nextToken();
+                DBCommand dropCommand = new DropCommand();
+                return dropCommand.parse(tokenBank);
             }
         }
         return null;

@@ -8,6 +8,7 @@ import java.nio.file.Paths;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Objects;
 
 /** This class implements the DB server. */
 public class DBServer {
@@ -37,13 +38,23 @@ public class DBServer {
         }
     }
 
-////    setup database?
-//    public void setup() {
-//    }
+    public String getStorageFolderPath() {
+        return storageFolderPath;
+    }
 
-    public void createNewDatabase(String databaseName) {
-        Database database = new Database(databaseName, storageFolderPath);
-        databases.put(databaseName, database);
+    public void deleteDirectory(File file) {
+        // function to delete subdirectories and files
+        // store all the paths of files and folders present
+        // inside directory
+        for (File subfile : file.listFiles()) {
+            // if it is a subfolder,e.g Rohan and Ritik,
+            //  recursively call function to empty subfolder
+            if (subfile.isDirectory()) {
+                deleteDirectory(subfile);
+            }
+            // delete files and empty subfolders
+            subfile.delete();
+        }
     }
 
     public void setCurrentDatabase(String databaseName) {
@@ -55,12 +66,16 @@ public class DBServer {
     }
 
     public void createNewTableFromFile(String tableName, String databaseName) {
-        Table table = new Table(tableName, databaseName);
+        Table table = new Table(tableName, databaseName, storageFolderPath);
         table.initialiseTableFromFile();
         table.writeTableToFileFromMemory();
         databases.get(databaseName).addNewTableFromFile(tableName);
 //        databaseName.addNewtable(tableName);
     }
+
+//    public void removeTable(String tableName) {
+//        databases.get(currentDatabase).
+//    }
 
     /**
     * KEEP this signature (i.e. {@code edu.uob.DBServer.handleCommand(String)}) otherwise we won't be

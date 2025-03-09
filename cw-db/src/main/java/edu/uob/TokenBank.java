@@ -4,7 +4,11 @@ import java.util.ArrayList;
 
 public class TokenBank {
     ArrayList<String> tokens = new ArrayList<String>();
-    int currentToken = 0;
+    int currentToken;
+
+    TokenBank() {
+        currentToken = 0;
+    }
 
     void setTokens(ArrayList<String> tokens) {
         this.tokens = tokens;
@@ -23,7 +27,7 @@ public class TokenBank {
     }
 
     void nextToken() {
-        currentToken++;
+        currentToken += 1;
     }
 
     ArrayList<String> getTokens() {
