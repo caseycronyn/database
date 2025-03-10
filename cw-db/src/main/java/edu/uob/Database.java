@@ -15,17 +15,14 @@ public class Database {
     HashMap<String, Table> tables = new HashMap<>();
     String name;
     private String storageFolderPath;
+    Integer ID;
 
     Database (String name, String storageFolderPath) {
         this.name = name;
         this.storageFolderPath = storageFolderPath;
-//        create database path
-        try {
-            // Create the database storage folder if it doesn't already exist !
-            Files.createDirectories(Paths.get(storageFolderPath + File.separator + name));
-        } catch(IOException ioe) {
-            System.out.println("Can't seem to create database storage folder " + storageFolderPath);
-        }
+        this.ID = 1;
+//        createIDFolderAndFile();
+        createDatabaseFolder();
     }
 //
     public void addNewTableFromFile(String tableName) {
@@ -33,4 +30,29 @@ public class Database {
         table.initialiseTableFromFile();
         tables.put(tableName, table);
     }
+
+//    public void createIDFolderAndFile() {
+//        try {
+//            // Create the database storage folder if it doesn't already exist !
+//            Files.createDirectories(Paths.get(storageFolderPath + File.separator + "state"));
+//            Files.createFile(Paths.get(storageFolderPath + File.separator + "state" + File.separator + "id"));
+//        } catch(IOException ioe) {
+//            System.out.println("Can't seem to create state storage folder " + storageFolderPath);
+//        }
+//    }
+
+    public void createDatabaseFolder() {
+        //        create database path
+        try {
+            // Create the database storage folder if it doesn't already exist !
+            Files.createDirectories(Paths.get(storageFolderPath + File.separator + name));
+        } catch(IOException ioe) {
+            System.out.println("Can't seem to create database storage folder " + storageFolderPath);
+        }
+    }
+
+    public int getAndIncrementID() {
+        return ID++;
+    }
+
 }

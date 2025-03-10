@@ -43,6 +43,16 @@ public class Parser implements DBCommand {
                 DBCommand dropCommand = new DropCommand();
                 return dropCommand.parse(tokenBank);
             }
+            if (tokenBank.tokens.get(i).equals("ALTER")) {
+                tokenBank.nextToken();
+                DBCommand alterCommand = new AlterCommand();
+                return alterCommand.parse(tokenBank);
+            }
+            if (tokenBank.tokens.get(i).equals("INSERT")) {
+                tokenBank.nextToken();
+                DBCommand insertCommand = new InsertCommand();
+                return insertCommand.parse(tokenBank);
+            }
         }
         return null;
     }

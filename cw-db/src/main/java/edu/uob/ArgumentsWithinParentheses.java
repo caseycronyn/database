@@ -3,8 +3,9 @@ package edu.uob;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class Attributes extends Parser {
-    public ArrayList<String> buildAttributes(TokenBank tokenBank) {
+public class ArgumentsWithinParentheses extends Parser {
+
+    public ArrayList<String> buildArguments(TokenBank tokenBank) {
         int position = tokenBank.getCurrentTokenPosition();
         String currentToken;
         ArrayList<String> fragments = new ArrayList<>();

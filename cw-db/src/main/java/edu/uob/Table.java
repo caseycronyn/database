@@ -12,18 +12,19 @@ public class Table {
     ArrayList<String> attributes = new ArrayList<>();
     ArrayList<HashMap<String, String>> entries = new ArrayList<>();
     static ArrayList<String> commandHolder = new ArrayList<String>();
-    String name;
+    String tableName;
     String databaseName;
     String storageFolderPath;
 
-//    TODO this looks a bit crap
+    //    TODO this looks a bit crap
     public Table(String tableName, String databaseName, String storageFolderPath) {
-        this.name = tableName;
+        this.tableName = tableName;
         this.databaseName = databaseName;
         this.storageFolderPath = storageFolderPath;
+        this.attributes.add("id");
     }
 
-//    not sure of the use of this ...
+    //    not sure of the use of this ...
     public void initialiseEmptyTableWithAttributes(ArrayList<String> attributes) {
         StringBuilder firstLineOfTable = new StringBuilder();
         for (String attribute : attributes) {
@@ -38,7 +39,7 @@ public class Table {
     }
 
     public void setAttributes(ArrayList<String> attributesIn) {
-        attributes = attributesIn;
+        attributes.addAll(attributesIn);
     }
 
     public void setDatabaseName(String databaseNameIn) {
@@ -70,11 +71,11 @@ public class Table {
     }
 
     public void readInFileAndPrint() throws IOException {
-        File fileToOpen = new File(name + ".tab");
+        File fileToOpen = new File(tableName + ".tab");
         FileReader reader = new FileReader(fileToOpen);
         BufferedReader buffReader = new BufferedReader(reader);
         String line;
-        while((line = buffReader.readLine()) != null) {
+        while ((line = buffReader.readLine()) != null) {
             System.out.println(line);
         }
         buffReader.close();
@@ -83,7 +84,7 @@ public class Table {
     public void readInFileAndPopulateArrayWithAllLines() {
         BufferedReader buffReader = null;
         FileReader reader = null;
-        File fileToOpen = new File(name + ".tab");
+        File fileToOpen = new File(tableName + ".tab");
         try {
             reader = new FileReader(fileToOpen);
             buffReader = new BufferedReader(reader);
@@ -93,11 +94,10 @@ public class Table {
 //            System.out.println(line);
             }
             buffReader.close();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             System.out.println("error in readInFileAndPopulateArrayWithAllLines: " + e);
         }
-        }
+    }
 
     public void populateEntriesAndMapAttributesFromFile() {
 //        loop through each line:
@@ -123,7 +123,7 @@ public class Table {
     }
 
     public void printEntriesHashMap() {
-        for (HashMap<String, String> row: entries) {
+        for (HashMap<String, String> row : entries) {
             System.out.println(row);
         }
     }
@@ -131,10 +131,9 @@ public class Table {
     public void writeTableToFileFromMemory() {
         PrintWriter writer = null;
         try {
-            writer = new PrintWriter(storageFolderPath + File.separator + databaseName + File.separator + name + ".tab");
-        }
-        catch (Exception e) {
-            System.out.println("error in writeTableToFile: " + e);
+            writer = new PrintWriter(storageFolderPath + File.separator + databaseName + File.separator + tableName + ".tab");
+        } catch (Exception e) {
+            System.out.println("error in writeTableToFileFromMemory: " + e);
         }
         String tabJoinedLine = String.join("\t", attributes);
         writer.println(tabJoinedLine);
@@ -163,11 +162,37 @@ public class Table {
     public void writeEmptyTableToFile() {
         try {
             // Create the database storage folder if it doesn't already exist !
-            Files.createFile(Paths.get(storageFolderPath + File.separator + databaseName + File.separator + name + ".tab"));
-        } catch(IOException ioe) {
+            Files.createFile(Paths.get(storageFolderPath + File.separator + databaseName + File.separator + tableName + ".tab"));
+        } catch (IOException ioe) {
             System.out.println("Can't seem to create file " + storageFolderPath);
         }
-        
     }
 
+    public void addNewAttribute(String attribute) {
+        attributes.add(attribute);
+        writeTableToFileFromMemory();
+    }
+
+    public void removeAttribute(String attribute) {
+        attributes.remove(attribute);
+        writeTableToFileFromMemory();
+    }
+
+    public void addEntryToTable(ArrayList<String> entryArray) {
+        HashMap<String, String> row = new HashMap<>();
+        if (entryArray.size() != attributes.size() + 1) {
+            return;
+        }
+//            loop through word_array:
+        for (int j = 0; j < attributes.size(); j++) {
+//                add each key value pair to a new row
+            row.put(attributes.get(j), entryArray.get(j));
+        }
+        entries.add(row);
+//            System.out.println(row);
+//            System.out.println(commandHolder.get(i));
+//        for (String entry: commandHolder) {
+//            System.out.println(entry);
+//        }
+    }
 }

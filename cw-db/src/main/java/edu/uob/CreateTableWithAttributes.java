@@ -12,8 +12,8 @@ public class CreateTableWithAttributes extends Parser {
     public DBCommand parse(TokenBank tokenBank) {
         tableName = tokenBank.getCurrentToken();
         tokenBank.nextToken();
-        Attributes attributesMaker = new Attributes();
-        attributes = attributesMaker.buildAttributes(tokenBank);
+        ArgumentsWithinParentheses attributesBuilder = new ArgumentsWithinParentheses();
+        attributes = attributesBuilder.buildArguments(tokenBank);
         return this;
     }
 

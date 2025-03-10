@@ -26,8 +26,13 @@ public class TokenBank {
         return currentToken;
     }
 
-    void nextToken() {
+//    returns false if next token is ';'
+    boolean nextToken() {
+        if (getNextToken().equals(";")) {
+            return false;
+        }
         currentToken += 1;
+        return true;
     }
 
     ArrayList<String> getTokens() {

@@ -140,4 +140,23 @@ public class ExampleDBTests {
         sendCommandToServer("CREATE TABLE marks;");
         sendCommandToServer("DROP TABLE marks;");
     }
+
+    @Test
+    public void testAlterTable() {
+        String randomName = generateRandomName();
+        sendCommandToServer("CREATE DATABASE " + randomName + ";");
+        sendCommandToServer("USE DATABASE " + randomName + ";");
+        sendCommandToServer("CREATE TABLE marks (name, mark, pass);");
+        sendCommandToServer("ALTER TABLE marks ADD age;");
+        sendCommandToServer("ALTER TABLE marks DROP name;");
+    }
+
+    @Test
+    public void testInsertCommand() {
+        String randomName = generateRandomName();
+        sendCommandToServer("CREATE DATABASE " + randomName + ";");
+        sendCommandToServer("USE DATABASE " + randomName + ";");
+        sendCommandToServer("CREATE TABLE marks (name, mark, pass);");
+        sendCommandToServer("INSERT INTO marks VALUES ('Simon', 65, TRUE);");
+    }
 }
