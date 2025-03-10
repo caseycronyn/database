@@ -16,6 +16,7 @@ types facilitates error
 handling and command building
  */
 public class Parser implements DBCommand {
+    TokenBank localTokenBank;
     // need to change this so I'm, checking for the first token only
     @Override
     public DBCommand parse(TokenBank tokenBank) {

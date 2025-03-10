@@ -99,14 +99,14 @@ public class MyDBTests {
         sendCommandToServer("SELECT * FROM marks;");
     }
 
-//    @Test
-//    public void selectCommandWithCondition() {
-//        String randomName = generateRandomName();
-//        sendCommandToServer("CREATE DATABASE " + randomName + ";");
-//        sendCommandToServer("USE DATABASE " + randomName + ";");
-//        sendCommandToServer("CREATE TABLE marks (name, mark, pass);");
-//        sendCommandToServer("SELECT * FROM marks;");
-//    }
+    @Test
+    public void selectCommandWithCondition() {
+        String randomName = generateRandomName();
+        sendCommandToServer("CREATE DATABASE " + randomName + ";");
+        sendCommandToServer("USE DATABASE " + randomName + ";");
+        sendCommandToServer("CREATE TABLE marks (name, mark, pass);");
+        sendCommandToServer("SELECT * FROM marks;");
+    }
 
 }
 

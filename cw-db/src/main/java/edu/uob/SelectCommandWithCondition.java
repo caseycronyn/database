@@ -11,5 +11,5 @@ public class SelectCommandWithCondition extends Parser {
     @Override
     public void executeCommand(DBServer server){
         ;
-    };
+    }
 }

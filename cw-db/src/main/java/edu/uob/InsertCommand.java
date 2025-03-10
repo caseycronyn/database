@@ -6,10 +6,7 @@ public class InsertCommand extends Parser {
     ArrayList<String> valueList;
     String tableName;
     Table table;
-    Parser {
-        localTokenBank = tokenBank;
-    }
-
+    
     @Override
     public DBCommand parse(TokenBank tokenBank) {
         tokenBank.nextToken();
