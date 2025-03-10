@@ -85,8 +85,8 @@ public class DBServer {
     */
     public String handleCommand(String command) {
         Tokeniser tokeniser = new Tokeniser();
-        Parser parser = new Parser();
         TokenBank tokenBank = new TokenBank();
+        Parser parser = new Parser();
 
         tokenBank.setTokens(tokeniser.setup(command));
         commandResult = parser.parse(tokenBank);

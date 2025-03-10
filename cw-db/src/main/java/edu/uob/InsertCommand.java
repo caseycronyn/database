@@ -5,6 +5,10 @@ import java.util.ArrayList;
 public class InsertCommand extends Parser {
     ArrayList<String> valueList;
     String tableName;
+    Table table;
+    Parser {
+        localTokenBank = tokenBank;
+    }
 
     @Override
     public DBCommand parse(TokenBank tokenBank) {
@@ -20,6 +24,9 @@ public class InsertCommand extends Parser {
 
     @Override
     public void executeCommand(DBServer server){
-//        server.databases.get(server.getCurrentDatabase()).tables.get(tableName).;
+        table = server.databases.get(server.getCurrentDatabase()).tables.get(tableName);
+//        System.out.println(table.attributes);
+        table.addEntryToTable(valueList, server.databases.get(server.getCurrentDatabase()).getAndIncrementID());
+        table.writeTableToFileFromMemory();
     };
 }

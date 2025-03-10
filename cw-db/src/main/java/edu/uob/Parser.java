@@ -16,7 +16,6 @@ types facilitates error
 handling and command building
  */
 public class Parser implements DBCommand {
-
     // need to change this so I'm, checking for the first token only
     @Override
     public DBCommand parse(TokenBank tokenBank) {
@@ -52,6 +51,11 @@ public class Parser implements DBCommand {
                 tokenBank.nextToken();
                 DBCommand insertCommand = new InsertCommand();
                 return insertCommand.parse(tokenBank);
+            }
+            if (tokenBank.tokens.get(i).equals("SELECT")) {
+                tokenBank.nextToken();
+                DBCommand selectCommand = new SelectCommand();
+                return selectCommand.parse(tokenBank);
             }
         }
         return null;

@@ -39,6 +39,10 @@ public class TokenBank {
         return tokens;
     }
 
+    String getTokenAtPosition(int position) {
+        return tokens.get(position);
+    }
+
 //    ArrayList<String> tokenArray = new ArrayList<>();
 
 //    Tokenizer (String query) {

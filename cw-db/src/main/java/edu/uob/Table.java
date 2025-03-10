@@ -9,8 +9,8 @@ import java.util.*;
 //populates the tables rows and columns by passing in the formatted string. this class also holds the data for rows and columns
 //the columns are ordered
 public class Table {
-    ArrayList<String> attributes = new ArrayList<>();
     ArrayList<HashMap<String, String>> entries = new ArrayList<>();
+    ArrayList<String> attributes = new ArrayList<>();
     static ArrayList<String> commandHolder = new ArrayList<String>();
     String tableName;
     String databaseName;
@@ -178,21 +178,31 @@ public class Table {
         writeTableToFileFromMemory();
     }
 
-    public void addEntryToTable(ArrayList<String> entryArray) {
+    public void addEntryToTable(ArrayList<String> entryArray, Integer newID) {
         HashMap<String, String> row = new HashMap<>();
-        if (entryArray.size() != attributes.size() + 1) {
+        if ((entryArray.size() + 1) != attributes.size()) {
             return;
         }
-//            loop through word_array:
-        for (int j = 0; j < attributes.size(); j++) {
-//                add each key value pair to a new row
-            row.put(attributes.get(j), entryArray.get(j));
+        row.put("id", newID.toString());
+        entryArray.add(0, newID.toString());
+        for (int i = 0; i < attributes.size(); i++) {
+            row.put(attributes.get(i), entryArray.get(i));
         }
+//        System.out.println(row);
         entries.add(row);
-//            System.out.println(row);
-//            System.out.println(commandHolder.get(i));
-//        for (String entry: commandHolder) {
-//            System.out.println(entry);
-//        }
+    }
+
+    public void printTableToStdout() {
+        String tabJoinedLine = String.join("\t", attributes);
+        System.out.println(tabJoinedLine);
+        for (HashMap<String, String> row : entries) {
+            ArrayList<String> orderedValues = new ArrayList<>();
+//            loop through attributes in order
+            for (String attribute : attributes) {
+                orderedValues.add(row.get(attribute));
+            }
+            String joinedLine = String.join("\t", orderedValues);
+            System.out.println(joinedLine);
+        }
     }
 }

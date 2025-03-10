@@ -9,7 +9,6 @@ public interface DBCommand {
 //    List<String> tableNames = null;
     String[] specialCharacters = {"(", ")", ",", ";"};
     TokenBank tokenBankLocal = null;
-    String databaseName = null;
 
     abstract DBCommand parse(TokenBank tokenBank);
     abstract void executeCommand(DBServer server);
