@@ -6,6 +6,7 @@ public class TokenBank {
     ArrayList<String> tokens = new ArrayList<String>();
     int currentToken;
 
+
     TokenBank() {
         currentToken = 0;
     }
@@ -41,6 +42,10 @@ public class TokenBank {
 
     String getTokenAtPosition(int position) {
         return tokens.get(position);
+    }
+
+    void setTokenAtPosition(int position) {
+        currentToken = position;
     }
 
 //    ArrayList<String> tokenArray = new ArrayList<>();

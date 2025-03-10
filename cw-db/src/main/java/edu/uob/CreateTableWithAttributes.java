@@ -1,7 +1,6 @@
 package edu.uob;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class CreateTableWithAttributes extends Parser {
     String tableName;
@@ -12,7 +11,7 @@ public class CreateTableWithAttributes extends Parser {
     public DBCommand parse(TokenBank tokenBank) {
         tableName = tokenBank.getCurrentToken();
         tokenBank.nextToken();
-        ArgumentsWithinParentheses attributesBuilder = new ArgumentsWithinParentheses();
+        Arguments attributesBuilder = new Arguments();
         attributes = attributesBuilder.buildArguments(tokenBank);
         return this;
     }

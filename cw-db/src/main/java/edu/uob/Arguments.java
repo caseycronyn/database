@@ -3,7 +3,8 @@ package edu.uob;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class ArgumentsWithinParentheses extends Parser {
+// gets arguments from a parentheses like expression. probably warrants a bit of a rename
+public class Arguments extends Parser {
 
     public ArrayList<String> buildArguments(TokenBank tokenBank) {
         int position = tokenBank.getCurrentTokenPosition();

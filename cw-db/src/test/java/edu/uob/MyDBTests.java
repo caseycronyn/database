@@ -105,7 +105,11 @@ public class MyDBTests {
         sendCommandToServer("CREATE DATABASE " + randomName + ";");
         sendCommandToServer("USE DATABASE " + randomName + ";");
         sendCommandToServer("CREATE TABLE marks (name, mark, pass);");
-        sendCommandToServer("SELECT * FROM marks;");
+        sendCommandToServer("INSERT INTO marks VALUES ('Simon', 65, TRUE);");
+        sendCommandToServer("INSERT INTO marks VALUES ('David', 82, TRUE);");
+        sendCommandToServer("INSERT INTO marks VALUES ('Jeremy', 38, FALSE);");
+//        sendCommandToServer("SELECT * FROM marks WHERE pass == TRUE;");
+        sendCommandToServer("SELECT * FROM marks WHERE pass == FALSE;");
     }
 
 }

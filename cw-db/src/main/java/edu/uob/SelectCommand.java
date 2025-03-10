@@ -12,7 +12,7 @@ public class SelectCommand extends Parser {
             return this;
         }
         if (tokenBank.getTokenAtPosition(4).equals("WHERE")) {
-            DBCommand selectCommandWithCondition = new SelectCommandWithCondition();
+            DBCommand selectCommandWithCondition = new SelectCommandWithConditional();
             return selectCommandWithCondition.parse(tokenBank);
         }
         return null;
