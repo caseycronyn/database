@@ -1,6 +1,7 @@
 package edu.uob;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /*
@@ -17,12 +18,13 @@ handling and command building
  */
 public class Parser implements DBCommand {
     TokenBank localTokenBank;
+    String[] specialCharacters = {"(", ")", ",", ";"};
     // need to change this so I'm, checking for the first token only
     @Override
     public DBCommand parse(TokenBank tokenBank) {
         for (int i = 0; i < tokenBank.tokens.size(); i++) {
             if (tokenBank.tokens.get(i).equals(";")) {
-//                will replace
+               // will replace
                 return this;
             }
 
@@ -65,6 +67,23 @@ public class Parser implements DBCommand {
     @Override
     public void executeCommand(DBServer server){};
 
-//    public DBCmd parse(ArrayList<String> tokens) {
-//    }
+   // tries to get rid of the parenthesis and get the arguments inside as a list
+    public ArrayList<String> convertListInParenthesisToArray(TokenBank tokenBank) {
+        int position = tokenBank.getCurrentTokenPosition();
+        String currentToken;
+        ArrayList<String> fragments = new ArrayList<>();
+        for (; position < tokenBank.tokens.size(); position++) {
+            currentToken = tokenBank.tokens.get(position);
+            if (!Arrays.asList(specialCharacters).contains(currentToken)) {
+            System.out.println(tokenBank.tokens.get(position));
+                fragments.add(tokenBank.tokens.get(position));
+            }
+        }
+       // String str = String.join("", fragments);
+       // System.out.println(fragments);
+        return fragments;
+    }
+
+   // public DBCmd parse(ArrayList<String> tokens) {
+   // }
 }

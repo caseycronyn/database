@@ -1,6 +1,6 @@
 package edu.uob;
 
-public class SelectCommand extends Parser {
+public class SelectCommand extends Conditionals implements DBCommand {
     TokenBank localTokenBank;
     String tableName;
 //    String

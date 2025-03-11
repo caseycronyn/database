@@ -14,8 +14,7 @@ public class InsertCommand extends Parser {
         tableName = tokenBank.getCurrentToken();
         tokenBank.nextToken();
         tokenBank.nextToken();
-        Arguments valueListBuilder = new Arguments();
-        valueList = valueListBuilder.buildArguments(tokenBank);
+        valueList = convertListInParenthesisToArray(tokenBank);
         return this;
     }
 

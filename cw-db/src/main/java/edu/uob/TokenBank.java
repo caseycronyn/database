@@ -1,6 +1,7 @@
 package edu.uob;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class TokenBank {
     ArrayList<String> tokens = new ArrayList<String>();
@@ -27,13 +28,8 @@ public class TokenBank {
         return currentToken;
     }
 
-//    returns false if next token is ';'
-    boolean nextToken() {
-        if (getNextToken().equals(";")) {
-            return false;
-        }
+    void nextToken() {
         currentToken += 1;
-        return true;
     }
 
     ArrayList<String> getTokens() {
@@ -47,6 +43,7 @@ public class TokenBank {
     void setTokenAtPosition(int position) {
         currentToken = position;
     }
+
 
 //    ArrayList<String> tokenArray = new ArrayList<>();
 

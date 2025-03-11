@@ -9,8 +9,7 @@ public class BooleanConditional extends Parser {
     @Override
     public DBCommand parse(TokenBank tokenBank) {
         localTokenBank = tokenBank;
-        Arguments conditions = new Arguments();
-        arguments = conditions.buildArguments(tokenBank);
+        arguments = convertListInParenthesisToArray(tokenBank);
         operator = arguments.get(1);
         return this;
     }
