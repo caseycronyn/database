@@ -2,6 +2,7 @@ package edu.uob;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 
 // Maybe use regular expressions for a subset of this
 // normalise this input so that it's all the same. takes a string and turns it into an array of token
@@ -12,7 +13,7 @@ public class Tokeniser {
     // Treats text inside single quotes as a single token
     // Breaks non-quoted text on spaces and special punctuation
     // Assembles all tokens into a list and prints them out
-    public ArrayList<String> setup(String query) {
+    public ArrayList<String> getListOfTokens(String query) {
         // Split the query on single quotes (to separate out query text from string literals)
         String[] fragments = query.split("'");
         for (int i = 0; i < fragments.length; i++) {
@@ -30,6 +31,10 @@ public class Tokeniser {
 //        for (int i = 0; i < tokens.size(); i++) System.out.println(tokens.get(i));
         return tokens;
     }
+
+    // public ArrayList<HashMap<Token, E>> tokenLexer(ArrayList<String> tokens) {
+    //
+    // }
 
     String[] tokeniseFragment(String input) {
         // Add in some extra padding spaces either side of the "special characters"...

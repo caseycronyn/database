@@ -24,7 +24,7 @@ public class DBServer {
 //        server.blockingListenOn(8888);
     }
 
-//  NOTE double check the databases location before submission
+ // NOTE double check the databases location before submission
     /**
     * KEEP this signature otherwise we won't be able to mark your submission correctly.
     */
@@ -88,7 +88,7 @@ public class DBServer {
         TokenBank tokenBank = new TokenBank();
         Parser parser = new Parser();
 
-        tokenBank.setTokens(tokeniser.setup(command));
+        tokenBank.setTokens(tokeniser.getListOfTokens(command));
         commandResult = parser.parse(tokenBank);
         commandResult.executeCommand(this);
         return "";

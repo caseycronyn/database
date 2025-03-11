@@ -1,34 +1,22 @@
-/CREATE DATABASE markbook;/
+class error
 
-[OK]
+// query, response. True = [OK], False = [Error] 
+HashMap<String, Boolean> queries = {
+    "CREATE DATABASE markbook;", true,
 
-/USE markbook;/
+"USE markbook;", [OK],
 
-[OK]
+"CREATE TABLE marks (name, mark, pass);", [OK],
 
-/CREATE TABLE marks (name, mark, pass);/
+"INSERT INTO marks VALUES ('Simon', 65, TRUE);", [OK],
 
-[OK]
+"INSERT INTO marks VALUES ('Sion', 55, TRUE);", [OK],
 
-/INSERT INTO marks VALUES ('Simon', 65, TRUE);/
+"INSERT INTO marks VALUES ('Rob', 35, FALSE);", [OK],
 
-[OK]
+"INSERT INTO marks VALUES ('Chris', 20, FALSE);", [OK],
 
-/INSERT INTO marks VALUES ('Sion', 55, TRUE);/
-
-[OK]
-
-/INSERT INTO marks VALUES ('Rob', 35, FALSE);/
-
-[OK]
-
-/INSERT INTO marks VALUES ('Chris', 20, FALSE);/
-
-[OK]
-
-/SELECT * FROM marks;/
-
-[OK]
+"SELECT * FROM marks;", [OK],
 
 id name mark pass
 
@@ -40,9 +28,7 @@ id name mark pass
 
 4 Chris 20 FALSE
 
-/SELECT * FROM marks WHERE name != 'Sion';/
-
-[OK]
+"SELECT * FROM marks WHERE name != 'Sion';", [OK],
 
 id name mark pass
 
@@ -52,9 +38,7 @@ id name mark pass
 
 4 Chris 20 FALSE
 
-/SELECT * FROM marks WHERE pass == TRUE;/
-
-[OK]
+"SELECT * FROM marks WHERE pass == TRUE;", [OK],
 
 id name mark pass
 
@@ -68,9 +52,7 @@ doesn't need to be able parse them)
 // Assuming there is a table called “coursework” in the database (and
 that table has been filled with data)
 
-/SELECT * FROM coursework;/
-
-[OK]
+"SELECT * FROM coursework;", [OK],
 
 id task submission
 
@@ -91,9 +73,7 @@ id task submission
 // attribute names are prepended with name of table from which they
 originated
 
-/JOIN coursework AND marks ON submission AND id;/
-
-[OK]
+"JOIN coursework AND marks ON submission AND id;", [OK],
 
 id coursework.task marks.name marks.mark marks.pass
 
@@ -105,25 +85,17 @@ id coursework.task marks.name marks.mark marks.pass
 
 4 STAG Sion 55 TRUE
 
-/UPDATE marks SET mark = 38 WHERE name == 'Chris';/
+"UPDATE marks SET mark = 38 WHERE name == 'Chris';", [OK],
 
-[OK]
-
-/SELECT * FROM marks WHERE name == 'Chris';/
-
-[OK]
+"SELECT * FROM marks WHERE name == 'Chris';", [OK],
 
 id name mark pass
 
 4 Chris 38 FALSE
 
-/DELETE FROM marks WHERE name == 'Sion';/
+"DELETE FROM marks WHERE name == 'Sion';", [OK],
 
-[OK]
-
-/SELECT * FROM marks;/
-
-[OK]
+"SELECT * FROM marks;", [OK],
 
 id name mark pass
 
@@ -133,17 +105,13 @@ id name mark pass
 
 4 Chris 38 FALSE
 
-/SELECT * FROM marks WHERE (pass == FALSE) AND (mark > 35);/
-
-[OK]
+"SELECT * FROM marks WHERE (pass == FALSE) AND (mark > 35);", [OK],
 
 id name mark pass
 
 4 Chris 38 FALSE
 
-/SELECT * FROM marks WHERE name LIKE 'i';/
-
-[OK]
+"SELECT * FROM marks WHERE name LIKE 'i';", [OK],
 
 id name mark pass
 
@@ -151,9 +119,7 @@ id name mark pass
 
 4 Chris 38 FALSE
 
-/SELECT id FROM marks WHERE pass == FALSE;/
-
-[OK]
+"SELECT id FROM marks WHERE pass == FALSE;", [OK],
 
 id
 
@@ -161,85 +127,57 @@ id
 
 4
 
-/SELECT name FROM marks WHERE mark>60;/
-
-[OK]
+"SELECT name FROM marks WHERE mark>60;", [OK],
 
 name
 
 Simon
 
-/DELETE FROM marks WHERE mark<40;/
+"DELETE FROM marks WHERE mark<40;", [OK],
 
-[OK]
-
-/SELECT * FROM marks;/
-
-[OK]
+"SELECT * FROM marks;", [OK],
 
 id name mark pass
 
 1 Simon 65 TRUE
 
-/ALTER TABLE marks ADD age;/
+"ALTER TABLE marks ADD age;", [OK],
 
-[OK]
-
-/SELECT * FROM marks;/
-
-[OK]
+"SELECT * FROM marks;", [OK],
 
 id name mark pass age
 
 1 Simon 65 TRUE
 
-/UPDATE marks SET age = 35 WHERE name == 'Simon';/
+"UPDATE marks SET age = 35 WHERE name == 'Simon';", [OK],
 
-[OK]
-
-/SELECT * FROM marks;/
-
-[OK]
+"SELECT * FROM marks;", [OK],
 
 id name mark pass age
 
 1 Simon 65 TRUE 35
 
-/ALTER TABLE marks DROP pass;/
+"ALTER TABLE marks DROP pass;", [OK],
 
-[OK]
-
-/SELECT * FROM marks;/
-
-[OK]
+"SELECT * FROM marks;", [OK],
 
 id name mark age
 
 1 Simon 65 35
 
-/SELECT * FROM marks/
-
-[ERROR]: Semi colon missing at end of line (or similar message !)
+"SELECT * FROM marks", [ERROR]: Semi colon missing at end of line (or similar message !),
 
 // Assuming there is NOT a table called “crew” in the database
 
-/SELECT * FROM crew;/
+"SELECT * FROM crew;", [ERROR]: Table does not exist (or similar message !),
 
-[ERROR]: Table does not exist (or similar message !)
+/ Assuming there is NOT an attribute called “height” in the table
 
-// Assuming there is NOT an attribute called “height” in the table
+"SELECT height FROM marks WHERE name == 'Chris';", [ERROR]: Attribute does not exist (or similar message !),
 
-/SELECT height FROM marks WHERE name == 'Chris';/
+"DROP TABLE marks;", [OK],
 
-[ERROR]: Attribute does not exist (or similar message !)
-
-/DROP TABLE marks;/
-
-[OK]
-
-/DROP DATABASE markbook;/
-
-[OK]
+"DROP DATABASE markbook;", [OK],
 
 Note that this transcript is not intended to be complete and
 comprehensive...

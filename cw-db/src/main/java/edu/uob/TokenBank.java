@@ -6,7 +6,15 @@ import java.util.Arrays;
 public class TokenBank {
     ArrayList<String> tokens = new ArrayList<String>();
     int currentToken;
+    String currentTable;
 
+    String getCurrentTable() {
+        return currentTable;
+    }
+
+    void setCurrentTable(String currentTable) {
+        this.currentTable = currentTable;
+    }
 
     TokenBank() {
         currentToken = 0;

@@ -75,7 +75,7 @@ public class Parser implements DBCommand {
         for (; position < tokenBank.tokens.size(); position++) {
             currentToken = tokenBank.tokens.get(position);
             if (!Arrays.asList(specialCharacters).contains(currentToken)) {
-            System.out.println(tokenBank.tokens.get(position));
+            // System.out.println(tokenBank.tokens.get(position));
                 fragments.add(tokenBank.tokens.get(position));
             }
         }

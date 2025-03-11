@@ -31,14 +31,15 @@ public class MyDBTests {
                 "Server took too long to respond (probably stuck in an infinite loop)");
     }
 
+    @Test
     public void testDatabaseCreationWithTableAndAttributes() {
         String randomName = generateRandomName();
         sendCommandToServer("CREATE DATABASE " + randomName + ";");
-        sendCommandToServer("USE DATABASE " + randomName + ";");
-        sendCommandToServer("CREATE TABLE marks (name, mark, pass);");
+        // sendCommandToServer("USE DATABASE " + randomName + ";");
+        // sendCommandToServer("CREATE TABLE marks (name, mark, pass);");
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     public void testDatabaseCreationWithEmptyTable() {
         String randomName = generateRandomName();
         sendCommandToServer("CREATE DATABASE " + randomName + ";");
@@ -46,21 +47,21 @@ public class MyDBTests {
         sendCommandToServer("CREATE TABLE marks;");
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     public void makeDatabaseAndTable() {
         sendCommandToServer("CREATE DATABASE test;");
         sendCommandToServer("USE DATABASE test;");
         sendCommandToServer("CREATE TABLE marks;");
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     public void testDatabaseDrop() {
         sendCommandToServer("CREATE DATABASE test;");
         sendCommandToServer("USE DATABASE test;");
         sendCommandToServer("DROP DATABASE test;");
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     public void testTableDrop() {
         sendCommandToServer("CREATE DATABASE test;");
         sendCommandToServer("USE DATABASE test;");
@@ -68,7 +69,7 @@ public class MyDBTests {
         sendCommandToServer("DROP TABLE marks;");
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     public void testAlterTable() {
         String randomName = generateRandomName();
         sendCommandToServer("CREATE DATABASE " + randomName + ";");

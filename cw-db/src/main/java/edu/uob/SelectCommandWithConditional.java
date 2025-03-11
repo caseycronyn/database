@@ -14,7 +14,7 @@ public class SelectCommandWithConditional extends Conditionals implements DBComm
         localTokenBank = tokenBank;
 //        set token to start of conditional fragment
         tokenBank.setTokenAtPosition(5);
-        booleanConditional(tokenBank);
+        // booleanConditional(tokenBank);
 //        build conditional class
         return this;
     }
@@ -22,6 +22,7 @@ public class SelectCommandWithConditional extends Conditionals implements DBComm
 //    this part will carry out the check. perhaps another class will need to be called but who knows
     @Override
     public void executeCommand(DBServer server){
+        comparatorConditional(server, localTokenBank);
 //        conditional checks with tokens passed in will return a conditional check that we can pass into the method ...
 //        table.loopThroughTableAndApplySelection(boolean check);
 //        loop through rows printing the selected attributes in order when the boolean is true
