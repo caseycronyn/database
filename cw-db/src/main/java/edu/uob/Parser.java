@@ -23,39 +23,39 @@ public class Parser implements DBCommand {
     @Override
     public DBCommand parse(TokenBank tokenBank) {
         for (int i = 0; i < tokenBank.tokens.size(); i++) {
-            if (tokenBank.tokens.get(i).equals(";")) {
+            if (tokenBank.tokens.get(i).getName().equals(";")) {
                // will replace
                 return this;
             }
 
-            if (tokenBank.tokens.get(i).equals("CREATE")) {
+            if (tokenBank.tokens.get(i).getName().equals("CREATE")) {
                 tokenBank.nextToken();
                 DBCommand createCommand = new CreateCommand();
                 return createCommand.parse(tokenBank);
             }
 
-            if (tokenBank.tokens.get(i).equals("USE")) {
+            if (tokenBank.tokens.get(i).getName().equals("USE")) {
                 tokenBank.nextToken();
                 DBCommand useCommand = new UseCommand();
                 return useCommand.parse(tokenBank);
             }
 
-            if (tokenBank.tokens.get(i).equals("DROP")) {
+            if (tokenBank.tokens.get(i).getName().equals("DROP")) {
                 tokenBank.nextToken();
                 DBCommand dropCommand = new DropCommand();
                 return dropCommand.parse(tokenBank);
             }
-            if (tokenBank.tokens.get(i).equals("ALTER")) {
+            if (tokenBank.tokens.get(i).getName().equals("ALTER")) {
                 tokenBank.nextToken();
                 DBCommand alterCommand = new AlterCommand();
                 return alterCommand.parse(tokenBank);
             }
-            if (tokenBank.tokens.get(i).equals("INSERT")) {
+            if (tokenBank.tokens.get(i).getName().equals("INSERT")) {
                 tokenBank.nextToken();
                 DBCommand insertCommand = new InsertCommand();
                 return insertCommand.parse(tokenBank);
             }
-            if (tokenBank.tokens.get(i).equals("SELECT")) {
+            if (tokenBank.tokens.get(i).getName().equals("SELECT")) {
                 tokenBank.nextToken();
                 DBCommand selectCommand = new SelectCommand();
                 return selectCommand.parse(tokenBank);
@@ -73,10 +73,10 @@ public class Parser implements DBCommand {
         String currentToken;
         ArrayList<String> fragments = new ArrayList<>();
         for (; position < tokenBank.tokens.size(); position++) {
-            currentToken = tokenBank.tokens.get(position);
+            currentToken = tokenBank.tokens.get(position).getName();
             if (!Arrays.asList(specialCharacters).contains(currentToken)) {
             // System.out.println(tokenBank.tokens.get(position));
-                fragments.add(tokenBank.tokens.get(position));
+                fragments.add(tokenBank.tokens.get(position).getName());
             }
         }
        // String str = String.join("", fragments);

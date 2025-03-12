@@ -1,7 +1,5 @@
 package edu.uob;
 
-import java.io.File;
-
 public class CreateTable extends Parser {
     String tableName;
     String databaseName;
@@ -11,7 +9,7 @@ public class CreateTable extends Parser {
     public DBCommand parse(TokenBank tokenBank) {
         tokenBank.nextToken();
         if (tokenBank.getNextToken().equals(";")) {
-            tableName = tokenBank.getCurrentToken();
+            tableName = tokenBank.getCurrentToken().getName();
             return this;
         }
         else if (tokenBank.getNextToken().equals("(")) {

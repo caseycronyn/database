@@ -1,12 +1,23 @@
 package edu.uob;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class TokenBank {
-    ArrayList<String> tokens = new ArrayList<String>();
-    int currentToken;
+    ArrayList<Token> tokens = new ArrayList<>();
+    int currentTokenPosition;
     String currentTable;
+
+    TokenBank(ArrayList<String> tokenNames) {
+        setTokens(tokenNames);
+    }
+
+    Token getFirstToken() {
+        return tokens.get(0);
+    }
+
+    Token getLastToken() {
+        return tokens.get(tokens.size() - 1);
+    }
 
     String getCurrentTable() {
         return currentTable;
@@ -17,39 +28,61 @@ public class TokenBank {
     }
 
     TokenBank() {
-        currentToken = 0;
+        currentTokenPosition = 0;
     }
 
-    void setTokens(ArrayList<String> tokens) {
-        this.tokens = tokens;
+    void setTokens(ArrayList<String> tokenNames) {
+        for (int i = 0; i < tokenNames.size(); i++) {
+        for (String tokenName : tokenNames) {
+            Token token = new Token(tokenName, i);
+            tokens.add(token);
+        }
     }
 
-    String getNextToken() {
-        return tokens.get(currentToken + 1);
+    Token getNextToken() {
+        return tokens.get(currentTokenPosition + 1);
     }
 
-    String getCurrentToken() {
-        return tokens.get(currentToken);
+    Token getCurrentToken() {
+        return tokens.get(currentTokenPosition);
     }
 
     Integer getCurrentTokenPosition() {
-        return currentToken;
+        return currentTokenPosition;
     }
 
-    void nextToken() {
-        currentToken += 1;
+    void incrementCurrentTokenPosition() {
+        currentTokenPosition += 1;
     }
 
-    ArrayList<String> getTokens() {
+    ArrayList<Token> getTokens() {
         return tokens;
     }
 
-    String getTokenAtPosition(int position) {
-        return tokens.get(position);
+    Token nextToken() {
+        return tokens.get(currentTokenPosition + 1);
     }
 
     void setTokenAtPosition(int position) {
-        currentToken = position;
+        currentTokenPosition = position;
+    }
+
+    void printTokenNames() {
+        for (Token token : tokens) {
+            System.out.printf(token.getName() + " ");
+        }
+        System.out.println();
+    }
+
+    void printTokenTypes() {
+        for (Token token : tokens) {
+            System.out.printf(token.getTokenType() + " ");
+        }
+        System.out.println();
+    }
+
+    Token getTokenAtPosition(int position) {
+        return tokens.get(position);
     }
 
 

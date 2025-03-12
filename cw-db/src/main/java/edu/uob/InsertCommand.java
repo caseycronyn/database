@@ -11,7 +11,7 @@ public class InsertCommand extends Parser {
     public DBCommand parse(TokenBank tokenBank) {
         tokenBank.nextToken();
 //        System.out.println(tokenBank.getCurrentToken());
-        tableName = tokenBank.getCurrentToken();
+        tableName = tokenBank.getCurrentToken().getName();
         tokenBank.nextToken();
         tokenBank.nextToken();
         valueList = convertListInParenthesisToArray(tokenBank);

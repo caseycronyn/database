@@ -85,12 +85,14 @@ public class DBServer {
     */
     public String handleCommand(String command) {
         Tokeniser tokeniser = new Tokeniser();
-        TokenBank tokenBank = new TokenBank();
+        TokenBank tokenBank = new TokenBank(tokeniser.getListOfTokens(command));
+        // in the middle of
+        Lexer lexer = new Lexer(tokenBank);
+        // will probably need a rewrite
         Parser parser = new Parser();
-
-        tokenBank.setTokens(tokeniser.getListOfTokens(command));
-        commandResult = parser.parse(tokenBank);
-        commandResult.executeCommand(this);
+        
+        // commandResult = parser.parse(tokenBank);
+        // commandResult.executeCommand(this);
         return "";
     }
 

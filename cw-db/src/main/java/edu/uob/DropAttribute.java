@@ -6,9 +6,9 @@ public class DropAttribute extends Parser {
 
     @Override
     public DBCommand parse(TokenBank tokenBank) {
-        tableName = tokenBank.getCurrentToken();
+        tableName = tokenBank.getCurrentToken().getName();
         tokenBank.nextToken();
-        attributeName = tokenBank.getNextToken();
+        attributeName = tokenBank.getNextToken().getName();
         return this;
     }
 

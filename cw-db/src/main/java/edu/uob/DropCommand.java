@@ -4,7 +4,7 @@ public class DropCommand extends Parser {
     String currentToken;
     @Override
     public DBCommand parse(TokenBank tokenBank) {
-        currentToken = tokenBank.getCurrentToken();
+        currentToken = tokenBank.getCurrentToken().getName();
         if (currentToken.equals("DATABASE")) {
             DBCommand dropDatabase = new DropDatabase();
             return dropDatabase.parse(tokenBank);

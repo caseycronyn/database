@@ -20,8 +20,8 @@ public class SelectCommand extends Conditionals implements DBCommand {
 
     @Override
     public void executeCommand(DBServer server){
-        tableName = localTokenBank.getTokenAtPosition(3);
-        if (localTokenBank.getCurrentToken().equals("*")) {
+        tableName = localTokenBank.getTokenAtPosition(3).getName();
+        if (localTokenBank.getCurrentTokenPosition().equals("*")) {
             server.databases.get(server.getCurrentDatabase()).tables.get(tableName).printTableToStdout();
         }
     };

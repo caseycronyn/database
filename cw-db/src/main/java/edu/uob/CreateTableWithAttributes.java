@@ -9,7 +9,7 @@ public class CreateTableWithAttributes extends Parser {
 
     @Override
     public DBCommand parse(TokenBank tokenBank) {
-        tableName = tokenBank.getCurrentToken();
+        tableName = tokenBank.getCurrentToken().getName();
         tokenBank.nextToken();
         attributes = convertListInParenthesisToArray(tokenBank);
         return this;

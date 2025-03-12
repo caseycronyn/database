@@ -6,11 +6,11 @@ public class CreateCommand extends Parser {
 //        System.out.println(DatabaseName);
 //        testInteger += 1;
 //        System.out.println(testInteger);
-        if (tokenBank.getCurrentToken().equals("DATABASE")) {
+        if (tokenBank.getCurrentTokenPosition().equals("DATABASE")) {
 //            tokenBank.nextToken();
             DBCommand createDatabase = new CreateDatabase();
             return createDatabase.parse(tokenBank);
-        } else if (tokenBank.getCurrentToken().equals("TABLE")) {
+        } else if (tokenBank.getCurrentTokenPosition().equals("TABLE")) {
             DBCommand createTable = new CreateTable();
             return createTable.parse(tokenBank);
         }

@@ -30,13 +30,17 @@ public class MyDBTests {
         return assertTimeoutPreemptively(Duration.ofMillis(1000), () -> { return server.handleCommand(command);},
                 "Server took too long to respond (probably stuck in an infinite loop)");
     }
+    @Test
+    public void testLexer() {
+        sendCommandToServer("CREATE DATABASE markbook;");
+    }
 
     @Test
     public void testDatabaseCreationWithTableAndAttributes() {
         String randomName = generateRandomName();
         sendCommandToServer("CREATE DATABASE " + randomName + ";");
-        // sendCommandToServer("USE DATABASE " + randomName + ";");
-        // sendCommandToServer("CREATE TABLE marks (name, mark, pass);");
+        sendCommandToServer("USE DATABASE " + randomName + ";");
+        sendCommandToServer("CREATE TABLE marks (name, mark, pass);");
     }
 
     @Test

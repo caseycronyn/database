@@ -32,9 +32,6 @@ public class Tokeniser {
         return tokens;
     }
 
-    // public ArrayList<HashMap<Token, E>> tokenLexer(ArrayList<String> tokens) {
-    //
-    // }
 
     String[] tokeniseFragment(String input) {
         // Add in some extra padding spaces either side of the "special characters"...

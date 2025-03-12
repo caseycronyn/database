@@ -10,7 +10,7 @@ public class CreateDatabase extends Parser {
     public DBCommand parse(TokenBank tokenBankIn) {
 //        tokenBankLocal = tokenBankIn;
 //        tokenBankIn.nextToken();
-        databaseName = tokenBankIn.getNextToken();
+        databaseName = tokenBankIn.getNextToken().getName();
 //        return "CREATE DATABASE " + tokenBank.getCurrentToken();
         return this;
     }
