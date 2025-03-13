@@ -90,3 +90,29 @@ loading in from tab files, then represent data using a hash map
 serialising from memory into a directory and the other way.
 write to disk each time.
 parsing then interpreting is probably simpler than trying to do both at the same time
+
+* bnf notes
+** DBCommand classes/ constructors needed:
+
+*** TODO use
+*** TODO create database
+*** TODO create table
+*** TODO create table with attributes
+*** TODO drop database
+*** TODO drop table
+*** TODO alter
+*** TODO insert
+*** TODO select
+*** TODO select with condition
+*** TODO update
+*** TODO delete
+*** TODO join
+
+
+
+
+
+
+
+
+

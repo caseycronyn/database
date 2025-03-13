@@ -22,44 +22,28 @@ public class Parser implements DBCommand {
     // need to change this so I'm, checking for the first token only
     @Override
     public DBCommand parse(TokenBank tokenBank) {
-        for (int i = 0; i < tokenBank.tokens.size(); i++) {
-            if (tokenBank.tokens.get(i).getName().equals(";")) {
-               // will replace
+        Token token = tokenBank.getFirstToken();
+        switch (token.getName()) {
+            case ";":
                 return this;
-            }
-
-            if (tokenBank.tokens.get(i).getName().equals("CREATE")) {
-                tokenBank.nextToken();
+            case "CREATE":
                 DBCommand createCommand = new CreateCommand();
                 return createCommand.parse(tokenBank);
-            }
-
-            if (tokenBank.tokens.get(i).getName().equals("USE")) {
-                tokenBank.nextToken();
+            case "USE":
                 DBCommand useCommand = new UseCommand();
                 return useCommand.parse(tokenBank);
-            }
-
-            if (tokenBank.tokens.get(i).getName().equals("DROP")) {
-                tokenBank.nextToken();
+            case "DROP":
                 DBCommand dropCommand = new DropCommand();
                 return dropCommand.parse(tokenBank);
-            }
-            if (tokenBank.tokens.get(i).getName().equals("ALTER")) {
-                tokenBank.nextToken();
+            case "ALTER":
                 DBCommand alterCommand = new AlterCommand();
                 return alterCommand.parse(tokenBank);
-            }
-            if (tokenBank.tokens.get(i).getName().equals("INSERT")) {
-                tokenBank.nextToken();
+            case "INSERT":
                 DBCommand insertCommand = new InsertCommand();
                 return insertCommand.parse(tokenBank);
-            }
-            if (tokenBank.tokens.get(i).getName().equals("SELECT")) {
-                tokenBank.nextToken();
+            case "SELECT":
                 DBCommand selectCommand = new SelectCommand();
                 return selectCommand.parse(tokenBank);
-            }
         }
         return null;
     }

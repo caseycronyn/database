@@ -7,11 +7,16 @@ public class TokenBank {
     int currentTokenPosition;
     String currentTable;
     Integer lastTokenPosition;
+    // Map<String, String> tokenKeys = new HashMap<>();;
 
 
     TokenBank(ArrayList<String> tokenNames) {
         setTokens(tokenNames);
     }
+
+    // void init() {
+    //
+    // }
 
     int getLastTokenPosition() {
         return lastTokenPosition;

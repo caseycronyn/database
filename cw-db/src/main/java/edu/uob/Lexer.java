@@ -14,6 +14,8 @@ public class Lexer {
         setup();
         lexTokens();
         checkForNullTokens();
+        // tokenBank.printTokenNames();
+        // tokenBank.printTokenTypes();
     }
 
     void checkForNullTokens() {
@@ -108,6 +110,8 @@ public class Lexer {
         addKeywordTokenIfEquals("and", "AND");
         tokenBank.nextToken();
         addPlainTextToken("attributeName");
+        tokenBank.printTokenNames();
+        tokenBank.printTokenTypes();
 
     }
 
@@ -235,7 +239,6 @@ public class Lexer {
             if (checkTokenIsPlainText(token)) {
                 token.setTokenType("attributeName");
             }
-
         }
 
         void dropLexer () {
