@@ -11,7 +11,7 @@ public class TokenBank {
 
     TokenBank(ArrayList<String> tokenNames) {
         setTokens(tokenNames);
-        lastTokenPosition = tokens.size() - 2;
+        lastTokenPosition = tokens.size() - 1;
     }
 
     int getLastTokenPosition() {
@@ -66,7 +66,7 @@ public class TokenBank {
         return tokens.get(currentTokenPosition);
     }
 
-    void setTokenAtPosition ( int position){
+    void setTokenAtPosition (int position){
         currentTokenPosition = position;
     }
 

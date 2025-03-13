@@ -5,8 +5,8 @@ import java.util.regex.Pattern;
 
 // will decide what kind of token each string is
 public class Lexer {
-    String [] whiteSpaceSymbols, nonWhiteSpaceSymbols, commandArray, commandTypeArray, tokenisedQuery, symbolArray;
-    String commandType, plainText, query, tableOrDatabase, alterationType, stringLiteral, booleanLiteral, floatLiteral, integerLiteral, symbol;
+    String [] whiteSpaceSymbols, nonWhiteSpaceSymbols, commandArray, commandTypeArray, tokenisedQuery, symbolArray, comparatorArray;
+    String commandType, plainText, query, tableOrDatabase, alterationType, stringLiteral, booleanLiteral, floatLiteral, integerLiteral, symbol, wildAttributeList, comparator;
     TokenBank tokenBank;
 
     // public static void main(String[] args) {
@@ -78,15 +78,46 @@ public class Lexer {
     }
 
     void selectLexer() {
+        getWildAttributeList();
+        Token token = tokenBank.getCurrentToken();
+        token.nameToUpperCase();
+        if (token.getName().equals("FROM")) {
+            token.setTokenType("from");
+        }
+        addPlainTextToken("tableName");
+        token = tokenBank.nextToken();
+        token.nameToUpperCase();
+        if (token.getName().equals("WHERE")) {
+            token.setTokenType("where");
+            conditionLexer();
+            // condition!! :(( AHHH!!
+        }
+    }
+
+    void conditionLexer() {
+
 
     }
-    
+
+    void getWildAttributeList() {
+        Token token = tokenBank.nextToken();
+        while (!token.getName().equalsIgnoreCase("FROM")) {
+            if (checkTokenForPattern(token, wildAttributeList)) {
+                token.setTokenType("attributeName");
+            }
+            else if (token.getName().equals(",")) {
+                token.setTokenType("comma");
+            }
+            token = tokenBank.nextToken();
+        }
+    }
+
     void insertLexer() {
         addKeywordTokenIfEquals("into", "INTO");
         addPlainTextToken("tableName");
         addKeywordTokenIfEquals("values", "VALUES");
         tokenBank.incrementCurrentTokenPosition();
-        parenthesesLexer(tokenBank.getCurrentTokenPosition(), "valueList");
+        parenthesesLexer("valueList");
     }
 
     void alterLexer() {
@@ -160,50 +191,52 @@ public class Lexer {
             token.setTokenType("tableName");
         }
         if (tokenBank.tokens.size() > 4) {
-            int startPosition = 3;
-            parenthesesLexer(startPosition, "attributeName");
+            token = tokenBank.nextToken();
+            parenthesesLexer("attributeName");
         }
     }
 
+    // TODO this aint working now... will require a lil fiddleodiyay
     // parentheses is passed in
-    void parenthesesLexer(int tokenPosition, String description) {
-        Token token = tokenBank.getTokenAtPosition(tokenPosition);
+    void parenthesesLexer(String description) {
+        Token token = tokenBank.getCurrentToken();
         if (token.getName().equals("(")) token.setTokenType("openParentheses");
-        tokenPosition++;
-        for ( ; tokenPosition <= tokenBank.getLastTokenPosition(); tokenPosition++) {
-            token = tokenBank.getTokenAtPosition(tokenPosition);
+        // token = tokenBank.nextToken();
+        for (int i = tokenBank.getCurrentTokenPosition() ; i < tokenBank.getLastTokenPosition(); i++) {
             if (token.getName().equals(",")) {
                 token.setTokenType("comma");
             }
-            else if ((tokenPosition == tokenBank.getLastTokenPosition()) && (token.getName().equals(")"))) {
+            else if ((i == tokenBank.getLastTokenPosition() - 1) && (token.getName().equals(")"))) {
                 token.setTokenType("closeParentheses");
             }
             else if (checkTokenIsPlainText(token)) {
-                setTokenInParentheses(token, description);
+                if (description.equals("attributeName")) {
+                    token.setTokenType("attributeName");
+                }
+                else if (description.equals("valueList")) {
+                    valueLexer();
+                }
             }
+            token = tokenBank.nextToken();
         }
     }
 
-    void setTokenInParentheses(Token token, String description) {
-        if (description.equals("attributeName")) {
-            token.setTokenType("attributeName");
+    void valueLexer() {
+        Token token = tokenBank.getCurrentToken();
+        if (checkTokenForPattern(token, stringLiteral)) {
+            token.setTokenType("stringLiteral");
         }
-        else if (description.equals("valueList")) {
-            if (checkTokenForPattern(token, stringLiteral)) {
-                token.setTokenType("stringLiteral");
-            }
-            else if (checkTokenForPattern(token, booleanLiteral)) {
-                token.setTokenType("booleanLiteral");
-            }
-            else if (checkTokenForPattern(token, floatLiteral)) {
-                token.setTokenType("floatLiteral");
-            }
-            else if (checkTokenForPattern(token, integerLiteral)) {
-                token.setTokenType("integerLiteral");
-            }
-            else if (token.getName().equals("NULL")) {
-                token.setTokenType("NULL");
-            }
+        else if (checkTokenForPattern(token, booleanLiteral)) {
+            token.setTokenType("booleanLiteral");
+        }
+        else if (checkTokenForPattern(token, floatLiteral)) {
+            token.setTokenType("floatLiteral");
+        }
+        else if (checkTokenForPattern(token, integerLiteral)) {
+            token.setTokenType("integerLiteral");
+        }
+        else if (token.getName().equals("NULL")) {
+            token.setTokenType("NULL");
         }
     }
 
@@ -286,6 +319,11 @@ public class Lexer {
         floatLiteral = "^[+-]?\\p{Digit}+\\.\\p{Digit}+$";
 
         integerLiteral = "^[+-]?\\p{Digit}+$";
+
+        wildAttributeList = plainText + "|\\*";
+
+        comparatorArray = new String[]{"==", ">", "<", ">=", "<=", "!=", "LIKE"};
+        comparator = String.join("|", comparatorArray);
     }
 
         // keywords = new String[]{
