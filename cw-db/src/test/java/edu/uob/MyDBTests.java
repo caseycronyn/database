@@ -109,8 +109,58 @@ public class MyDBTests {
         sendCommandToServer("INSERT INTO marks VALUES ('Simon', 65, TRUE);");
         sendCommandToServer("INSERT INTO marks VALUES ('David', 82, TRUE);");
         sendCommandToServer("INSERT INTO marks VALUES ('Jeremy', 38, FALSE);");
-//        sendCommandToServer("SELECT * FROM marks WHERE pass == TRUE;");
-        sendCommandToServer("SELECT * FROM marks WHERE pass == FALSE;");
+        sendCommandToServer("SELECT * FROM marks WHERE (pass == FALSE);");
+    }
+
+    @Test
+    public void selectCommandWithMultipleConditions() {
+        String randomName = generateRandomName();
+        sendCommandToServer("CREATE DATABASE " + randomName + ";");
+        sendCommandToServer("USE DATABASE " + randomName + ";");
+        sendCommandToServer("CREATE TABLE marks (name, mark, pass);");
+        sendCommandToServer("INSERT INTO marks VALUES ('Simon', 65, TRUE);");
+        sendCommandToServer("INSERT INTO marks VALUES ('David', 82, TRUE);");
+        sendCommandToServer("INSERT INTO marks VALUES ('Jeremy', 38, FALSE);");
+        sendCommandToServer("SELECT mark, name FROM marks WHERE (pass == FALSE) OR pass == TRUE AND (mark > 35);");
+    }
+
+    @Test
+    public void updateCommand() {
+        String randomName = generateRandomName();
+        sendCommandToServer("CREATE DATABASE " + randomName + ";");
+        sendCommandToServer("USE DATABASE " + randomName + ";");
+        sendCommandToServer("CREATE TABLE marks (name, mark, pass);");
+        sendCommandToServer("INSERT INTO marks VALUES ('Simon', 65, TRUE);");
+        sendCommandToServer("INSERT INTO marks VALUES ('David', 82, TRUE);");
+        sendCommandToServer("INSERT INTO marks VALUES ('Jeremy', 38, FALSE);");
+        sendCommandToServer("UPDATE marks SET age = 35 WHERE name == 'Simon';");
+    }
+
+    @Test
+    public void deleteCommand() {
+        String randomName = generateRandomName();
+        sendCommandToServer("CREATE DATABASE " + randomName + ";");
+        sendCommandToServer("USE DATABASE " + randomName + ";");
+        sendCommandToServer("CREATE TABLE marks (name, mark, pass);");
+        sendCommandToServer("INSERT INTO marks VALUES ('Simon', 65, TRUE);");
+        sendCommandToServer("INSERT INTO marks VALUES ('David', 82, TRUE);");
+        sendCommandToServer("INSERT INTO marks VALUES ('Jeremy', 38, FALSE);");
+        sendCommandToServer("UPDATE marks SET age = 35 WHERE name == 'Simon';");
+        sendCommandToServer("DELETE FROM marks WHERE name == 'Sion';");
+    }
+
+    @Test
+    public void joinCommand() {
+        String randomName = generateRandomName();
+        sendCommandToServer("CREATE DATABASE " + randomName + ";");
+        sendCommandToServer("USE DATABASE " + randomName + ";");
+        sendCommandToServer("CREATE TABLE marks (name, mark, pass);");
+        sendCommandToServer("CREATE TABLE names (name, mark, pass);");
+        sendCommandToServer("INSERT INTO marks VALUES ('Simon', 65, TRUE);");
+        sendCommandToServer("INSERT INTO names VALUES ('Dave', 27, FALSE);");
+        sendCommandToServer("INSERT INTO marks VALUES ('David', 82, TRUE);");
+        sendCommandToServer("INSERT INTO marks VALUES ('Jeremy', 38, FALSE);");
+        sendCommandToServer("JOIN names AND marks ON pass AND id;");
     }
 
 }

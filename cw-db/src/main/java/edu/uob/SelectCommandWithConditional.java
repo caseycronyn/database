@@ -13,7 +13,7 @@ public class SelectCommandWithConditional extends Conditionals implements DBComm
     public DBCommand parse(TokenBank tokenBank) {
         localTokenBank = tokenBank;
 //        set token to start of conditional fragment
-        tokenBank.setTokenAtPosition(5);
+        tokenBank.setCurrentTokenToPosition(5);
         // booleanConditional(tokenBank);
 //        build conditional class
         return this;

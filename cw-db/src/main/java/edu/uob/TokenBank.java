@@ -11,11 +11,18 @@ public class TokenBank {
 
     TokenBank(ArrayList<String> tokenNames) {
         setTokens(tokenNames);
-        lastTokenPosition = tokens.size() - 1;
     }
 
     int getLastTokenPosition() {
         return lastTokenPosition;
+    }
+
+    boolean checkIfAtFinalToken() {
+        return (lastTokenPosition == currentTokenPosition);
+    }
+
+    int numberOfTokensLeft() {
+        return tokens.size() - currentTokenPosition - 1;
     }
 
     Token getFirstToken() {
@@ -43,6 +50,7 @@ public class TokenBank {
             Token token = new Token(tokenNames.get(i), i);
             tokens.add(token);
         }
+        lastTokenPosition = tokens.size() - 1;
     }
 
     Token getCurrentToken () {
@@ -66,8 +74,22 @@ public class TokenBank {
         return tokens.get(currentTokenPosition);
     }
 
-    void setTokenAtPosition (int position){
+    Token previousToken () {
+        currentTokenPosition--;
+        return tokens.get(currentTokenPosition);
+    }
+
+    void setCurrentTokenToPosition (int position){
         currentTokenPosition = position;
+    }
+
+    void deleteToken(int tokenPosition) {
+        tokens.remove(tokenPosition);
+        lastTokenPosition--;
+        // update indices after token
+        for (int i = tokenPosition; i < tokens.size(); i++) {
+            tokens.get(i).setPosition(i);
+        }
     }
 
     void printTokenNames () {
