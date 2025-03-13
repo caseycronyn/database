@@ -7,7 +7,7 @@ public class DropTable extends Parser {
 
     @Override
     public DBCommand parse(TokenBank tokenBank) {
-        tableName = tokenBank.getNextToken().getName();
+        tableName = tokenBank.nextToken().getName();
         return this;
     }
 

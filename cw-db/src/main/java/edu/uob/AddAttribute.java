@@ -10,7 +10,7 @@ public class AddAttribute extends Parser {
 //        System.out.println(tokenBank.getCurrentToken());
         tableName = tokenBank.getCurrentToken().getName();
         tokenBank.nextToken();
-        attributeName = tokenBank.getNextToken().getName();
+        attributeName = tokenBank.nextToken().getName();
         return this;
     }
 

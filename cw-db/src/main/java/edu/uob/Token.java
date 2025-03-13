@@ -1,8 +1,8 @@
 package edu.uob;
 
 public class Token {
-    String name, tokenType;
-    Integer position;
+    private String name, tokenType;
+    private Integer position;
 
     Token (String name, Integer position) {
         this.name = name;
@@ -24,5 +24,9 @@ public class Token {
 
     void setName(String name) {
         this.name = name;
+    }
+
+    void nameToUpperCase() {
+        name = name.toUpperCase();
     }
 }

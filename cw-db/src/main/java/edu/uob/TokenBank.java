@@ -6,9 +6,16 @@ public class TokenBank {
     ArrayList<Token> tokens = new ArrayList<>();
     int currentTokenPosition;
     String currentTable;
+    Integer lastTokenPosition;
+
 
     TokenBank(ArrayList<String> tokenNames) {
         setTokens(tokenNames);
+        lastTokenPosition = tokens.size() - 2;
+    }
+
+    int getLastTokenPosition() {
+        return lastTokenPosition;
     }
 
     Token getFirstToken() {
@@ -33,41 +40,37 @@ public class TokenBank {
 
     void setTokens(ArrayList<String> tokenNames) {
         for (int i = 0; i < tokenNames.size(); i++) {
-        for (String tokenName : tokenNames) {
-            Token token = new Token(tokenName, i);
+            Token token = new Token(tokenNames.get(i), i);
             tokens.add(token);
         }
     }
 
-    Token getNextToken() {
-        return tokens.get(currentTokenPosition + 1);
-    }
-
-    Token getCurrentToken() {
+    Token getCurrentToken () {
         return tokens.get(currentTokenPosition);
     }
 
-    Integer getCurrentTokenPosition() {
+    Integer getCurrentTokenPosition () {
         return currentTokenPosition;
     }
 
-    void incrementCurrentTokenPosition() {
+    void incrementCurrentTokenPosition () {
         currentTokenPosition += 1;
     }
 
-    ArrayList<Token> getTokens() {
+    ArrayList<Token> getTokens () {
         return tokens;
     }
 
-    Token nextToken() {
-        return tokens.get(currentTokenPosition + 1);
+    Token nextToken () {
+        currentTokenPosition++;
+        return tokens.get(currentTokenPosition);
     }
 
-    void setTokenAtPosition(int position) {
+    void setTokenAtPosition ( int position){
         currentTokenPosition = position;
     }
 
-    void printTokenNames() {
+    void printTokenNames () {
         for (Token token : tokens) {
             System.out.printf(token.getName() + " ");
         }

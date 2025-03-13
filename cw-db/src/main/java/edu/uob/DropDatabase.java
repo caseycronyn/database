@@ -6,7 +6,7 @@ public class DropDatabase extends Parser {
     String databaseName;
     @Override
     public DBCommand parse(TokenBank tokenBank) {
-        databaseName = tokenBank.getNextToken().getName();
+        databaseName = tokenBank.nextToken().getName();
         return this;
     }
 

@@ -8,7 +8,7 @@ public class DropAttribute extends Parser {
     public DBCommand parse(TokenBank tokenBank) {
         tableName = tokenBank.getCurrentToken().getName();
         tokenBank.nextToken();
-        attributeName = tokenBank.getNextToken().getName();
+        attributeName = tokenBank.nextToken().getName();
         return this;
     }
 

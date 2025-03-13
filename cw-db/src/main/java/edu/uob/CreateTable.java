@@ -8,11 +8,11 @@ public class CreateTable extends Parser {
     @Override
     public DBCommand parse(TokenBank tokenBank) {
         tokenBank.nextToken();
-        if (tokenBank.getNextToken().equals(";")) {
+        if (tokenBank.nextToken().equals(";")) {
             tableName = tokenBank.getCurrentToken().getName();
             return this;
         }
-        else if (tokenBank.getNextToken().equals("(")) {
+        else if (tokenBank.nextToken().equals("(")) {
             DBCommand createTableWithAttributes = new CreateTableWithAttributes();
             return createTableWithAttributes.parse(tokenBank);
         }
