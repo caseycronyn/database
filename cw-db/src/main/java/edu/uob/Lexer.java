@@ -9,10 +9,6 @@ public class Lexer {
     String commandType, plainText, query, tableOrDatabase, alterationType, stringLiteral, booleanLiteral, floatLiteral, integerLiteral, symbol, wildAttributeList, comparator, parentheses, booleanOperator;
     TokenBank tokenBank;
 
-    // public static void main(String[] args) {
-    //     // Lexer lexer = new Lexer();
-    // }
-
     Lexer(TokenBank tokenBank) {
         this.tokenBank = tokenBank;
         setup();
