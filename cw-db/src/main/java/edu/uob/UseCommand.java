@@ -10,7 +10,7 @@ public class UseCommand extends Parser {
 
     @Override
     public void executeCommand(DBServer server, TokenBank tokenBank) {
-        String databaseName = tokenBank.getNameFromType("databaseName");
+        String databaseName = tokenBank.getTokenFromType("databaseName").getName();
         server.setCurrentDatabase(databaseName);
     };
 }

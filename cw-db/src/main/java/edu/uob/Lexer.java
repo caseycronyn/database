@@ -301,20 +301,20 @@ public class Lexer {
 
         // parentheses is passed in
         void parenthesesLexer () {
-            boolean openParentheses = false;
+            boolean openParenthesis = false;
             boolean closeParenthesis = false;
             Token token = tokenBank.getCurrentToken();
             int initialTokenPosition = tokenBank.getCurrentTokenPosition();
             if (token.getName().equals("(")) {
-                token.setTokenType("openParentheses");
-                openParentheses = true;
+                token.setTokenType("openParenthesis");
+                openParenthesis = true;
             }
             // token = tokenBank.nextToken();
             for (int i = tokenBank.getCurrentTokenPosition(); i < tokenBank.getLastTokenPosition(); i++) {
                 if (token.getName().equals(",")) {
                     token.setTokenType("comma");
-                } else if ((i == tokenBank.getLastTokenPosition() - 1) && (token.getName().equals(")")) && openParentheses) {
-                    token.setTokenType("closeParentheses");
+                } else if ((i == tokenBank.getLastTokenPosition() - 1) && (token.getName().equals(")")) && openParenthesis) {
+                    token.setTokenType("closeParenthesis");
                     closeParenthesis = true;
                 }
                 token = tokenBank.nextToken();
@@ -327,7 +327,7 @@ public class Lexer {
 
         void setNullTokensInParentheses (String description){
             Token token = tokenBank.getCurrentToken();
-            while (token.getTokenType() != "closeParentheses") {
+            while (token.getTokenType() != "closeParenthesis") {
                 token = tokenBank.nextToken();
                 if (description.equals("valueList")) {
                     addTokenIfValue();

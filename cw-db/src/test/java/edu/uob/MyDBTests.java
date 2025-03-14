@@ -39,13 +39,6 @@ public class MyDBTests {
         sendCommandToServer("CREATE TABLE marks;");
     }
 
-    @Test
-    public void testDatabaseCreationWithTableAndAttributes() {
-        String randomName = generateRandomName();
-        sendCommandToServer("CREATE DATABASE " + randomName + ";");
-        sendCommandToServer("USE DATABASE " + randomName + ";");
-        sendCommandToServer("CREATE TABLE marks (name, mark, pass);");
-    }
 
 
     @Test
@@ -53,6 +46,14 @@ public class MyDBTests {
         sendCommandToServer("CREATE DATABASE test;");
         sendCommandToServer("USE DATABASE test;");
         sendCommandToServer("CREATE TABLE marks;");
+    }
+
+    @Test
+    public void testDatabaseCreationWithTableAndAttributes() {
+        String randomName = generateRandomName();
+        sendCommandToServer("CREATE DATABASE " + randomName + ";");
+        sendCommandToServer("USE DATABASE " + randomName + ";");
+        sendCommandToServer("CREATE TABLE marks (name, mark, pass);");
     }
 
     @Test

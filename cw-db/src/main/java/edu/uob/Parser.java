@@ -19,22 +19,35 @@ handling and command building
 public class Parser implements DBCommand {
     @Override
     public DBCommand parse(TokenBank tokenBank) {
+        tokenBank.initialise();
         String query = tokenBank.getQueryAsTokenTypes();
-        if (tokenBank.getQueryAsTokenType("use").equals(query)) {
+        if (query.equals(tokenBank.getQueryAsTokenType("use"))) {
             DBCommand useCommand = new UseCommand();
             return useCommand.parse(tokenBank);
         }
-        else if (tokenBank.getQueryAsTokenType("create database").equals(query)) {
+        else if (query.equals(tokenBank.getQueryAsTokenType("create database"))) {
             DBCommand createDatabase = new CreateDatabase();
             return createDatabase.parse(tokenBank);
         }
-        else if (tokenBank.getQueryAsTokenType("create table").equals(query)) {
+        else if (query.equals(tokenBank.getQueryAsTokenType("create table"))) {
             DBCommand createTable = new CreateTable();
             return createTable.parse(tokenBank);
         }
-        else if (tokenBank.getQueryAsTokenType("create table with attributes").equals(query)) {
+        else if (query.contains(tokenBank.getQueryAsTokenType("create table with attributes")) && tokenBank.getTokens().size() > 4) {
             DBCommand createTableWithAttributes = new CreateTableWithAttributes();
             return createTableWithAttributes.parse(tokenBank);
+        }
+        else if (query.equals(tokenBank.getQueryAsTokenType("drop database"))) {
+            DBCommand dropDatabase = new DropDatabase();
+            return dropDatabase.parse(tokenBank);
+        }
+        else if (query.equals(tokenBank.getQueryAsTokenType("drop table"))) {
+            DBCommand dropTable = new DropTable();
+            return dropTable.parse(tokenBank);
+        }
+        else if (query.equals(tokenBank.getQueryAsTokenType("alter"))) {
+            DBCommand alterTable = new AlterTable();
+            return alterTable.parse(tokenBank);
         }
         //     DBCommand createCommand = new CreateCommand();
         //     return createCommand.parse(tokenBank);
@@ -60,13 +73,16 @@ public class Parser implements DBCommand {
     public void executeCommand(DBServer server, TokenBank tokenBank) {};
 
     public List<Token> getAttributesFromParenthesis(TokenBank tokenBank) {
-        int start = tokenBank.getPositionFromType("openParenthesis");
-        Token token = tokenBank.getTokenAtPosition(start + 1);
+        int start = tokenBank.getTokenFromType("openParenthesis").getPosition();
+        tokenBank.setCurrentTokenToPosition(start + 1);
+        Token token = tokenBank.getCurrentToken();
         List<Token> attributes = new ArrayList<>();
         while (!token.getTokenType().equals("closeParenthesis")) {
             if (token.getTokenType().equals("attributeName")) {
                 attributes.add(token);
             }
+            token = tokenBank.nextToken();
+
         }
         return attributes;
     }

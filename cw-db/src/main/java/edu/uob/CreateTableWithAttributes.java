@@ -11,7 +11,7 @@ public class CreateTableWithAttributes extends Parser {
 
     @Override
     public void executeCommand(DBServer server, TokenBank tokenBank) {
-        String tableName = tokenBank.getNameFromType("tableName");
+        String tableName = tokenBank.getTokenFromType("tableName").getName();
         String databaseName = server.getCurrentDatabase();
         List<Token> attributes = getAttributesFromParenthesis(tokenBank);
         Table table = new Table(tableName, databaseName, server.getStorageFolderPath());

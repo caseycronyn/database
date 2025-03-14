@@ -1,6 +1,6 @@
 package edu.uob;
 
-public class AlterCommand extends Parser {
+public class AlterTable extends Parser {
     @Override
     public DBCommand parse(TokenBank tokenBank) {
         tokenBank.nextToken();

@@ -10,15 +10,17 @@ public class TokenBank {
     String currentTable;
     Integer lastTokenPosition;
     Map<String, String> tokenQueries;
-    Map<String, Token> getTokenFromType;
+    Map<String, Token> tokenToTypeMap;
 
     TokenBank(ArrayList<String> tokenNames) {
         setTokens(tokenNames);
+        currentTokenPosition = 0;
     }
 
     void initialise() {
         tokenQueries = createTokenQueries();
-        getTokenFromType = createTokenTypesToTokens();
+        tokenToTypeMap = createTokenTypesToTokens();
+        currentTokenPosition = 0;
     }
 
     Map<String, Token> createTokenTypesToTokens() {
@@ -29,16 +31,13 @@ public class TokenBank {
         return getTokenFromType;
     }
 
-    String getNameFromType(String tokenType) {
-        return getTokenFromType.get(tokenType).getName();
-    }
-
-    int getPositionFromType(String tokenType) {
-        return getTokenFromType.get(tokenType).getPosition();
-    }
 
     String getQueryAsTokenType(String key) {
         return tokenQueries.get(key);
+    }
+
+    Token getTokenFromType(String tokenType) {
+        return tokenToTypeMap.get(tokenType);
     }
 
     Map<String, String> createTokenQueries() {
@@ -46,7 +45,7 @@ public class TokenBank {
         tokenKeys.put("use", "useCommand databaseSelector databaseName terminator");
         tokenKeys.put("create database", "createCommand databaseSelector databaseName terminator");
         tokenKeys.put("create table",  "createCommand tableSelector tableName terminator");
-        tokenKeys.put("create table with attributes", "createCommand tableSelector tableName ... ");
+        tokenKeys.put("create table with attributes", "createCommand tableSelector tableName");
         tokenKeys.put("drop database", "dropCommand databaseSelector databaseName terminator");
         tokenKeys.put("drop table", "dropCommand tableSelector tableName terminator");
         tokenKeys.put("alter", "alterCommand tableSelector tableName alterationType attributeName terminator");

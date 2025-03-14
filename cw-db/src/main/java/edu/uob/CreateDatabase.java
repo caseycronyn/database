@@ -10,7 +10,7 @@ public class CreateDatabase extends Parser {
 
     @Override
     public void executeCommand(DBServer server, TokenBank tokenBank){
-        String databaseName = tokenBank.getNameFromType("databaseName");
+        String databaseName = tokenBank.getTokenFromType("databaseName").getName();
         Database database = new Database(databaseName, server.getStorageFolderPath());
         server.databases.put(databaseName, database);
     };
