@@ -91,9 +91,8 @@ public class DBServer {
         // will probably need a rewrite
         Parser parser = new Parser();
 
-        // commandResult = parser.parse(tokenBank);
-        // commandResult.executeCommand(this);
-        // tokenBank.printTokenTypes();
+        commandResult = parser.parse(tokenBank);
+        commandResult.executeCommand(this, tokenBank);
         return "";
     }
 

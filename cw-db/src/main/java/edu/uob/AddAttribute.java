@@ -15,7 +15,7 @@ public class AddAttribute extends Parser {
     }
 
     @Override
-    public void executeCommand(DBServer server){
+    public void executeCommand(DBServer server, TokenBank tokenBank) {
 //        System.out.println(server.databases.get(server.getCurrentDatabase()).tables.get(tableName));
         server.databases.get(server.getCurrentDatabase()).tables.get(tableName).addNewAttribute(attributeName);
     };

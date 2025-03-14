@@ -1,22 +1,63 @@
 package edu.uob;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class TokenBank {
     ArrayList<Token> tokens = new ArrayList<>();
     int currentTokenPosition;
     String currentTable;
     Integer lastTokenPosition;
-    // Map<String, String> tokenKeys = new HashMap<>();;
-
+    Map<String, String> tokenQueries;
+    Map<String, Token> getTokenFromType;
 
     TokenBank(ArrayList<String> tokenNames) {
         setTokens(tokenNames);
     }
 
-    // void init() {
-    //
-    // }
+    void initialise() {
+        tokenQueries = createTokenQueries();
+        getTokenFromType = createTokenTypesToTokens();
+    }
+
+    Map<String, Token> createTokenTypesToTokens() {
+        Map<String, Token> getTokenFromType = new HashMap<>();
+        for (Token token : tokens) {
+            getTokenFromType.put(token.getTokenType(), token);
+        }
+        return getTokenFromType;
+    }
+
+    String getNameFromType(String tokenType) {
+        return getTokenFromType.get(tokenType).getName();
+    }
+
+    int getPositionFromType(String tokenType) {
+        return getTokenFromType.get(tokenType).getPosition();
+    }
+
+    String getQueryAsTokenType(String key) {
+        return tokenQueries.get(key);
+    }
+
+    Map<String, String> createTokenQueries() {
+        Map<String, String> tokenKeys = new HashMap<>();
+        tokenKeys.put("use", "useCommand databaseSelector databaseName terminator");
+        tokenKeys.put("create database", "createCommand databaseSelector databaseName terminator");
+        tokenKeys.put("create table",  "createCommand tableSelector tableName terminator");
+        tokenKeys.put("create table with attributes", "createCommand tableSelector tableName ... ");
+        tokenKeys.put("drop database", "dropCommand databaseSelector databaseName terminator");
+        tokenKeys.put("drop table", "dropCommand tableSelector tableName terminator");
+        tokenKeys.put("alter", "alterCommand tableSelector tableName alterationType attributeName terminator");
+        tokenKeys.put("insert", "insertCommand into tableName values ... ");
+        tokenKeys.put("select", "selectCommand wildAttributeSymbol from tableName terminator");
+        tokenKeys.put("select with condition", "selectCommand wildAttributeSymbol from tableName ... ");
+        tokenKeys.put("update", "updateCommand tableName set attributeName equals integerLiteral ... ");
+        tokenKeys.put("delete", "deleteCommand from tableName ... ");
+        tokenKeys.put("join", "joinCommand tableName and tableName ... ");
+        return tokenKeys;
+    }
 
     int getLastTokenPosition() {
         return lastTokenPosition;
@@ -109,6 +150,15 @@ public class TokenBank {
             System.out.printf(token.getTokenType() + " ");
         }
         System.out.println();
+    }
+
+    String getQueryAsTokenTypes() {
+        StringBuilder result = new StringBuilder();
+        for (Token token : tokens) {
+            result.append(token.getTokenType()).append(" ");
+        }
+        result.deleteCharAt(result.length() - 1);
+        return result.toString();
     }
 
     Token getTokenAtPosition(int position) {

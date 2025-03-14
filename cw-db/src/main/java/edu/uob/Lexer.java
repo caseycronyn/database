@@ -13,6 +13,7 @@ public class Lexer {
         this.tokenBank = tokenBank;
         setup();
         lexTokens();
+        tokenBank.initialise();
         checkForNullTokens();
         // tokenBank.printTokenNames();
         // tokenBank.printTokenTypes();
@@ -300,17 +301,26 @@ public class Lexer {
 
         // parentheses is passed in
         void parenthesesLexer () {
+            boolean openParentheses = false;
+            boolean closeParenthesis = false;
             Token token = tokenBank.getCurrentToken();
             int initialTokenPosition = tokenBank.getCurrentTokenPosition();
-            if (token.getName().equals("(")) token.setTokenType("openParentheses");
+            if (token.getName().equals("(")) {
+                token.setTokenType("openParentheses");
+                openParentheses = true;
+            }
             // token = tokenBank.nextToken();
             for (int i = tokenBank.getCurrentTokenPosition(); i < tokenBank.getLastTokenPosition(); i++) {
                 if (token.getName().equals(",")) {
                     token.setTokenType("comma");
-                } else if ((i == tokenBank.getLastTokenPosition() - 1) && (token.getName().equals(")"))) {
+                } else if ((i == tokenBank.getLastTokenPosition() - 1) && (token.getName().equals(")")) && openParentheses) {
                     token.setTokenType("closeParentheses");
+                    closeParenthesis = true;
                 }
                 token = tokenBank.nextToken();
+            }
+            if (!closeParenthesis) {
+                throw new java.lang.Error("error: help! no closing parentheses");
             }
             tokenBank.setCurrentTokenToPosition(initialTokenPosition);
         }
@@ -405,9 +415,6 @@ public class Lexer {
 
 
         void setup () {
-            query = "CREATE DATABASE markbook;";
-            tokenisedQuery = new String[]{"CREATE", "DATABASE", "markbook", ";"};
-
             // optional whitespace in these
             whiteSpaceSymbols = new String[]{"Command", "CommandType", "Use", "Create", "CreateDatabase", "CreateTable", "Drop", "Alter", "Insert", "Select", "Update", "Delete", "Join", "NameValueList", "NameValuePair", "AlterationType", "ValueList", "WildAttribList", "AttributeList", "Condition", "FirstCondition", "SecondCondition", "BoolOperator", "Comparator"};
 

@@ -13,7 +13,7 @@ public class DropAttribute extends Parser {
     }
 
     @Override
-    public void executeCommand(DBServer server){
+    public void executeCommand(DBServer server, TokenBank tokenBank) {
         server.databases.get(server.getCurrentDatabase()).tables.get(tableName).removeAttribute(attributeName);;
     };
 }

@@ -21,7 +21,7 @@ public class SelectCommandWithConditional extends Conditionals implements DBComm
 
 //    this part will carry out the check. perhaps another class will need to be called but who knows
     @Override
-    public void executeCommand(DBServer server){
+    public void executeCommand(DBServer server, TokenBank tokenbank) {
         comparatorConditional(server, localTokenBank);
 //        conditional checks with tokens passed in will return a conditional check that we can pass into the method ...
 //        table.loopThroughTableAndApplySelection(boolean check);

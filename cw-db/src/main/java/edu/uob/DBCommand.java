@@ -11,7 +11,7 @@ public interface DBCommand {
     TokenBank tokenBankLocal = null;
 
     abstract DBCommand parse(TokenBank tokenBank);
-    abstract void executeCommand(DBServer server);
+    abstract void executeCommand(DBServer server, TokenBank tokenBank);
 //    String commandType;
 //
 

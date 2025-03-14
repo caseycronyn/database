@@ -38,8 +38,10 @@ public class Table {
 //        System.out.println(attributes);
     }
 
-    public void setAttributes(ArrayList<String> attributesIn) {
-        attributes.addAll(attributesIn);
+    public void setAttributes(List<Token> tokens) {
+        for (Token token : tokens) {
+            attributes.add(token.getName());
+        }
     }
 
     public void setDatabaseName(String databaseNameIn) {
@@ -178,19 +180,19 @@ public class Table {
         writeTableToFileFromMemory();
     }
 
-    public void addEntryToTable(ArrayList<String> entryArray, Integer newID) {
-        HashMap<String, String> row = new HashMap<>();
-        if ((entryArray.size() + 1) != attributes.size()) {
-            return;
-        }
-        row.put("id", newID.toString());
-        entryArray.add(0, newID.toString());
-        for (int i = 0; i < attributes.size(); i++) {
-            row.put(attributes.get(i), entryArray.get(i));
-        }
-//        System.out.println(row);
-        entries.add(row);
-    }
+//     public void addEntryToTable(List<Token> tokens, Integer newID) {
+//         HashMap<String, String> row = new HashMap<>();
+//         if ((tokens.size() + 1) != attributes.size()) {
+//             return;
+//         }
+//         row.put("id", newID.toString());
+//         tokens.add(0, newID.toString());
+//         for (int i = 0; i < attributes.size(); i++) {
+//             row.put(attributes.get(i), tokens.get(i));
+//         }
+// //        System.out.println(row);
+//         entries.add(row);
+//     }
 
     public void printTableToStdout() {
         String tabJoinedLine = String.join("\t", attributes);

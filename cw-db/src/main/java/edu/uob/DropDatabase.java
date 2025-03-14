@@ -11,7 +11,7 @@ public class DropDatabase extends Parser {
     }
 
     @Override
-    public void executeCommand(DBServer server){
+    public void executeCommand(DBServer server, TokenBank tokenBank) {
 //        server.deleteDatabase(databaseName);
         server.databases.remove(databaseName);
         File file = new File(server.getStorageFolderPath() + File.separator + databaseName);

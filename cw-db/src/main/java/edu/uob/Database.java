@@ -47,7 +47,7 @@ public class Database {
             // Create the database storage folder if it doesn't already exist !
             Files.createDirectories(Paths.get(storageFolderPath + File.separator + name));
         } catch(IOException ioe) {
-            System.out.println("Can't seem to create database storage folder " + storageFolderPath);
+            System.out.println("Can't seem to create database storage folder " + storageFolderPath + File.separator + name);
         }
     }
 

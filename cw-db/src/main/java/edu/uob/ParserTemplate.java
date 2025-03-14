@@ -1,6 +1,7 @@
 package edu.uob;
 
 public class ParserTemplate extends Parser {
+    TokenBank localTokenBank;
     @Override
     public DBCommand parse(TokenBank tokenBank) {
         localTokenBank = tokenBank;
@@ -8,7 +9,7 @@ public class ParserTemplate extends Parser {
     }
 
     @Override
-    public void executeCommand(DBServer server){
+    public void executeCommand(DBServer server, TokenBank tokenBank) {
         ;
     }
 

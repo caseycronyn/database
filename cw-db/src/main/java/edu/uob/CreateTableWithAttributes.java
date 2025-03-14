@@ -1,24 +1,20 @@
 package edu.uob;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class CreateTableWithAttributes extends Parser {
-    String tableName;
-    String databaseName;
-    ArrayList<String> attributes;
 
     @Override
     public DBCommand parse(TokenBank tokenBank) {
-        tableName = tokenBank.getCurrentToken().getName();
-        tokenBank.nextToken();
-        attributes = convertListInParenthesisToArray(tokenBank);
         return this;
     }
 
     @Override
-    public void executeCommand(DBServer server){
-        databaseName = server.getCurrentDatabase();
-        Table table = new Table(tableName, server.getCurrentDatabase(), server.getStorageFolderPath());
+    public void executeCommand(DBServer server, TokenBank tokenBank) {
+        String tableName = tokenBank.getNameFromType("tableName");
+        String databaseName = server.getCurrentDatabase();
+        List<Token> attributes = getAttributesFromParenthesis(tokenBank);
+        Table table = new Table(tableName, databaseName, server.getStorageFolderPath());
         table.setAttributes(attributes);
         table.writeTableToFileFromMemory();
         server.databases.get(databaseName).tables.put(tableName, table);

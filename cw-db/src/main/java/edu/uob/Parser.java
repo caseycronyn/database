@@ -17,57 +17,58 @@ types facilitates error
 handling and command building
  */
 public class Parser implements DBCommand {
-    TokenBank localTokenBank;
-    String[] specialCharacters = {"(", ")", ",", ";"};
-    // need to change this so I'm, checking for the first token only
     @Override
     public DBCommand parse(TokenBank tokenBank) {
-        Token token = tokenBank.getFirstToken();
-        switch (token.getName()) {
-            case ";":
-                return this;
-            case "CREATE":
-                DBCommand createCommand = new CreateCommand();
-                return createCommand.parse(tokenBank);
-            case "USE":
-                DBCommand useCommand = new UseCommand();
-                return useCommand.parse(tokenBank);
-            case "DROP":
-                DBCommand dropCommand = new DropCommand();
-                return dropCommand.parse(tokenBank);
-            case "ALTER":
-                DBCommand alterCommand = new AlterCommand();
-                return alterCommand.parse(tokenBank);
-            case "INSERT":
-                DBCommand insertCommand = new InsertCommand();
-                return insertCommand.parse(tokenBank);
-            case "SELECT":
-                DBCommand selectCommand = new SelectCommand();
-                return selectCommand.parse(tokenBank);
+        String query = tokenBank.getQueryAsTokenTypes();
+        if (tokenBank.getQueryAsTokenType("use").equals(query)) {
+            DBCommand useCommand = new UseCommand();
+            return useCommand.parse(tokenBank);
         }
-        return null;
+        else if (tokenBank.getQueryAsTokenType("create database").equals(query)) {
+            DBCommand createDatabase = new CreateDatabase();
+            return createDatabase.parse(tokenBank);
+        }
+        else if (tokenBank.getQueryAsTokenType("create table").equals(query)) {
+            DBCommand createTable = new CreateTable();
+            return createTable.parse(tokenBank);
+        }
+        else if (tokenBank.getQueryAsTokenType("create table with attributes").equals(query)) {
+            DBCommand createTableWithAttributes = new CreateTableWithAttributes();
+            return createTableWithAttributes.parse(tokenBank);
+        }
+        //     DBCommand createCommand = new CreateCommand();
+        //     return createCommand.parse(tokenBank);
+            // case "DROP":
+            //     DBCommand dropCommand = new DropCommand();
+            //     return dropCommand.parse(tokenBank);
+            // case "ALTER":
+            //     DBCommand alterCommand = new AlterCommand();
+            //     return alterCommand.parse(tokenBank);
+            // case "INSERT":
+            //     DBCommand insertCommand = new InsertCommand();
+            //     return insertCommand.parse(tokenBank);
+            // case "SELECT":
+            //     DBCommand selectCommand = new SelectCommand();
+            //     return selectCommand.parse(tokenBank);
+            // default:
+            //     return this;
+        return this;
     }
+
 
     @Override
-    public void executeCommand(DBServer server){};
+    public void executeCommand(DBServer server, TokenBank tokenBank) {};
 
-   // tries to get rid of the parenthesis and get the arguments inside as a list
-    public ArrayList<String> convertListInParenthesisToArray(TokenBank tokenBank) {
-        int position = tokenBank.getCurrentTokenPosition();
-        String currentToken;
-        ArrayList<String> fragments = new ArrayList<>();
-        for (; position < tokenBank.tokens.size(); position++) {
-            currentToken = tokenBank.tokens.get(position).getName();
-            if (!Arrays.asList(specialCharacters).contains(currentToken)) {
-            // System.out.println(tokenBank.tokens.get(position));
-                fragments.add(tokenBank.tokens.get(position).getName());
+    public List<Token> getAttributesFromParenthesis(TokenBank tokenBank) {
+        int start = tokenBank.getPositionFromType("openParenthesis");
+        Token token = tokenBank.getTokenAtPosition(start + 1);
+        List<Token> attributes = new ArrayList<>();
+        while (!token.getTokenType().equals("closeParenthesis")) {
+            if (token.getTokenType().equals("attributeName")) {
+                attributes.add(token);
             }
         }
-       // String str = String.join("", fragments);
-       // System.out.println(fragments);
-        return fragments;
+        return attributes;
     }
 
-   // public DBCmd parse(ArrayList<String> tokens) {
-   // }
 }
