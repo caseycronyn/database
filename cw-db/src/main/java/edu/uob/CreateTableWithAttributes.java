@@ -15,8 +15,7 @@ public class CreateTableWithAttributes extends Parser {
         String databaseName = server.getCurrentDatabase();
         List<Token> attributes = getTokenTypeFromParentheses(tokenBank, "attributeName");
         Table table = new Table(tableName, databaseName, server.getStorageFolderPath());
-        table.setAttributes(attributes);
-        table.writeTableToFileFromMemory();
+        table.addAttributesToTable(attributes);
         server.databases.get(databaseName).tables.put(tableName, table);
     }
 }

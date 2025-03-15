@@ -8,8 +8,9 @@ import java.util.*;
 //populates the tables rows and columns by passing in the formatted string. this class also holds the data for rows and columns
 //the columns are ordered
 public class Table {
-    List<HashMap<String, Token>> rowsOfAttributesMappedToTokens = new ArrayList<>();
-    List<String> attributes = new ArrayList<>();
+    // List<HashMap<String, Token>> rowsOfAttributesMappedToTokens = new ArrayList<>();
+    List<Attribute> attributes = new ArrayList<>();
+    // Map<String, String> attributesToTypes = new HashMap<>();
     List<Row> rows = new ArrayList<>();
     static ArrayList<String> commandHolder = new ArrayList<String>();
     String tableName;
@@ -21,7 +22,18 @@ public class Table {
         this.tableName = tableName;
         this.databaseName = databaseName;
         this.storageFolderPath = storageFolderPath;
-        this.attributes.add("id");
+        // this.attributes.add("id");
+    }
+
+    // set all to null
+    void addAttributesToTable(List<Token> tokens) {
+        Attribute idAttribute = new Attribute("id", "integerLiteral");
+        attributes.add(idAttribute);
+        for (Token token : tokens) {
+            Attribute attribute = new Attribute(token.getName(), "NULL");
+            attributes.add(attribute);
+        }
+        writeTableToFileFromMemory();
     }
 
     //    not sure of the use of this ...
@@ -38,11 +50,11 @@ public class Table {
 //        System.out.println(attributes);
     }
 
-    public void setAttributes(List<Token> tokens) {
-        for (Token token : tokens) {
-            attributes.add(token.getName());
-        }
-    }
+    // public void setAttributes(List<Token> tokens) {
+    //     for (Token token : tokens) {
+    //         attributes.add(token.getName());
+    //     }
+    // }
 
     public void setDatabaseName(String databaseNameIn) {
         databaseName = databaseNameIn;
@@ -65,12 +77,12 @@ public class Table {
 //
 //     }
 
-    public void populateAttributesFromFile() {
-        String command = commandHolder.get(0);
-        String[] attributeArray = command.split("\t");
-        attributes.addAll(List.of(attributeArray));
-//        System.out.println(attributes);
-    }
+//     public void populateAttributesFromFile() {
+//         String command = commandHolder.get(0);
+//         String[] attributeArray = command.split("\t");
+//         attributes.addAll(List.of(attributeArray));
+// //        System.out.println(attributes);
+//     }
 
     public void readInFileAndPrint() throws IOException {
         File fileToOpen = new File(tableName + ".tab");
@@ -125,7 +137,7 @@ public class Table {
 //     }
 
     public void printEntriesHashMap() {
-        for (HashMap<String, Token> row : rowsOfAttributesMappedToTokens) {
+        for (Row row : rows) {
             System.out.println(row);
         }
     }
@@ -137,19 +149,22 @@ public class Table {
         } catch (Exception e) {
             System.out.println("error in writeTableToFileFromMemory: " + e);
         }
-        String tabJoinedLine = String.join("\t", attributes);
-        writer.println(tabJoinedLine);
+        StringBuilder firstLine = new StringBuilder();
+        for (Attribute attribute : attributes) {
+            firstLine.append(attribute.getName()).append("\t");
+        }
+        writer.println(firstLine);
         /*
         for each row of entries:
             make ordered array
             join with tabs
             write to file
          */
-        for (HashMap<String, Token> row : rowsOfAttributesMappedToTokens) {
+        for (Row row : rows) {
             ArrayList<String> orderedValues = new ArrayList<>();
 //            loop through attributes in order
-            for (String attribute : attributes) {
-                orderedValues.add(row.get(attribute).getName());
+            for (Attribute attribute : attributes) {
+                orderedValues.add(row.attributesToValues.get(attribute.getName()).getName());
             }
             String joinedLine = String.join("\t", orderedValues);
 //            System.out.println(joinedLine);
@@ -170,42 +185,46 @@ public class Table {
         }
     }
 
-    public void addNewAttribute(String attribute) {
+    public void addNewAttribute(String name) {
+        Attribute attribute = new Attribute(name, "NULL");
         attributes.add(attribute);
         writeTableToFileFromMemory();
     }
 
-    public void removeAttribute(String attribute) {
-        attributes.remove(attribute);
+    public void removeAttribute(String name) {
+        Iterator<Attribute> iterator = attributes.iterator();
+        while (iterator.hasNext()) {
+            Attribute attribute = iterator.next();
+            if (attribute.getName().equals(name)) {
+                iterator.remove();  // Safely removes the current Attribute
+                // attributes.remove(name); // Also remove from the map
+                break; // Break after removing, assuming unique attribute names
+            }
+        }
         writeTableToFileFromMemory();
     }
 
     public void addRowToTable(List<Token> valueList, Integer newID) {
         Row row = new Row(attributes, valueList, newID);
         rows.add(row);
+        checkAndSetAttributeTypes();
+        writeTableToFileFromMemory();
+    }
 
-
-
-//         if ((tokens.size() + 1) != attributes.size()) {
-//             return;
-//         }
-//         row.put("id", newID.toString());
-//         tokens.add(0, newID.toString());
-//         for (int i = 0; i < attributes.size(); i++) {
-//             row.put(attributes.get(i), tokens.get(i));
-//         }
-// //        System.out.println(row);
-//         entries.add(row);
+    public void checkAndSetAttributeTypes() {
+        for (Row row : rows) {
+           ;
+        }
     }
 
     public void printTableToStdout() {
-        String tabJoinedLine = String.join("\t", attributes);
+        String tabJoinedLine = String.join("\t", (CharSequence) attributes);
         System.out.println(tabJoinedLine);
-        for (HashMap<String, Token> row : rowsOfAttributesMappedToTokens) {
+        for (Row row : rows) {
             ArrayList<String> orderedValues = new ArrayList<>();
 //            loop through attributes in order
-            for (String attribute : attributes) {
-                orderedValues.add(row.get(attribute).getName());
+            for (Attribute attribute : attributes) {
+                orderedValues.add(row.attributesToValues.get(attribute.getName()).getName());
             }
             String joinedLine = String.join("\t", orderedValues);
             System.out.println(joinedLine);

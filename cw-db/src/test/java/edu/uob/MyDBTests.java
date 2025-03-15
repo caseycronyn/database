@@ -39,8 +39,6 @@ public class MyDBTests {
         sendCommandToServer("CREATE TABLE marks;");
     }
 
-
-
     @Test
     public void makeDatabaseAndTable() {
         sendCommandToServer("CREATE DATABASE test;");

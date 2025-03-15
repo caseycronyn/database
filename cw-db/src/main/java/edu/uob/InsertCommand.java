@@ -25,6 +25,5 @@ public class InsertCommand extends Parser {
         table.addRowToTable(valueList, newID);
 
         // table.addEntryToTable(valueList, server.databases.get(server.getCurrentDatabase()).getAndIncrementID());
-        table.writeTableToFileFromMemory();
     };
 }

@@ -1,5 +1,5 @@
 clean:
-	rm -r ../databases/*
+	rm -r databases/*
 
 compile:
 	./mvnw clean compile

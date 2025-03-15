@@ -4,6 +4,11 @@ public class Attribute {
     String name;
     String dataType;
 
+    Attribute(String name, String dataType) {
+        this.name = name;
+        this.dataType = dataType;
+    }
+
     void setDataType(String dataType) {
         this.dataType = dataType;
     }
@@ -16,7 +21,7 @@ public class Attribute {
         this.name = name;
     }
 
-    void getName() {
-        this.name = name;
+    String getName() {
+        return name;
     }
 }
