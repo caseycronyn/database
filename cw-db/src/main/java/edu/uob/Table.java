@@ -1,7 +1,6 @@
 package edu.uob;
 
 import java.io.*;
-import java.lang.reflect.Array;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
@@ -9,8 +8,9 @@ import java.util.*;
 //populates the tables rows and columns by passing in the formatted string. this class also holds the data for rows and columns
 //the columns are ordered
 public class Table {
-    ArrayList<HashMap<String, String>> entries = new ArrayList<>();
-    ArrayList<String> attributes = new ArrayList<>();
+    List<HashMap<String, Token>> rowsOfAttributesMappedToTokens = new ArrayList<>();
+    List<String> attributes = new ArrayList<>();
+    List<Row> rows = new ArrayList<>();
     static ArrayList<String> commandHolder = new ArrayList<String>();
     String tableName;
     String databaseName;
@@ -48,22 +48,22 @@ public class Table {
         databaseName = databaseNameIn;
     }
 
-    public void initialiseTableFromFile() {
-        readInFileAndPopulateArrayWithAllLines();
-        populateAttributesAndEntriesFromFile();
-    }
-
-    public void populateAttributesAndEntriesFromFile() {
-        try {
-            populateAttributesFromFile();
-            populateEntriesAndMapAttributesFromFile();
-        }
-//        TODO is this ok?
-        catch (Exception e) {
-            System.out.println("error in populateAttributesAndEntries: " + e);
-        }
-
-    }
+    // public void initialiseTableFromFile() {
+    //     readInFileAndPopulateArrayWithAllLines();
+    //     populateAttributesAndEntriesFromFile();
+    // }
+    //
+//     public void populateAttributesAndEntriesFromFile() {
+//         try {
+//             populateAttributesFromFile();
+//             populateEntriesAndMapAttributesFromFile();
+//         }
+// //        TODO is this ok?
+//         catch (Exception e) {
+//             System.out.println("error in populateAttributesAndEntries: " + e);
+//         }
+//
+//     }
 
     public void populateAttributesFromFile() {
         String command = commandHolder.get(0);
@@ -101,31 +101,31 @@ public class Table {
         }
     }
 
-    public void populateEntriesAndMapAttributesFromFile() {
-//        loop through each line:
-        for (int i = 1; i < commandHolder.size(); i++) {
-//            split words into separate terms add to word_array
-            String[] entryArray = commandHolder.get(i).split("\t");
-            HashMap<String, String> row = new HashMap<>();
-            if (entryArray.length != attributes.size()) {
-                return;
-            }
-//            loop through word_array:
-            for (int j = 0; j < attributes.size(); j++) {
-//                add each key value pair to a new row
-                row.put(attributes.get(j), entryArray[j]);
-            }
-            entries.add(row);
-//            System.out.println(row);
-//            System.out.println(commandHolder.get(i));
-        }
-//        for (String entry: commandHolder) {
-//            System.out.println(entry);
-//        }
-    }
+//     public void populateEntriesAndMapAttributesFromFile() {
+// //        loop through each line:
+//         for (int i = 1; i < commandHolder.size(); i++) {
+// //            split words into separate terms add to word_array
+//             String[] entryArray = commandHolder.get(i).split("\t");
+//             HashMap<String, Token> row = new HashMap<>();
+//             if (entryArray.length != attributes.size()) {
+//                 return;
+//             }
+// //            loop through word_array:
+//             for (int j = 0; j < attributes.size(); j++) {
+// //                add each key value pair to a new row
+//                 row.put(attributes.get(j), entryArray[j]);
+//             }
+//             entries.add(row);
+// //            System.out.println(row);
+// //            System.out.println(commandHolder.get(i));
+//         }
+// //        for (String entry: commandHolder) {
+// //            System.out.println(entry);
+// //        }
+//     }
 
     public void printEntriesHashMap() {
-        for (HashMap<String, String> row : entries) {
+        for (HashMap<String, Token> row : rowsOfAttributesMappedToTokens) {
             System.out.println(row);
         }
     }
@@ -145,11 +145,11 @@ public class Table {
             join with tabs
             write to file
          */
-        for (HashMap<String, String> row : entries) {
+        for (HashMap<String, Token> row : rowsOfAttributesMappedToTokens) {
             ArrayList<String> orderedValues = new ArrayList<>();
 //            loop through attributes in order
             for (String attribute : attributes) {
-                orderedValues.add(row.get(attribute));
+                orderedValues.add(row.get(attribute).getName());
             }
             String joinedLine = String.join("\t", orderedValues);
 //            System.out.println(joinedLine);
@@ -180,8 +180,12 @@ public class Table {
         writeTableToFileFromMemory();
     }
 
-//     public void addEntryToTable(List<Token> tokens, Integer newID) {
-//         HashMap<String, String> row = new HashMap<>();
+    public void addRowToTable(List<Token> valueList, Integer newID) {
+        Row row = new Row(attributes, valueList, newID);
+        rows.add(row);
+
+
+
 //         if ((tokens.size() + 1) != attributes.size()) {
 //             return;
 //         }
@@ -192,16 +196,16 @@ public class Table {
 //         }
 // //        System.out.println(row);
 //         entries.add(row);
-//     }
+    }
 
     public void printTableToStdout() {
         String tabJoinedLine = String.join("\t", attributes);
         System.out.println(tabJoinedLine);
-        for (HashMap<String, String> row : entries) {
+        for (HashMap<String, Token> row : rowsOfAttributesMappedToTokens) {
             ArrayList<String> orderedValues = new ArrayList<>();
 //            loop through attributes in order
             for (String attribute : attributes) {
-                orderedValues.add(row.get(attribute));
+                orderedValues.add(row.get(attribute).getName());
             }
             String joinedLine = String.join("\t", orderedValues);
             System.out.println(joinedLine);

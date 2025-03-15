@@ -13,7 +13,7 @@ public class CreateTableWithAttributes extends Parser {
     public void executeCommand(DBServer server, TokenBank tokenBank) {
         String tableName = tokenBank.getTokenFromType("tableName").getName();
         String databaseName = server.getCurrentDatabase();
-        List<Token> attributes = getAttributesFromParenthesis(tokenBank);
+        List<Token> attributes = getTokenTypeFromParentheses(tokenBank, "attributeName");
         Table table = new Table(tableName, databaseName, server.getStorageFolderPath());
         table.setAttributes(attributes);
         table.writeTableToFileFromMemory();

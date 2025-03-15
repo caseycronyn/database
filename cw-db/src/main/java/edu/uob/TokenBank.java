@@ -49,7 +49,7 @@ public class TokenBank {
         tokenKeys.put("drop database", "dropCommand databaseSelector databaseName terminator");
         tokenKeys.put("drop table", "dropCommand tableSelector tableName terminator");
         tokenKeys.put("alter", "alterCommand tableSelector tableName alterationType attributeName terminator");
-        tokenKeys.put("insert", "insertCommand into tableName values ... ");
+        tokenKeys.put("insert", "insertCommand into tableName values");
         tokenKeys.put("select", "selectCommand wildAttributeSymbol from tableName terminator");
         tokenKeys.put("select with condition", "selectCommand wildAttributeSymbol from tableName ... ");
         tokenKeys.put("update", "updateCommand tableName set attributeName equals integerLiteral ... ");

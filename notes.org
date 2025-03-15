@@ -94,25 +94,17 @@ parsing then interpreting is probably simpler than trying to do both at the same
 * bnf notes
 ** DBCommand classes/ constructors needed:
 
-*** TODO use
-*** TODO create database
-*** TODO create table
-*** TODO create table with attributes
-*** TODO drop database
-*** TODO drop table
-*** TODO alter
-*** TODO insert
-*** TODO select
-*** TODO select with condition
-*** TODO update
-*** TODO delete
-*** TODO join
-
-
-
-
-
-
-
-
-
+*** rewrite to use lexing
+**** DONE use
+**** DONE create database
+**** DONE create table
+**** DONE create table with attributes
+**** DONE drop database
+**** DONE drop table
+**** DONE alter
+**** IN PROGRESS insert
+**** TODO select
+**** TODO select with condition
+**** TODO update
+**** TODO delete
+**** TODO join

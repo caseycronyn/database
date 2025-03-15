@@ -8,6 +8,23 @@ public class Token {
         this.name = name;
         this.position = position;
         tokenType = null;
+        // dataType = null;
+    }
+
+    void setDataType() {
+        // this.dataType = dataType;
+    }
+
+    void getDataType() {
+        switch (tokenType) {
+            case "integerLiteral":
+                returnInt();
+
+        }
+    }
+
+    int returnInt() {
+        return Integer.parseInt(name);
     }
 
     void setTokenType(String tokenType) {

@@ -24,12 +24,12 @@ public class Database {
 //        createIDFolderAndFile();
         createDatabaseFolder();
     }
-//
-    public void addNewTableFromFile(String tableName) {
-        Table table = new Table(tableName, name, storageFolderPath);
-        table.initialiseTableFromFile();
-        tables.put(tableName, table);
-    }
+
+//     public void addNewTableFromFile(String tableName) {
+//         Table table = new Table(tableName, name, storageFolderPath);
+//         table.initialiseTableFromFile();
+//         tables.put(tableName, table);
+//     }
 
 //    public void createIDFolderAndFile() {
 //        try {

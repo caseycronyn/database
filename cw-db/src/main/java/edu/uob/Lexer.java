@@ -9,16 +9,6 @@ public class Lexer {
     String commandType, plainText, query, tableOrDatabase, alterationType, stringLiteral, booleanLiteral, floatLiteral, integerLiteral, symbol, wildAttributeList, comparator, parentheses, booleanOperator;
     TokenBank tokenBank;
 
-    Lexer(TokenBank tokenBank) {
-        this.tokenBank = tokenBank;
-        setup();
-        lexTokens();
-        tokenBank.initialise();
-        checkForNullTokens();
-        // tokenBank.printTokenNames();
-        // tokenBank.printTokenTypes();
-    }
-
     void checkForNullTokens() {
         for (Token token : tokenBank.getTokens()) {
             if (token.getTokenType() == null) {
@@ -140,8 +130,8 @@ public class Lexer {
         addPlainTextToken("attributeName");
         tokenBank.nextToken();
         addKeywordTokenIfEquals("equals", "=");
-        tokenBank.nextToken();
-        addTokenIfValue();
+        Token token = tokenBank.nextToken();
+        setValueTokenType(token);
         tokenBank.nextToken();
     }
 
@@ -185,8 +175,8 @@ public class Lexer {
             addPlainTextToken("attributeName");
             tokenBank.nextToken();
             addTokenIfPatternCheckSuccessful("comparator", comparator);
-            tokenBank.nextToken();
-            addTokenIfValue();
+            Token token = tokenBank.nextToken();
+            setValueTokenType(token);
         }
 
         void addTokenIfPatternCheckSuccessful (String description, String pattern){
@@ -218,7 +208,7 @@ public class Lexer {
             addKeywordTokenIfEquals("values", "VALUES");
             tokenBank.incrementCurrentTokenPosition();
             parenthesesLexer();
-            setNullTokensInParentheses("variables");
+            setNullTokensInParentheses("valueList");
         }
 
         void alterLexer () {
@@ -327,31 +317,34 @@ public class Lexer {
 
         void setNullTokensInParentheses (String description){
             Token token = tokenBank.getCurrentToken();
-            while (token.getTokenType() != "closeParenthesis") {
+            while (!token.getTokenType().equals("closeParenthesis")) {
                 token = tokenBank.nextToken();
                 if (description.equals("valueList")) {
-                    addTokenIfValue();
+                    setValueTokenType(token);
                 } else if (checkTokenIsPlainText(token)) {
                     token.setTokenType(description);
                 }
             }
         }
 
-        void addTokenIfValue () {
-            Token token = tokenBank.getCurrentToken();
-            if (checkTokenForPattern(token, stringLiteral)) {
-                token.setTokenType("stringLiteral");
-            } else if (checkTokenForPattern(token, booleanLiteral)) {
+        void setValueTokenType(Token token) {
+            // Token token = tokenBank.getCurrentToken();
+            if (checkTokenForPattern(token, booleanLiteral)) {
                 token.setTokenType("booleanLiteral");
-            } else if (checkTokenForPattern(token, floatLiteral)) {
+            }
+            else if (checkTokenForPattern(token, floatLiteral)) {
                 token.setTokenType("floatLiteral");
-            } else if (checkTokenForPattern(token, integerLiteral)) {
+            }
+            else if (checkTokenForPattern(token, integerLiteral)) {
                 token.setTokenType("integerLiteral");
-            } else if (token.getName().equals("NULL")) {
+            }
+            else if (token.getName().equals("NULL")) {
                 token.setTokenType("NULL");
             }
+            else if (checkTokenForPattern(token, stringLiteral)) {
+                token.setTokenType("stringLiteral");
+            }
         }
-
 
         void useLexer () {
             Token token = tokenBank.getCurrentToken();
@@ -413,8 +406,7 @@ public class Lexer {
             tokenBank.setCurrentTokenToPosition(startPosition);
         }
 
-
-        void setup () {
+        void createStrings() {
             // optional whitespace in these
             whiteSpaceSymbols = new String[]{"Command", "CommandType", "Use", "Create", "CreateDatabase", "CreateTable", "Drop", "Alter", "Insert", "Select", "Update", "Delete", "Join", "NameValueList", "NameValuePair", "AlterationType", "ValueList", "WildAttribList", "AttributeList", "Condition", "FirstCondition", "SecondCondition", "BoolOperator", "Comparator"};
 
@@ -451,6 +443,14 @@ public class Lexer {
             comparator = String.join("|", comparatorArray);
 
             parentheses = "\\(|\\)";
+        }
+
+        void setup (TokenBank tokenBank) {
+            this.tokenBank = tokenBank;
+            createStrings();
+            lexTokens();
+            tokenBank.initialise();
+            checkForNullTokens();
         }
 }
 

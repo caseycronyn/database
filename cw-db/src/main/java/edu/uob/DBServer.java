@@ -65,13 +65,13 @@ public class DBServer {
         return currentDatabase;
     }
 
-    public void createNewTableFromFile(String tableName, String databaseName) {
-        Table table = new Table(tableName, databaseName, storageFolderPath);
-        table.initialiseTableFromFile();
-        table.writeTableToFileFromMemory();
-        databases.get(databaseName).addNewTableFromFile(tableName);
-//        databaseName.addNewtable(tableName);
-    }
+//     public void createNewTableFromFile(String tableName, String databaseName) {
+//         Table table = new Table(tableName, databaseName, storageFolderPath);
+//         table.initialiseTableFromFile();
+//         table.writeTableToFileFromMemory();
+//         databases.get(databaseName).addNewTableFromFile(tableName);
+// //        databaseName.addNewtable(tableName);
+//     }
 
 //    public void removeTable(String tableName) {
 //        databases.get(currentDatabase).
@@ -87,7 +87,8 @@ public class DBServer {
         Tokeniser tokeniser = new Tokeniser();
         TokenBank tokenBank = new TokenBank(tokeniser.getListOfTokens(command));
         // in the middle of
-        Lexer lexer = new Lexer(tokenBank);
+        Lexer lexer = new Lexer();
+        lexer.setup(tokenBank);
         // will probably need a rewrite
         Parser parser = new Parser();
 
