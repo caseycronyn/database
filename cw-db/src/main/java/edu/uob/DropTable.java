@@ -14,6 +14,8 @@ public class DropTable extends Parser {
         String tableName = tokenBank.getTokenFromType("tableName").getName();
         server.databases.get(server.getCurrentDatabase()).tables.remove(tableName);
         File file = new File(server.getStorageFolderPath() + File.separator + server.getCurrentDatabase() + File.separator + tableName + ".tab");
-        file.delete();
+        if (!file.delete()) {
+            System.err.println("Could not delete file: " + file.getAbsolutePath());
+        }
     }
 }

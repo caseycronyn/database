@@ -86,6 +86,7 @@ public class MyDBTests {
         sendCommandToServer("USE DATABASE " + randomName + ";");
         sendCommandToServer("CREATE TABLE marks (name, mark, pass);");
         sendCommandToServer("INSERT INTO marks VALUES ('Simon', 65, TRUE);");
+        sendCommandToServer("INSERT INTO marks VALUES ('Hello', 22, FALSE);");
     }
 
     @Test
@@ -96,12 +97,37 @@ public class MyDBTests {
         sendCommandToServer("CREATE TABLE marks (name, mark, pass);");
         sendCommandToServer("INSERT INTO marks VALUES ('Simon', 65, TRUE);");
         sendCommandToServer("INSERT INTO marks VALUES ('David', 82, TRUE);");
-        sendCommandToServer("INSERT INTO marks VALUES ('Jeremy', 38, False);");
-        sendCommandToServer("SELECT * FROM marks;");
+        sendCommandToServer("INSERT INTO marks VALUES ('Jeremy', 38, FALSE);");
+        sendCommandToServer("SELECT mark, name FROM marks;");
     }
 
     @Test
-    public void selectCommandWithCondition() {
+    public void selectCommandWithConditions() {
+        String randomName = generateRandomName();
+        sendCommandToServer("CREATE DATABASE " + randomName + ";");
+        sendCommandToServer("USE DATABASE " + randomName + ";");
+        sendCommandToServer("CREATE TABLE marks (name, mark, pass);");
+        sendCommandToServer("INSERT INTO marks VALUES ('Simon', 65, TRUE);");
+        sendCommandToServer("INSERT INTO marks VALUES ('David', 82, TRUE);");
+        sendCommandToServer("INSERT INTO marks VALUES ('Jeremy', 38, FALSE);");
+        sendCommandToServer("SELECT mark, name FROM marks WHERE (pass == FALSE);");
+    }
+
+    @Test
+    public void selectAllCommand() {
+        String randomName = generateRandomName();
+        sendCommandToServer("CREATE DATABASE " + randomName + ";");
+        sendCommandToServer("USE DATABASE " + randomName + ";");
+        sendCommandToServer("CREATE TABLE marks (name, mark, pass);");
+        sendCommandToServer("INSERT INTO marks VALUES ('Simon', 65, TRUE);");
+        sendCommandToServer("INSERT INTO marks VALUES ('David', 82, TRUE);");
+        sendCommandToServer("INSERT INTO marks VALUES ('Jeremy', 38, FALSE);");
+        sendCommandToServer("SELECT * FROM marks;");
+    }
+
+
+    @Test
+    public void selectAllCommandWithCondition() {
         String randomName = generateRandomName();
         sendCommandToServer("CREATE DATABASE " + randomName + ";");
         sendCommandToServer("USE DATABASE " + randomName + ";");

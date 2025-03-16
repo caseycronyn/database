@@ -2,6 +2,7 @@ package edu.uob;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class TokenBank {
@@ -50,7 +51,8 @@ public class TokenBank {
         tokenKeys.put("drop table", "dropCommand tableSelector tableName terminator");
         tokenKeys.put("alter", "alterCommand tableSelector tableName alterationType attributeName terminator");
         tokenKeys.put("insert", "insertCommand into tableName values");
-        tokenKeys.put("select", "selectCommand wildAttributeSymbol from tableName terminator");
+        tokenKeys.put("select", "attributeName from tableName");
+        tokenKeys.put("select all", "selectCommand wildAttributeSymbol from tableName");
         tokenKeys.put("select with condition", "selectCommand wildAttributeSymbol from tableName ... ");
         tokenKeys.put("update", "updateCommand tableName set attributeName equals integerLiteral ... ");
         tokenKeys.put("delete", "deleteCommand from tableName ... ");
@@ -165,6 +167,35 @@ public class TokenBank {
     }
 
 
+    public List<Token> getTokenTypeFromFragment(String description, String startToken, String endToken) {
+        int start = getTokenFromType(startToken).getPosition();
+        setCurrentTokenToPosition(start + 1);
+        Token token = getCurrentToken();
+        List<Token> newTokens = new ArrayList<>();
+        while (!token.getTokenType().equals(endToken)) {
+            if (token.getTokenType().equals(description)) {
+                newTokens.add(token);
+            }
+            else if (description.equals("valueList") && tokenIsAValue(token)) {
+                newTokens.add(token);
+            }
+            else if (description.equals("condition") && tokenIsACondition(token)) {
+                newTokens.add(token);
+            }
+            token = nextToken();
+
+        }
+        return newTokens;
+    }
+
+    boolean tokenIsACondition(Token token) {
+        return (token.getTokenType().equals("attributeName") || token.getTokenType().equals("comparator") || tokenIsAValue(token));
+    }
+
+
+    public boolean tokenIsAValue(Token token) {
+        return (token.getTokenType().contains("Literal") || token.getTokenType().equals("NULL"));
+    }
 //    ArrayList<String> tokenArray = new ArrayList<>();
 
 //    Tokenizer (String query) {

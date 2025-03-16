@@ -1,6 +1,7 @@
 package edu.uob;
 
 import java.io.File;
+import java.io.IOException;
 
 public class DropDatabase extends Parser {
     @Override
@@ -14,6 +15,8 @@ public class DropDatabase extends Parser {
         server.databases.remove(databaseName);
         File file = new File(server.getStorageFolderPath() + File.separator + databaseName);
         server.deleteDirectory(file);
-        file.delete();
+        if (!file.delete()) {
+            System.out.println("Error deleting " + databaseName);
+        }
     };
 }

@@ -1,45 +1,31 @@
 package edu.uob;
 
 public class Value {
-    int integerValue = -1;
-    float floatValue = -1;
-    String stringValue = null;
-    boolean booleanValue;
-    String type, name;
-
+    String dataType, stringValue;
 
     Value(Token token)
     {
-        type = token.getTokenType();
-        name = token.getName();
-    }
-
-    String getName() {
-        return name;
-    }
-
-    String getType() {
-        return type;
-    }
-
-    int getIntegerValue() {
-        return integerValue;
-    }
-
-    float getFloatValue() {
-        return floatValue;
+        dataType = token.getTokenType();
+        stringValue = token.getName();
     }
 
     String getStringValue() {
         return stringValue;
     }
 
+    String getDataType() {
+        return dataType;
+    }
+
+    int getIntegerValue() {
+        return Integer.parseInt(stringValue);
+    }
+
+    float getFloatValue() {
+        return Float.parseFloat(stringValue);
+    }
+
     boolean getBooleanValue() {
-        return booleanValue;
+        return Boolean.parseBoolean(stringValue);
     }
-
-    void setIntegerValue() {
-        ;
-    }
-
 }

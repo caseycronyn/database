@@ -137,7 +137,7 @@ public class Lexer {
 
     void selectLexer() {
         tokenBank.getCurrentToken();
-        getWildAttributeList();
+        getAttributeNames();
         Token token = tokenBank.getCurrentToken();
         token.nameToUpperCase();
         if (token.getName().equals("FROM")) {
@@ -186,7 +186,7 @@ public class Lexer {
             }
         }
 
-        void getWildAttributeList () {
+        void getAttributeNames() {
             Token token = tokenBank.getCurrentToken();
             while (!token.getName().equalsIgnoreCase("FROM")) {
                 if (checkTokenForPattern(token, wildAttributeList)) {
@@ -386,7 +386,7 @@ public class Lexer {
 
         boolean checkTokenForPattern (Token token, String patternString){
             String name = token.getName();
-            Pattern pattern = Pattern.compile(patternString);
+            Pattern pattern = Pattern.compile(patternString, Pattern.CASE_INSENSITIVE);
             Matcher matcher = pattern.matcher(name);
             return matcher.find();
         }

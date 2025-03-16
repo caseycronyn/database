@@ -94,6 +94,7 @@ public class DBServer {
 
         commandResult = parser.parse(tokenBank);
         commandResult.executeCommand(this, tokenBank);
+        tokenBank.printTokenTypes();
         return "";
     }
 

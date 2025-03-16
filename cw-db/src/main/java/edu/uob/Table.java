@@ -10,8 +10,9 @@ import java.util.*;
 public class Table {
     // List<HashMap<String, Token>> rowsOfAttributesMappedToTokens = new ArrayList<>();
     List<Attribute> attributes = new ArrayList<>();
-    // Map<String, String> attributesToTypes = new HashMap<>();
+    Map<String, String> attributesToValues = new HashMap<>();
     List<Row> rows = new ArrayList<>();
+
     static ArrayList<String> commandHolder = new ArrayList<String>();
     String tableName;
     String databaseName;
@@ -25,6 +26,41 @@ public class Table {
         // this.attributes.add("id");
     }
 
+    void updateTable() {
+        writeTableToFileFromMemory();
+        updateAttributesToValues();
+    }
+
+    void updateAttributesToValues() {
+        Map<String, String> valueSet = new HashMap<>();
+        String value, finalValue;
+        value =  finalValue = null;
+        for (int i = 1; i < attributes.size(); i++) {
+            valueSet.clear();
+            for (int j = 0; j < rows.size(); j++) {
+                value = rows.get(j).attributesToValues.get(attributes.get(i).getName()).getDataType();
+                valueSet.put(value, value);
+            }
+        if (valueSet.size() == 1) {
+            finalValue = value;
+        }
+        else if (valueSet.size() > 1) {
+            finalValue = resolveValueConflict(valueSet);
+        }
+        attributes.get(i).setDataType(finalValue);
+        }
+    }
+
+    // string + anything = string
+    // bool + anything = string
+    // float + int = float
+    String resolveValueConflict(Map<String, String> valueSet) {
+        if (valueSet.containsKey("floatLiteral") && valueSet.containsKey("stringLiteral")) {
+            return "floatLiteral";
+        }
+        else return "stringLiteral";
+    }
+
     // set all to null
     void addAttributesToTable(List<Token> tokens) {
         Attribute idAttribute = new Attribute("id", "integerLiteral");
@@ -33,7 +69,7 @@ public class Table {
             Attribute attribute = new Attribute(token.getName(), "NULL");
             attributes.add(attribute);
         }
-        writeTableToFileFromMemory();
+        updateTable();
     }
 
     //    not sure of the use of this ...
@@ -160,11 +196,12 @@ public class Table {
             join with tabs
             write to file
          */
+        ArrayList<String> orderedValues = new ArrayList<>();
         for (Row row : rows) {
-            ArrayList<String> orderedValues = new ArrayList<>();
+            orderedValues.clear();
 //            loop through attributes in order
             for (Attribute attribute : attributes) {
-                orderedValues.add(row.attributesToValues.get(attribute.getName()).getName());
+                orderedValues.add(row.attributesToValues.get(attribute.getName()).getStringValue());
             }
             String joinedLine = String.join("\t", orderedValues);
 //            System.out.println(joinedLine);
@@ -192,42 +229,70 @@ public class Table {
     }
 
     public void removeAttribute(String name) {
-        Iterator<Attribute> iterator = attributes.iterator();
-        while (iterator.hasNext()) {
-            Attribute attribute = iterator.next();
-            if (attribute.getName().equals(name)) {
-                iterator.remove();  // Safely removes the current Attribute
-                // attributes.remove(name); // Also remove from the map
-                break; // Break after removing, assuming unique attribute names
+        Iterator<Attribute> attribute = attributes.iterator();
+        while (attribute.hasNext()) {
+            if (attribute.next().getName().equals(name)) {
+                attribute.remove();
             }
         }
-        writeTableToFileFromMemory();
+        updateTable();
     }
 
     public void addRowToTable(List<Token> valueList, Integer newID) {
         Row row = new Row(attributes, valueList, newID);
         rows.add(row);
-        checkAndSetAttributeTypes();
-        writeTableToFileFromMemory();
+        checkAndSetValueTypes();
+        updateTable();
     }
 
-    public void checkAndSetAttributeTypes() {
-        for (Row row : rows) {
-           ;
-        }
-    }
-
-    public void printTableToStdout() {
-        String tabJoinedLine = String.join("\t", (CharSequence) attributes);
-        System.out.println(tabJoinedLine);
-        for (Row row : rows) {
-            ArrayList<String> orderedValues = new ArrayList<>();
-//            loop through attributes in order
-            for (Attribute attribute : attributes) {
-                orderedValues.add(row.attributesToValues.get(attribute.getName()).getName());
+    public void checkAndSetValueTypes() {
+        for (Attribute attribute : attributes) {
+            ArrayList<String> valueTypes = new ArrayList();
+            for (int i = 1; i < rows.size(); i++) {
             }
-            String joinedLine = String.join("\t", orderedValues);
-            System.out.println(joinedLine);
         }
+    }
+
+    public void printTableToStdout(List<Token> selectedAttributes, List<Token> condition) {
+        if (selectedAttributes == null) {
+            selectedAttributes = new ArrayList<>();
+            for (Attribute attribute : attributes) {
+                Token token = new Token(attribute.getName(), -1);
+                selectedAttributes.add(token);
+            }
+        }
+        StringBuilder firstLine = new StringBuilder();
+        for (Token attribute : selectedAttributes) {
+            firstLine.append(attribute.getName()).append("\t");
+        }
+        System.out.println(firstLine);
+        for (Row row : rows) {
+            if (conditionIsMet(condition, row)) {
+                ArrayList<String> orderedValues = new ArrayList<>();
+                // loop through attributes in order
+                for (Token attribute : selectedAttributes) {
+                    String attributeValue = row.attributesToValues.get(attribute.getName()).getStringValue();
+                    orderedValues.add(attributeValue);
+                }
+                String joinedLine = String.join("\t", orderedValues);
+                System.out.println(joinedLine);
+            }
+        }
+    }
+
+    boolean conditionIsMet(List<Token> condition, Row row) {
+        return true;
+        // if (condition == null) {
+        //     return true;
+        // }
+        // else {
+
+        // for (Token token : condition) {
+        //     ;
+        // }
+
+        // }
+        //
+        // return false;
     }
 }

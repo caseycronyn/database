@@ -2,8 +2,6 @@ package edu.uob;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /*
 Parser builds subclass of
@@ -26,28 +24,44 @@ public class Parser extends Lexer implements DBCommand {
         if (query.equals(tokenBank.getQueryAsTokenType("use"))) {
             DBCommand useCommand = new UseCommand();
             return useCommand.parse(tokenBank);
-        } else if (query.equals(tokenBank.getQueryAsTokenType("create database"))) {
+        }
+        else if (query.equals(tokenBank.getQueryAsTokenType("create database"))) {
             DBCommand createDatabase = new CreateDatabase();
             return createDatabase.parse(tokenBank);
-        } else if (query.equals(tokenBank.getQueryAsTokenType("create table"))) {
+        }
+        else if (query.equals(tokenBank.getQueryAsTokenType("create table"))) {
             DBCommand createTable = new CreateTable();
             return createTable.parse(tokenBank);
-        } else if (query.contains(tokenBank.getQueryAsTokenType("create table with attributes")) && tokenBank.getTokens().size() > 4) {
+        }
+        else if (query.contains(tokenBank.getQueryAsTokenType("create table with attributes")) && tokenBank.getTokens().size() > 4) {
             DBCommand createTableWithAttributes = new CreateTableWithAttributes();
             return createTableWithAttributes.parse(tokenBank);
-        } else if (query.equals(tokenBank.getQueryAsTokenType("drop database"))) {
+        }
+        else if (query.equals(tokenBank.getQueryAsTokenType("drop database"))) {
             DBCommand dropDatabase = new DropDatabase();
             return dropDatabase.parse(tokenBank);
-        } else if (query.equals(tokenBank.getQueryAsTokenType("drop table"))) {
+        }
+        else if (query.equals(tokenBank.getQueryAsTokenType("drop table"))) {
             DBCommand dropTable = new DropTable();
             return dropTable.parse(tokenBank);
-        } else if (query.equals(tokenBank.getQueryAsTokenType("alter"))) {
+        }
+        else if (query.equals(tokenBank.getQueryAsTokenType("alter"))) {
             DBCommand alterTable = new AlterTable();
             return alterTable.parse(tokenBank);
-        } else if (query.contains(tokenBank.getQueryAsTokenType("insert"))) {
+        }
+        else if (query.contains(tokenBank.getQueryAsTokenType("insert"))) {
             DBCommand insertCommand = new InsertCommand();
             return insertCommand.parse(tokenBank);
         }
+        else if (query.contains(tokenBank.getQueryAsTokenType("select"))) {
+            DBCommand selectCommand = new SelectCommand();
+            return selectCommand.parse(tokenBank);
+        }
+        else if (query.contains(tokenBank.getQueryAsTokenType("select all"))) {
+            DBCommand selectAllCommand = new SelectAllCommand();
+            return selectAllCommand.parse(tokenBank);
+        }
+
         //     DBCommand createCommand = new CreateCommand();
         //     return createCommand.parse(tokenBank);
         // case "DROP":
@@ -74,27 +88,9 @@ public class Parser extends Lexer implements DBCommand {
 
     ;
 
-    public List<Token> getTokenTypeFromParentheses(TokenBank tokenBank, String description) {
-        int start = tokenBank.getTokenFromType("openParenthesis").getPosition();
-        tokenBank.setCurrentTokenToPosition(start + 1);
-        Token token = tokenBank.getCurrentToken();
-        List<Token> newTokens = new ArrayList<>();
-        while (!token.getTokenType().equals("closeParenthesis")) {
-            if (description.equals("valueList") && isTokenAValue(token)) {
-                newTokens.add(token);
-            }
-            else if (token.getTokenType().equals(description)) {
-                newTokens.add(token);
-            }
-            token = tokenBank.nextToken();
 
-        }
-        return newTokens;
-    }
+    // public List<Token>
 
-    public boolean isTokenAValue(Token token) {
-        return (token.getTokenType().contains("Literal") || token.getTokenType().equals("NULL"));
-    }
 
 
 }
