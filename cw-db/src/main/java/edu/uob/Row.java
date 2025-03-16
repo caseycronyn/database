@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 public class Row {
-    Map<String, Value> attributesToValues = new HashMap<>();
+    Map<String, Token> attributesToValues = new HashMap<>();
     List<Attribute> attributes;
     List<Token> tokenList;
     int id;
@@ -22,16 +22,14 @@ public class Row {
         addId();
         for (int i = 1; i < attributes.size(); i++) {
             Token token = tokenList.get(i - 1);
-            Value value = new Value(token);
-            attributesToValues.put(attributes.get(i).getName(), value);
+            attributesToValues.put(attributes.get(i).getName(), token);
         }
     }
 
     void addId() {
         Token token = new Token(Integer.toString(id), -1);
         token.setTokenType("integerLiteral");
-        Value value = new Value(token);
-        attributesToValues.put(attributes.get(0).getName(), value);
+        attributesToValues.put(attributes.get(0).getName(), token);
     }
 
     Value createValue() {

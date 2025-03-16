@@ -13,7 +13,7 @@ public class Table {
     Map<String, String> attributesToValues = new HashMap<>();
     List<Row> rows = new ArrayList<>();
 
-    static ArrayList<String> commandHolder = new ArrayList<String>();
+    static ArrayList<String> commandHolder = new ArrayList<>();
     String tableName;
     String databaseName;
     String storageFolderPath;
@@ -34,20 +34,19 @@ public class Table {
     void updateAttributesToValues() {
         Map<String, String> valueSet = new HashMap<>();
         String value, finalValue;
-        value =  finalValue = null;
+        value = finalValue = null;
         for (int i = 1; i < attributes.size(); i++) {
             valueSet.clear();
             for (int j = 0; j < rows.size(); j++) {
-                value = rows.get(j).attributesToValues.get(attributes.get(i).getName()).getDataType();
+                value = rows.get(j).attributesToValues.get(attributes.get(i).getName()).getTokenType();
                 valueSet.put(value, value);
             }
-        if (valueSet.size() == 1) {
-            finalValue = value;
-        }
-        else if (valueSet.size() > 1) {
-            finalValue = resolveValueConflict(valueSet);
-        }
-        attributes.get(i).setDataType(finalValue);
+            if (valueSet.size() == 1) {
+                finalValue = value;
+            } else if (valueSet.size() > 1) {
+                finalValue = resolveValueConflict(valueSet);
+            }
+            attributes.get(i).setDataType(finalValue);
         }
     }
 
@@ -57,16 +56,16 @@ public class Table {
     String resolveValueConflict(Map<String, String> valueSet) {
         if (valueSet.containsKey("floatLiteral") && valueSet.containsKey("stringLiteral")) {
             return "floatLiteral";
-        }
-        else return "stringLiteral";
+        } else return "stringLiteral";
     }
 
     // set all to null
     void addAttributesToTable(List<Token> tokens) {
-        Attribute idAttribute = new Attribute("id", "integerLiteral");
+        int i = 0;
+        Attribute idAttribute = new Attribute("id", "integerLiteral", i);
         attributes.add(idAttribute);
         for (Token token : tokens) {
-            Attribute attribute = new Attribute(token.getName(), "NULL");
+            Attribute attribute = new Attribute(token.getName(), "NULL", ++i);
             attributes.add(attribute);
         }
         updateTable();
@@ -201,7 +200,7 @@ public class Table {
             orderedValues.clear();
 //            loop through attributes in order
             for (Attribute attribute : attributes) {
-                orderedValues.add(row.attributesToValues.get(attribute.getName()).getStringValue());
+                orderedValues.add(row.attributesToValues.get(attribute.getName()).getName());
             }
             String joinedLine = String.join("\t", orderedValues);
 //            System.out.println(joinedLine);
@@ -223,7 +222,7 @@ public class Table {
     }
 
     public void addNewAttribute(String name) {
-        Attribute attribute = new Attribute(name, "NULL");
+        Attribute attribute = new Attribute(name, "NULL", attributes.size());
         attributes.add(attribute);
         writeTableToFileFromMemory();
     }
@@ -271,7 +270,7 @@ public class Table {
                 ArrayList<String> orderedValues = new ArrayList<>();
                 // loop through attributes in order
                 for (Token attribute : selectedAttributes) {
-                    String attributeValue = row.attributesToValues.get(attribute.getName()).getStringValue();
+                    String attributeValue = row.attributesToValues.get(attribute.getName()).getName();
                     orderedValues.add(attributeValue);
                 }
                 String joinedLine = String.join("\t", orderedValues);
@@ -281,18 +280,109 @@ public class Table {
     }
 
     boolean conditionIsMet(List<Token> condition, Row row) {
-        return true;
-        // if (condition == null) {
-        //     return true;
-        // }
-        // else {
+        if (condition.size() == 3) {
+            return tertiaryCondition(condition, row);
+        }
+        return false;
+    }
 
-        // for (Token token : condition) {
-        //     ;
-        // }
+    boolean tertiaryCondition(List<Token> condition, Row row) {
+        String attributeToken = condition.get(0).getName();
+        String comparator = condition.get(1).getName();
+        Token valueToken = condition.get(2);
+        Token valueInCell = row.attributesToValues.get(attributeToken);
 
-        // }
-        //
-        // return false;
+        String dataType = null;
+        for (Attribute attribute : attributes) {
+            if (attributeToken.equals(attribute.getName())) {
+                dataType = attributes.get(attribute.getIndex()).getDataType();
+            }
+        }
+        Object value, query;
+        switch (dataType) {
+            case "booleanLiteral":
+                return booleanCondition(valueToken, valueInCell, comparator);
+            case "integerLiteral":
+                return integerCondition(valueToken, valueInCell, comparator);
+            case "floatLiteral":
+                return floatCondition(valueToken, valueInCell, comparator);
+            case "stringLiteral":
+                return stringCondition(valueToken, valueInCell, comparator);
+        }
+        return false;
+    }
+
+    boolean booleanCondition(Token valueToken, Token valueInCell, String comparator) {
+        boolean value = valueInCell.getBooleanValue();
+        boolean query = valueToken.getBooleanValue();
+        switch (comparator) {
+            case "==":
+                return (value == query);
+            case "!=":
+                return (value != query);
+        }
+        return false;
+    }
+
+    boolean integerCondition(Token valueToken, Token valueInCell, String comparator) {
+        int value = valueInCell.getIntegerValue();
+        int query = valueToken.getIntegerValue();
+        switch (comparator) {
+            case "==":
+                return (value == query);
+            case ">":
+                return (value > query);
+            case "<":
+                return (value < query);
+            case ">=":
+                return (value >= query);
+            case "<=":
+                return (value <= query);
+            case "!=":
+                return (value != query);
+        }
+        return false;
+    }
+
+    boolean floatCondition(Token valueToken, Token valueInCell, String comparator) {
+        float value = valueInCell.getFloatValue();
+        float query = valueToken.getFloatValue();
+        switch (comparator) {
+            case "==":
+                return (value == query);
+            case ">":
+                return (value > query);
+            case "<":
+                return (value < query);
+            case ">=":
+                return (value >= query);
+            case "<=":
+                return (value <= query);
+            case "!=":
+                return (value != query);
+        }
+        return false;
+    }
+
+    boolean stringCondition(Token valueToken, Token valueInCell, String comparator) {
+        String value = valueInCell.getName();
+        String query = valueToken.getName();
+        switch (comparator) {
+            case "==":
+                return (value.equals(query));
+            case ">":
+                return (value.length() > query.length());
+            case "<":
+                return (value.length() < query.length());
+            case ">=":
+                return (value.length() >= query.length());
+            case "<=":
+                return (value.length() <= query.length());
+            case "!=":
+                return (!value.equals(query));
+            case "LIKE":
+                return (query.contains(value));
+        }
+        return false;
     }
 }

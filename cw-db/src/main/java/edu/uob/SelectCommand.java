@@ -16,7 +16,7 @@ public class SelectCommand implements DBCommand {
 
         List<Token> attributeNames = tokenBank.getTokenTypeFromFragment("attributeName", "selectCommand", "from");
         List<Token> condition = tokenBank.getTokenTypeFromFragment("condition", "where", "terminator");
-        table.printTableToStdout(attributeNames, null);
+        table.printTableToStdout(attributeNames, condition);
 
     }
 }

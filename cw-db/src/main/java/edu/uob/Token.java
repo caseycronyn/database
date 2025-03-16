@@ -15,14 +15,6 @@ public class Token {
         // this.dataType = dataType;
     }
 
-    void getDataType() {
-        switch (tokenType) {
-            case "integerLiteral":
-                returnInt();
-
-        }
-    }
-
     int returnInt() {
         return Integer.parseInt(name);
     }
@@ -53,5 +45,17 @@ public class Token {
 
     void setPosition(int position) {
         this.position = position;
+    }
+
+    int getIntegerValue() {
+        return Integer.parseInt(name);
+    }
+
+    float getFloatValue() {
+        return Float.parseFloat(name);
+    }
+
+    boolean getBooleanValue() {
+        return Boolean.parseBoolean(name);
     }
 }
