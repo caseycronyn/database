@@ -40,9 +40,16 @@ public class Database {
             tableTwo.getAttributeAtIndex(i).setName(tableTwo.getName() + "." + tableTwo.getAttributeAtIndex(i).getName());
             newTable.attributes.add(tableTwo.getAttributeAtIndex(i));
         }
-        String newTableName = tableOneName + "." + attributeOneName;
-        newTable.removeAttribute(newTableName);
-        newTable.removeAttribute(tableTwoName + "." + attributeTwoName);
+
+        // attempt at mapping. half working ish. need to do proper mappinng here for the joins after below function
+        for (int i = 0; i < tableTwo.getRows().size(); i++) {
+            for (int j = 1; j < tableTwo.getAttributes().size(); j++) {
+                for (Token token : tableTwo.getRowAtIndex(i).getTokenList()) {
+                    newTable.getRowAtIndex(i).addValueToValuesMap(tableTwo.getAttributeAtIndex(j).getName(), token);
+                }
+            }
+
+        }
 
         /*
         (skipping id)
@@ -77,10 +84,8 @@ public class Database {
             tableOneIndex++;
         }
 
-        for (int i = tableOneIndex; i < tableOne.getRows().size(); i++) {
-
-        }
-
+        newTable.removeAttribute(tableOneName + "." + attributeOneName);
+        newTable.removeAttribute(tableTwoName + "." + attributeTwoName);
 
         return newTable;
     }

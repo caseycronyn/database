@@ -34,11 +34,14 @@ public class Row {
         for (Token token : tokenList) {
             newTokenList.add(token.copy());
         }
-
         Row newRow = new Row(newAttributes, newTokenList, id);
         newRow.addAttributesToValuesMap(newAttributesToValues);
 
         return newRow;
+    }
+
+    void addValueToValuesMap(String attributeName, Token value) {
+        attributesToValues.put(attributeName, value);
     }
 
     void clearAttributes() {
