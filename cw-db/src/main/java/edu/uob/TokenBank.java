@@ -33,7 +33,7 @@ public class TokenBank {
     }
 
 
-    String getQueryAsTokenType(String key) {
+    String getQueryAsTokenTypes(String key) {
         return tokenQueries.get(key);
     }
 
@@ -54,9 +54,9 @@ public class TokenBank {
         tokenKeys.put("select", "attributeName from tableName");
         tokenKeys.put("select all", "selectCommand wildAttributeSymbol from tableName");
         tokenKeys.put("select with condition", "selectCommand wildAttributeSymbol from tableName ... ");
-        tokenKeys.put("update", "updateCommand tableName set attributeName equals integerLiteral ... ");
-        tokenKeys.put("delete", "deleteCommand from tableName ... ");
-        tokenKeys.put("join", "joinCommand tableName and tableName ... ");
+        tokenKeys.put("update", "updateCommand tableName set attributeName equals");
+        tokenKeys.put("delete", "deleteCommand from tableName where");
+        tokenKeys.put("join", "joinCommand tableOneName and tableTwoName on attributeOneName and attributeTwoName terminator");
         return tokenKeys;
     }
 
@@ -117,6 +117,10 @@ public class TokenBank {
     }
 
     Token nextToken () {
+        if (currentTokenPosition >= tokens.size() - 1) {
+            System.out.println("No more tokens");
+            return null;
+        }
         currentTokenPosition++;
         return tokens.get(currentTokenPosition);
     }
@@ -179,13 +183,26 @@ public class TokenBank {
             else if (description.equals("valueList") && tokenIsAValue(token)) {
                 newTokens.add(token);
             }
-            else if (description.equals("condition") && tokenIsACondition(token)) {
+            else if (description.equals("condition") && (tokenIsACondition(token) || token.getTokenType().equals("booleanOperator"))) {
+                newTokens.add(token);
+            }
+            else if (description.equals("nameValuePairs") && tokenIsNameValuePair(token)) {
                 newTokens.add(token);
             }
             token = nextToken();
 
         }
         return newTokens;
+    }
+
+    boolean tokenIsNameValuePair (Token token) {
+        return token.getTokenType().equals("attributeName") || token.getTokenType().equals("equals") || tokenIsAValue(token);
+    }
+
+
+
+    boolean tokenIsParenthesis (Token token) {
+        return token.getTokenType().equals("openParenthesis") || token.getTokenType().equals("closeParenthesis");
     }
 
     boolean tokenIsACondition(Token token) {

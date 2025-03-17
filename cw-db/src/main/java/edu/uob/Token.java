@@ -11,6 +11,14 @@ public class Token {
         // dataType = null;
     }
 
+    Token copy() {
+        String newName = new String(name);
+        String newTokenType = new String(tokenType);
+        Token token = new Token(newName, position);
+        token.setTokenType(newTokenType);
+        return token;
+    }
+
     void setDataType() {
         // this.dataType = dataType;
     }
@@ -58,4 +66,9 @@ public class Token {
     boolean getBooleanValue() {
         return Boolean.parseBoolean(name);
     }
+
+    boolean tokenIsParenthesis () {
+        return name.equals("openParenthesis") || name.equals("closeParenthesis");
+    }
+
 }

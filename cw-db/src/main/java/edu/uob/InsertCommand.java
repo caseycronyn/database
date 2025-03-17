@@ -15,5 +15,5 @@ public class InsertCommand extends Parser {
         List<Token> valueList = tokenBank.getTokenTypeFromFragment("valueList", "openParenthesis", "closeParenthesis");
         int newID = server.databases.get(server.getCurrentDatabase()).getAndIncrementID();
         table.addRowToTable(valueList, newID);
-    };
+    }
 }

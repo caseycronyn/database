@@ -1,5 +1,7 @@
 package edu.uob;
 
+import java.util.List;
+
 public class SelectAllCommand implements DBCommand {
     @Override
     public DBCommand parse(TokenBank tokenBank) {
@@ -10,6 +12,7 @@ public class SelectAllCommand implements DBCommand {
     public void executeCommand(DBServer server, TokenBank tokenBank) {
         String tableName = tokenBank.getTokenFromType("tableName").getName();
         Table table = server.databases.get(server.getCurrentDatabase()).tables.get(tableName);
-        table.printTableToStdout(null, null);
+        List<Token> condition = tokenBank.getTokenTypeFromFragment("condition", "where", "terminator");
+        table.filterTableWithAttributesAndCondition(null, condition);
     }
 }

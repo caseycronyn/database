@@ -102,9 +102,9 @@ parsing then interpreting is probably simpler than trying to do both at the same
 **** DONE drop database
 **** DONE drop table
 **** DONE alter
-**** IN PROGRESS insert
-**** TODO select
-**** TODO select with condition
+**** DONE insert
+**** DONE select
+**** DONE select with condition
 **** TODO update
 **** TODO delete
 **** TODO join

@@ -1,13 +1,13 @@
 package edu.uob;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 // formats the string then passes it into the appropriate table method
 // all these will need to be made more robust at a later point
@@ -23,6 +23,95 @@ public class Database {
         this.ID = 1;
 //        createIDFolderAndFile();
         createDatabaseFolder();
+    }
+
+    public Table combineTablesIntoNewTable(String tableOneName, String tableTwoName, String attributeOneName, String attributeTwoName) {
+        String combinedTableName = tableOneName + "." + tableTwoName;
+        Table table = new Table(combinedTableName, this.toString(), storageFolderPath);
+        Table tableOne = tables.get(tableOneName).copy();
+        Table tableTwo = tables.get(tableTwoName).copy();
+
+        /*
+        (skipping id)
+        for attributes in tableOne:
+            add attributes excluding joined attribute
+        for attributes in tableTwo:
+            add attributes excluding joined attribute
+        for rows in tableTwo:
+            if attributeTwo == attributeOne:
+                add match to hashmap using ID's
+
+        for rows in tableOne:
+            add rows
+        for rows in tableTwo:
+            add matching rows using hashmap
+        reset ID's
+         */
+        // add id
+        addAttributesToNewTable(tableOne, tableTwo, attributeOneName, attributeTwoName, table);
+        Map<Integer, Integer> tableJoinOnID = getMapOfTableJoinOnID(tableOne, tableTwo, attributeOneName, attributeTwoName);
+
+        // we need the list in order and the attributes in order
+        // so we should construct this
+        // first of all lets do table one
+        int tableOneIndex = tableOne.getRowAtIndex(0).getId();
+        for (int i = 0; i < tableOne.getRows().size(); i++) {
+            
+        }
+
+        for (int i = tableOneIndex; i < tableOne.getRows().size(); i++) {
+
+        }
+
+
+        return table;
+    }
+
+    Map<Integer, Integer> getMapOfTableJoinOnID(Table tableOne, Table tableTwo, String attributeOneName, String attributeTwoName) {
+        // String dataType = attributeOne;
+        // maps table one's rows to table two's rows
+        boolean matchFound;
+        Map<Integer, Integer> tableJoinOnID = new HashMap<>();
+        for (Row rowOne : tableOne.getRows()) {
+            matchFound = false;
+            String tableOneTarget = rowOne.getValueFromAttribute(attributeOneName).getName();
+            for (Row rowTwo : tableTwo.getRows()) {
+                String tableTwoCandidate = rowTwo.getValueFromAttribute(attributeTwoName).getName();
+                if (!matchFound && tableOneTarget.equals(tableTwoCandidate)) {
+                    int rowOneID = rowOne.getId();
+                    int rowTwoID = rowTwo.getId();
+                    tableJoinOnID.put(rowOneID, rowTwoID);
+                    matchFound = true;
+                }
+            }
+        }
+        return tableJoinOnID;
+    }
+
+    void addAttributesToNewTable(Table tableOne, Table tableTwo, String attributeOneName, String attributeTwoName, Table table) {
+        Attribute id = new Attribute("id", "integerLiteral", 0);
+        table.addAttribute(id);
+        // add attributes
+        for (int i = 1; i < tableOne.getAttributes().size(); i++) {
+            Attribute retrievedAttributeOne = tableOne.getAttributeAtIndex(i);
+            if (!retrievedAttributeOne.getName().equals(attributeOneName)) {
+                Attribute newAttribute = new Attribute(retrievedAttributeOne.getName(), retrievedAttributeOne.getDataType(), retrievedAttributeOne.getIndex());
+                table.addAttribute(newAttribute);
+                table.getAttribute(retrievedAttributeOne.getName()).setName(tableOne.getName() + "." + retrievedAttributeOne.getName());
+            }
+        }
+        for (int i = 1; i < tableTwo.getAttributes().size(); i++) {
+            Attribute retrievedAttributeTwo = tableTwo.getAttributeAtIndex(i);
+            if (!retrievedAttributeTwo.getName().equals(attributeTwoName)) {
+                Attribute newAttributeTwo = new Attribute(retrievedAttributeTwo.getName(), retrievedAttributeTwo.getDataType(), retrievedAttributeTwo.getIndex());
+                table.addAttribute(newAttributeTwo);
+                table.getAttribute(retrievedAttributeTwo.getName()).setName(tableTwo.getName() + "." + retrievedAttributeTwo.getName());
+            }
+        }
+    }
+
+    void addTable(Table table) {
+        tables.put(table.getName(), table);
     }
 
 //     public void addNewTableFromFile(String tableName) {

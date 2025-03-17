@@ -11,6 +11,13 @@ public class Attribute {
         this.index = index;
     }
 
+    Attribute copy() {
+        String newName = new String(name);
+        String newDataType = new String(dataType);
+        Attribute newAttribute = new Attribute(newName, newDataType, index);
+        return newAttribute;
+    }
+
     int getIndex() {
         return index;
     }

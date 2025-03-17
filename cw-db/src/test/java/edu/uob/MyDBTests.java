@@ -135,7 +135,7 @@ public class MyDBTests {
         sendCommandToServer("INSERT INTO marks VALUES ('Simon', 65, TRUE);");
         sendCommandToServer("INSERT INTO marks VALUES ('David', 82, TRUE);");
         sendCommandToServer("INSERT INTO marks VALUES ('Jeremy', 38, FALSE);");
-        sendCommandToServer("SELECT * FROM marks WHERE (pass == FALSE);");
+        sendCommandToServer("SELECT * FROM marks WHERE (pass == FALSE) OR (name == 'Simon');");
     }
 
     @Test
@@ -146,8 +146,8 @@ public class MyDBTests {
         sendCommandToServer("CREATE TABLE marks (name, mark, pass);");
         sendCommandToServer("INSERT INTO marks VALUES ('Simon', 65, TRUE);");
         sendCommandToServer("INSERT INTO marks VALUES ('David', 82, TRUE);");
-        sendCommandToServer("INSERT INTO marks VALUES ('Jeremy', 38, FALSE);");
-        sendCommandToServer("SELECT mark, name FROM marks WHERE (pass == FALSE) OR pass == TRUE AND (mark > 35);");
+        sendCommandToServer("INSERT INTO marks VALUES ('Jeremy', 33, FALSE);");
+        sendCommandToServer("SELECT mark, name FROM marks WHERE (pass == FALSE) OR pass == TRUE AND mark > 80;");
     }
 
     @Test
@@ -159,7 +159,19 @@ public class MyDBTests {
         sendCommandToServer("INSERT INTO marks VALUES ('Simon', 65, TRUE);");
         sendCommandToServer("INSERT INTO marks VALUES ('David', 82, TRUE);");
         sendCommandToServer("INSERT INTO marks VALUES ('Jeremy', 38, FALSE);");
-        sendCommandToServer("UPDATE marks SET age = 35 WHERE name == 'Simon';");
+        sendCommandToServer("UPDATE marks SET mark = 98 WHERE name == 'Simon';");
+    }
+
+    @Test
+    public void updateCommandMultiplePairs() {
+        String randomName = generateRandomName();
+        sendCommandToServer("CREATE DATABASE " + randomName + ";");
+        sendCommandToServer("USE DATABASE " + randomName + ";");
+        sendCommandToServer("CREATE TABLE marks (name, mark, pass);");
+        sendCommandToServer("INSERT INTO marks VALUES ('Simon', 65, FALSE);");
+        sendCommandToServer("INSERT INTO marks VALUES ('David', 82, TRUE);");
+        sendCommandToServer("INSERT INTO marks VALUES ('Jeremy', 38, FALSE);");
+        sendCommandToServer("UPDATE marks SET mark = 98, pass = TRUE WHERE name == 'Jeremy';");
     }
 
     @Test
@@ -172,7 +184,7 @@ public class MyDBTests {
         sendCommandToServer("INSERT INTO marks VALUES ('David', 82, TRUE);");
         sendCommandToServer("INSERT INTO marks VALUES ('Jeremy', 38, FALSE);");
         sendCommandToServer("UPDATE marks SET age = 35 WHERE name == 'Simon';");
-        sendCommandToServer("DELETE FROM marks WHERE name == 'Sion';");
+        sendCommandToServer("DELETE FROM marks WHERE name == 'Simon' OR mark == 38;");
     }
 
     @Test
@@ -181,12 +193,18 @@ public class MyDBTests {
         sendCommandToServer("CREATE DATABASE " + randomName + ";");
         sendCommandToServer("USE DATABASE " + randomName + ";");
         sendCommandToServer("CREATE TABLE marks (name, mark, pass);");
-        sendCommandToServer("CREATE TABLE names (name, mark, pass);");
         sendCommandToServer("INSERT INTO marks VALUES ('Simon', 65, TRUE);");
-        sendCommandToServer("INSERT INTO names VALUES ('Dave', 27, FALSE);");
-        sendCommandToServer("INSERT INTO marks VALUES ('David', 82, TRUE);");
-        sendCommandToServer("INSERT INTO marks VALUES ('Jeremy', 38, FALSE);");
-        sendCommandToServer("JOIN names AND marks ON pass AND id;");
+        sendCommandToServer("INSERT INTO marks VALUES ('Sion', 55, TRUE);");
+        sendCommandToServer("INSERT INTO marks VALUES ('Rob', 35, FALSE);");
+        sendCommandToServer("INSERT INTO marks VALUES ('Chris', 20, FALSE);");
+
+        sendCommandToServer("CREATE TABLE coursework (task, submission);");
+        sendCommandToServer("INSERT INTO coursework VALUES ('OXO', 3);");
+        sendCommandToServer("INSERT INTO coursework VALUES ('DB', 1);");
+        sendCommandToServer("INSERT INTO coursework VALUES ('OXO', 4);");
+        sendCommandToServer("INSERT INTO coursework VALUES ('STAG', 2);");
+
+        sendCommandToServer("JOIN coursework AND marks ON submission AND id;");
     }
 
 }

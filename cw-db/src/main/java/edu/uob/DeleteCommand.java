@@ -2,8 +2,7 @@ package edu.uob;
 
 import java.util.List;
 
-public class SelectCommand implements DBCommand {
-
+public class DeleteCommand implements DBCommand {
     @Override
     public DBCommand parse(TokenBank tokenBank) {
         return this;
@@ -13,10 +12,8 @@ public class SelectCommand implements DBCommand {
     public void executeCommand(DBServer server, TokenBank tokenBank) {
         String tableName = tokenBank.getTokenFromType("tableName").getName();
         Table table = server.databases.get(server.getCurrentDatabase()).tables.get(tableName);
-
-        List<Token> attributeNames = tokenBank.getTokenTypeFromFragment("attributeName", "selectCommand", "from");
         List<Token> condition = tokenBank.getTokenTypeFromFragment("condition", "where", "terminator");
-        table.filterTableWithAttributesAndCondition(attributeNames, condition);
-
+        table.deleteFromTableOnCondition(condition);
+        // System.out.println("Deleted " + tableName);
     }
 }

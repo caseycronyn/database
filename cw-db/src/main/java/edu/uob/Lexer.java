@@ -88,21 +88,21 @@ public class Lexer {
     }
 
     void joinLexer() {
-        addPlainTextToken("tableName");
+        addPlainTextToken("tableOneName");
         tokenBank.nextToken();
         addKeywordTokenIfEquals("and", "AND");
         tokenBank.nextToken();
-        addPlainTextToken("tableName");
+        addPlainTextToken("tableTwoName");
         tokenBank.nextToken();
         addKeywordTokenIfEquals("on", "ON");
         tokenBank.nextToken();
-        addPlainTextToken("attributeName");
+        addPlainTextToken("attributeOneName");
         tokenBank.nextToken();
         addKeywordTokenIfEquals("and", "AND");
         tokenBank.nextToken();
-        addPlainTextToken("attributeName");
-        tokenBank.printTokenNames();
-        tokenBank.printTokenTypes();
+        addPlainTextToken("attributeTwoName");
+        // tokenBank.printTokenNames();
+        // tokenBank.printTokenTypes();
 
     }
 
@@ -127,10 +127,15 @@ public class Lexer {
     }
 
     void nameValuePair() {
+        Token token = tokenBank.getCurrentToken();
+        if (token.getName().equals(",")) {
+            token.setTokenType("comma");
+            tokenBank.nextToken();
+        }
         addPlainTextToken("attributeName");
         tokenBank.nextToken();
         addKeywordTokenIfEquals("equals", "=");
-        Token token = tokenBank.nextToken();
+        token = tokenBank.nextToken();
         setValueTokenType(token);
         tokenBank.nextToken();
     }
@@ -159,17 +164,21 @@ public class Lexer {
         token.nameToUpperCase();
         if (token.getName().equals("WHERE")) {
             token.setTokenType("where");
-            stripParenthesesToEnd();
+            // stripParenthesesToEnd();
+            parenthesesLexer();
             while (!tokenBank.checkIfAtFinalToken()) {
                 token = tokenBank.nextToken();
-                if (checkTokenForPattern(token, booleanOperator)) {
-                    token.setTokenType("booleanOperator");
-                } else if (tokenBank.numberOfTokensLeft() > 2) {
-                    attributeComparatorValue();
+                if (token.getTokenType() == null) {
+                    if (checkTokenForPattern(token, booleanOperator)) {
+                        token.setTokenType("booleanOperator");
+                    } else if (tokenBank.numberOfTokensLeft() > 2) {
+                        attributeComparatorValue();
+                    }
                 }
             }
         }
     }
+
 
         void attributeComparatorValue () {
             addPlainTextToken("attributeName");
@@ -290,26 +299,29 @@ public class Lexer {
         }
 
         // parentheses is passed in
+        // lexes all parentheses
         void parenthesesLexer () {
-            boolean openParenthesis = false;
-            boolean closeParenthesis = false;
+            boolean parenthesesOpen = false;
+            int openParenthesisCount = 0;
+            int closeParenthesisCount = 0;
             Token token = tokenBank.getCurrentToken();
             int initialTokenPosition = tokenBank.getCurrentTokenPosition();
-            if (token.getName().equals("(")) {
-                token.setTokenType("openParenthesis");
-                openParenthesis = true;
-            }
             // token = tokenBank.nextToken();
-            for (int i = tokenBank.getCurrentTokenPosition(); i < tokenBank.getLastTokenPosition(); i++) {
-                if (token.getName().equals(",")) {
+            for (int i = initialTokenPosition; i < tokenBank.getLastTokenPosition(); i++) {
+                if (token.getName().equals("(")) {
+                    token.setTokenType("openParenthesis");
+                    parenthesesOpen = true;
+                    openParenthesisCount++;
+                }
+                else if (token.getName().equals(",")) {
                     token.setTokenType("comma");
-                } else if ((i == tokenBank.getLastTokenPosition() - 1) && (token.getName().equals(")")) && openParenthesis) {
+                } else if ((token.getName().equals(")")) && parenthesesOpen) {
                     token.setTokenType("closeParenthesis");
-                    closeParenthesis = true;
+                    closeParenthesisCount++;
                 }
                 token = tokenBank.nextToken();
             }
-            if (!closeParenthesis) {
+            if (openParenthesisCount != closeParenthesisCount) {
                 throw new java.lang.Error("error: help! no closing parentheses");
             }
             tokenBank.setCurrentTokenToPosition(initialTokenPosition);
