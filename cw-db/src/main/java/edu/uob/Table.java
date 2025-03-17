@@ -1,9 +1,6 @@
 package edu.uob;
 
-import org.w3c.dom.Attr;
-
 import java.io.*;
-import java.nio.file.FileStore;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
@@ -118,6 +115,14 @@ public class Table {
                 finalValue = resolveValueConflict(valueSet);
             }
             attributes.get(i).setDataType(finalValue);
+        }
+    }
+
+    void updateTokenToCurrentAttributeNames() {
+        for (Row row : rows) {
+            for (Attribute attribute : row.getAttributes()) {
+
+            }
         }
     }
 
@@ -340,8 +345,18 @@ public class Table {
         updateTable();
     }
 
-    Row getRowAtIndex(int index) {
+    Row getRowNumber(int index) {
         return rows.get(index);
+    }
+
+    Row getRowByIndices(int index) {
+        int match = -1;
+        for (Row row : rows) {
+            if (row.getValueFromAttribute("id").getIntegerValue() == index) {
+                return row;
+            }
+        }
+        return null;
     }
 
 

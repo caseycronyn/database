@@ -40,7 +40,7 @@ public class Row {
         return newRow;
     }
 
-    void addValueToValuesMap(String attributeName, Token value) {
+    void addValueToRow(String attributeName, Token value) {
         attributesToValues.put(attributeName, value);
     }
 
@@ -86,7 +86,7 @@ public class Row {
 
 
     void addId() {
-        Token token = new Token(Integer.toString(id), -1);
+        Token token = new Token(Integer.toString(id), 0);
         token.setTokenType("integerLiteral");
         attributesToValues.put(attributes.get(0).getName(), token);
     }

@@ -4,9 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 // formats the string then passes it into the appropriate table method
@@ -30,7 +28,7 @@ public class Database {
         Table tableOne = tables.get(tableOneName).copy();
         Table tableTwo = tables.get(tableTwoName).copy();
 
-        // change table names and add them to new table
+        // change table attribute names and add them to new table
         for (int i = 1; i < tableOne.getAttributes().size(); i++) {
             tableOne.getAttributeAtIndex(i).setName(tableOne.getName() + "." + tableOne.getAttributeAtIndex(i).getName());
         }
@@ -41,15 +39,31 @@ public class Database {
             newTable.attributes.add(tableTwo.getAttributeAtIndex(i));
         }
 
+        // update tokens to reflect attributes
+        // tableOne.updateAttributesToValues();
+
+        Map<Integer, Integer> tableJoinOnID = getMapOfTableJoinOnID(tableOne, tableTwo, attributeOneName, attributeTwoName);
+
         // attempt at mapping. half working ish. need to do proper mappinng here for the joins after below function
-        for (int i = 0; i < tableTwo.getRows().size(); i++) {
+        int tableOneIndex = tableOne.getRowNumber(0).getId();
+        // loop though row indices in table one
+        for (int i = 0; i < tableOne.getRows().size(); i++) {
+            // loop through attributes of table two
             for (int j = 1; j < tableTwo.getAttributes().size(); j++) {
-                for (Token token : tableTwo.getRowAtIndex(i).getTokenList()) {
-                    newTable.getRowAtIndex(i).addValueToValuesMap(tableTwo.getAttributeAtIndex(j).getName(), token);
+                // add matching Token of mapped row to row i of new table
+                Integer matchingIndex = tableJoinOnID.get(tableOneIndex);
+
+                Row tableTwoRow = tableTwo.getRowByIndices(matchingIndex);
+
+                String attributeName = tableTwo.getAttributeAtIndex(j).getName();
+                Token matchingToken = tableTwoRow.getValueFromAttribute(attributeName);
+
+                Row tableOneRow = tableOne.getRowNumber(i);
+                tableOneRow.addValueToRow(attributeName, matchingToken);
                 }
+            tableOneIndex++;
             }
 
-        }
 
         /*
         (skipping id)
@@ -68,21 +82,10 @@ public class Database {
         reset ID's
          */
         // add id
-        Map<Integer, Integer> tableJoinOnID = getMapOfTableJoinOnID(tableOne, tableTwo, attributeOneName, attributeTwoName);
 
         // we need the list in order and the attributes in order
         // so we should construct this
         // first of all lets do table one
-        int tableOneIndex = tableOne.getRowAtIndex(0).getId();
-        for (int i = 0; i < tableOne.getRows().size(); i++) {
-            List<Token> newTokens = new ArrayList<>();
-
-            newTokens.addAll(tableOne.getRowAtIndex(i).getTokenList());
-            newTokens.remove(attributeOneName);
-            newTokens.addAll(tableTwo.getRowAtIndex(tableJoinOnID.get(tableOneIndex)).getTokenList());
-            newTokens.remove(attributeTwoName);
-            tableOneIndex++;
-        }
 
         newTable.removeAttribute(tableOneName + "." + attributeOneName);
         newTable.removeAttribute(tableTwoName + "." + attributeTwoName);
