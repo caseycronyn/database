@@ -322,6 +322,7 @@ public class Table {
         writeTableToFileFromMemory();
     }
 
+
     public void removeAttribute(String name) {
         Iterator<Attribute> attribute = attributes.iterator();
         while (attribute.hasNext()) {
@@ -329,7 +330,7 @@ public class Table {
                 attribute.remove();
             }
         }
-        updateTable();
+        // updateTable();
     }
 
     public void addRowToTable(List<Token> valueList, Integer newID) {

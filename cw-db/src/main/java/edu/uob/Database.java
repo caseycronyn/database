@@ -27,9 +27,22 @@ public class Database {
 
     public Table combineTablesIntoNewTable(String tableOneName, String tableTwoName, String attributeOneName, String attributeTwoName) {
         String combinedTableName = tableOneName + "." + tableTwoName;
-        Table table = new Table(combinedTableName, this.toString(), storageFolderPath);
         Table tableOne = tables.get(tableOneName).copy();
         Table tableTwo = tables.get(tableTwoName).copy();
+
+        // change table names and add them to new table
+        for (int i = 1; i < tableOne.getAttributes().size(); i++) {
+            tableOne.getAttributeAtIndex(i).setName(tableOne.getName() + "." + tableOne.getAttributeAtIndex(i).getName());
+        }
+
+        Table newTable = tableOne.copy();
+        for (int i = 1; i < tableTwo.getAttributes().size(); i++) {
+            tableTwo.getAttributeAtIndex(i).setName(tableTwo.getName() + "." + tableTwo.getAttributeAtIndex(i).getName());
+            newTable.attributes.add(tableTwo.getAttributeAtIndex(i));
+        }
+        String newTableName = tableOneName + "." + attributeOneName;
+        newTable.removeAttribute(newTableName);
+        newTable.removeAttribute(tableTwoName + "." + attributeTwoName);
 
         /*
         (skipping id)
@@ -48,7 +61,6 @@ public class Database {
         reset ID's
          */
         // add id
-        addAttributesToNewTable(tableOne, tableTwo, attributeOneName, attributeTwoName, table);
         Map<Integer, Integer> tableJoinOnID = getMapOfTableJoinOnID(tableOne, tableTwo, attributeOneName, attributeTwoName);
 
         // we need the list in order and the attributes in order
@@ -56,7 +68,13 @@ public class Database {
         // first of all lets do table one
         int tableOneIndex = tableOne.getRowAtIndex(0).getId();
         for (int i = 0; i < tableOne.getRows().size(); i++) {
-            
+            List<Token> newTokens = new ArrayList<>();
+
+            newTokens.addAll(tableOne.getRowAtIndex(i).getTokenList());
+            newTokens.remove(attributeOneName);
+            newTokens.addAll(tableTwo.getRowAtIndex(tableJoinOnID.get(tableOneIndex)).getTokenList());
+            newTokens.remove(attributeTwoName);
+            tableOneIndex++;
         }
 
         for (int i = tableOneIndex; i < tableOne.getRows().size(); i++) {
@@ -64,7 +82,7 @@ public class Database {
         }
 
 
-        return table;
+        return newTable;
     }
 
     Map<Integer, Integer> getMapOfTableJoinOnID(Table tableOne, Table tableTwo, String attributeOneName, String attributeTwoName) {
@@ -89,25 +107,26 @@ public class Database {
     }
 
     void addAttributesToNewTable(Table tableOne, Table tableTwo, String attributeOneName, String attributeTwoName, Table table) {
-        Attribute id = new Attribute("id", "integerLiteral", 0);
-        table.addAttribute(id);
-        // add attributes
-        for (int i = 1; i < tableOne.getAttributes().size(); i++) {
-            Attribute retrievedAttributeOne = tableOne.getAttributeAtIndex(i);
-            if (!retrievedAttributeOne.getName().equals(attributeOneName)) {
-                Attribute newAttribute = new Attribute(retrievedAttributeOne.getName(), retrievedAttributeOne.getDataType(), retrievedAttributeOne.getIndex());
-                table.addAttribute(newAttribute);
-                table.getAttribute(retrievedAttributeOne.getName()).setName(tableOne.getName() + "." + retrievedAttributeOne.getName());
-            }
-        }
-        for (int i = 1; i < tableTwo.getAttributes().size(); i++) {
-            Attribute retrievedAttributeTwo = tableTwo.getAttributeAtIndex(i);
-            if (!retrievedAttributeTwo.getName().equals(attributeTwoName)) {
-                Attribute newAttributeTwo = new Attribute(retrievedAttributeTwo.getName(), retrievedAttributeTwo.getDataType(), retrievedAttributeTwo.getIndex());
-                table.addAttribute(newAttributeTwo);
-                table.getAttribute(retrievedAttributeTwo.getName()).setName(tableTwo.getName() + "." + retrievedAttributeTwo.getName());
-            }
-        }
+
+        // Attribute id = new Attribute("id", "integerLiteral", 0);
+        // table.addAttribute(id);
+        // // add attributes
+        // for (int i = 1; i < tableOne.getAttributes().size(); i++) {
+        //     Attribute retrievedAttributeOne = tableOne.getAttributeAtIndex(i);
+        //     if (!retrievedAttributeOne.getName().equals(attributeOneName)) {
+        //         Attribute newAttribute = new Attribute(retrievedAttributeOne.getName(), retrievedAttributeOne.getDataType(), retrievedAttributeOne.getIndex());
+        //         table.addAttribute(newAttribute);
+        //         table.getAttribute(retrievedAttributeOne.getName()).setName(tableOne.getName() + "." + retrievedAttributeOne.getName());
+        //     }
+        // }
+        // for (int i = 1; i < tableTwo.getAttributes().size(); i++) {
+        //     Attribute retrievedAttributeTwo = tableTwo.getAttributeAtIndex(i);
+        //     if (!retrievedAttributeTwo.getName().equals(attributeTwoName)) {
+        //         Attribute newAttributeTwo = new Attribute(retrievedAttributeTwo.getName(), retrievedAttributeTwo.getDataType(), retrievedAttributeTwo.getIndex());
+        //         table.addAttribute(newAttributeTwo);
+        //         table.getAttribute(retrievedAttributeTwo.getName()).setName(tableTwo.getName() + "." + retrievedAttributeTwo.getName());
+        //     }
+        // }
     }
 
     void addTable(Table table) {
