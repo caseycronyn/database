@@ -40,6 +40,19 @@ public class Row {
         return newRow;
     }
 
+    void changeKeyInAttributesToValuesMap(String attributeName, String replacementName) {
+        Token returnedToken = attributesToValues.remove(attributeName);
+        attributesToValues.put(replacementName, returnedToken);
+    }
+
+    void changeAttributeName(String attributeName, String newAttributeName) {
+        for (Attribute attribute : attributes) {
+            if (attribute.getName().equals(attributeName)) {
+                attribute.setName(newAttributeName);
+            }
+        }
+    }
+
     void addValueToRow(String attributeName, Token value) {
         attributesToValues.put(attributeName, value);
     }

@@ -28,21 +28,8 @@ public class Database {
         Table tableOne = tables.get(tableOneName).copy();
         Table tableTwo = tables.get(tableTwoName).copy();
 
-        // change table attribute names and add them to new table
-        for (int i = 1; i < tableOne.getAttributes().size(); i++) {
-            tableOne.getAttributeAtIndex(i).setName(tableOne.getName() + "." + tableOne.getAttributeAtIndex(i).getName());
-        }
-
-        Table newTable = tableOne.copy();
-        for (int i = 1; i < tableTwo.getAttributes().size(); i++) {
-            tableTwo.getAttributeAtIndex(i).setName(tableTwo.getName() + "." + tableTwo.getAttributeAtIndex(i).getName());
-            newTable.attributes.add(tableTwo.getAttributeAtIndex(i));
-        }
-
-        // update tokens to reflect attributes
-        // tableOne.updateAttributesToValues();
-
         Map<Integer, Integer> tableJoinOnID = getMapOfTableJoinOnID(tableOne, tableTwo, attributeOneName, attributeTwoName);
+        Table newTable = makeNewTableAndupdateAttributesForJoin(tableOne, tableTwo);
 
         // attempt at mapping. half working ish. need to do proper mappinng here for the joins after below function
         int tableOneIndex = tableOne.getRowNumber(0).getId();
@@ -92,6 +79,40 @@ public class Database {
 
         return newTable;
     }
+
+    Table makeNewTableAndupdateAttributesForJoin(Table tableOne, Table tableTwo) {
+        // change table attribute names and add them to new table
+        for (int i = 1; i < tableOne.getAttributes().size(); i++) {
+            tableOne.getAttributeAtIndex(i).setName(tableOne.getName() + "." + tableOne.getAttributeAtIndex(i).getName());
+        }
+
+        Table newTable = tableOne.copy();
+        for (int i = 1; i < tableTwo.getAttributes().size(); i++) {
+            tableTwo.getAttributeAtIndex(i).setName(tableTwo.getName() + "." + tableTwo.getAttributeAtIndex(i).getName());
+            newTable.attributes.add(tableTwo.getAttributeAtIndex(i));
+        }
+        // update row attributes
+        for (Row row : tableOne.getRows()) {
+            for (Attribute attribute : row.getAttributes()) {
+                if (!attribute.getName().equals("id")) {
+                    String newString = tableOne.getName() + "." + attribute.getName();
+                    row.changeKeyInAttributesToValuesMap(attribute.getName(), newString);
+                    row.changeAttributeName(attribute.getName(), newString);
+                }
+            }
+        }
+        for (Row row : tableTwo.getRows()) {
+            for (Attribute attribute : row.getAttributes()) {
+                if (!attribute.getName().equals("id")) {
+                    String newString = tableTwo.getName() + "." + attribute.getName();
+                    row.changeKeyInAttributesToValuesMap(attribute.getName(), newString);
+                    row.changeAttributeName(attribute.getName(), newString);
+                }
+            }
+        }
+        return newTable;
+    }
+
 
     Map<Integer, Integer> getMapOfTableJoinOnID(Table tableOne, Table tableTwo, String attributeOneName, String attributeTwoName) {
         // String dataType = attributeOne;
