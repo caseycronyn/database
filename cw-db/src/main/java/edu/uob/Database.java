@@ -33,21 +33,20 @@ public class Database {
 
         // attempt at mapping. half working ish. need to do proper mappinng here for the joins after below function
         int tableOneIndex = tableOne.getRowNumber(0).getId();
-        // loop though row indices in table one
+        // loop though rows in table one
         for (int i = 0; i < tableOne.getRows().size(); i++) {
-            // loop through attributes of table two
+            // loop through attributes of table two skipping id
             for (int j = 1; j < tableTwo.getAttributes().size(); j++) {
                 // add matching Token of mapped row to row i of new table
-                Integer matchingIndex = tableJoinOnID.get(tableOneIndex);
-
-                Row tableTwoRow = tableTwo.getRowByIndices(matchingIndex);
+                Integer tableTwoIndex = tableJoinOnID.get(tableOneIndex);
+                Row tableTwoRow = tableTwo.getRowByIndices(tableTwoIndex);
 
                 String attributeName = tableTwo.getAttributeAtIndex(j).getName();
                 Token matchingToken = tableTwoRow.getValueFromAttribute(attributeName);
 
-                Row tableOneRow = tableOne.getRowNumber(i);
+                Row tableOneRow = newTable.getRowNumber(i);
                 tableOneRow.addValueToRow(attributeName, matchingToken);
-                }
+            }
             tableOneIndex++;
             }
 
@@ -73,25 +72,27 @@ public class Database {
         // we need the list in order and the attributes in order
         // so we should construct this
         // first of all lets do table one
+        // remove chosen attributes
 
+        setAllTableIds(newTable);
         newTable.removeAttribute(tableOneName + "." + attributeOneName);
         newTable.removeAttribute(tableTwoName + "." + attributeTwoName);
-
+        newTable.printTable();
         return newTable;
     }
 
-    Table makeNewTableAndupdateAttributesForJoin(Table tableOne, Table tableTwo) {
-        // change table attribute names and add them to new table
-        for (int i = 1; i < tableOne.getAttributes().size(); i++) {
-            tableOne.getAttributeAtIndex(i).setName(tableOne.getName() + "." + tableOne.getAttributeAtIndex(i).getName());
+    void setAllTableIds(Table table) {
+        int i = 0;
+        for (Row row : table.getRows()) {
+            row.changeId(getAndIncrementID());
+            // Token token = new Token((int) getAndIncrementID(), 0);
+            // row.changeValue();
         }
+    }
 
-        Table newTable = tableOne.copy();
-        for (int i = 1; i < tableTwo.getAttributes().size(); i++) {
-            tableTwo.getAttributeAtIndex(i).setName(tableTwo.getName() + "." + tableTwo.getAttributeAtIndex(i).getName());
-            newTable.attributes.add(tableTwo.getAttributeAtIndex(i));
-        }
-        // update row attributes
+    // edits all attributes and makes a copy of the
+    Table makeNewTableAndupdateAttributesForJoin(Table tableOne, Table tableTwo) {
+        // update row attributes and tokens
         for (Row row : tableOne.getRows()) {
             for (Attribute attribute : row.getAttributes()) {
                 if (!attribute.getName().equals("id")) {
@@ -110,6 +111,21 @@ public class Database {
                 }
             }
         }
+        // change table attribute names
+        for (int i = 1; i < tableOne.getAttributes().size(); i++) {
+            tableOne.getAttributeAtIndex(i).setName(tableOne.getName() + "." + tableOne.getAttributeAtIndex(i).getName());
+        }
+        // create table and add tableTwo's attributes
+        Table newTable = tableOne.copy();
+        for (int i = 1; i < tableTwo.getAttributes().size(); i++) {
+            tableTwo.getAttributeAtIndex(i).setName(tableTwo.getName() + "." + tableTwo.getAttributeAtIndex(i).getName());
+            newTable.attributes.add(tableTwo.getAttributeAtIndex(i));
+        }
+        for (int i = 0; i < newTable.getRows().size(); i++) {
+            for (int j = 1; j < tableTwo.getAttributes().size(); j++) {
+                newTable.getRowNumber(i).addAttribute(tableTwo.getAttributeAtIndex(j));
+            }
+        }
         return newTable;
     }
 
@@ -121,9 +137,9 @@ public class Database {
         Map<Integer, Integer> tableJoinOnID = new HashMap<>();
         for (Row rowOne : tableOne.getRows()) {
             matchFound = false;
-            String tableOneTarget = rowOne.getValueFromAttribute(attributeOneName).getName();
+            String tableOneTarget = rowOne.getValueFromAttribute(attributeOneName).getValue();
             for (Row rowTwo : tableTwo.getRows()) {
-                String tableTwoCandidate = rowTwo.getValueFromAttribute(attributeTwoName).getName();
+                String tableTwoCandidate = rowTwo.getValueFromAttribute(attributeTwoName).getValue();
                 if (!matchFound && tableOneTarget.equals(tableTwoCandidate)) {
                     int rowOneID = rowOne.getId();
                     int rowTwoID = rowTwo.getId();

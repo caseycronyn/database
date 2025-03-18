@@ -10,7 +10,7 @@ public class SelectAllCommand implements DBCommand {
 
     @Override
     public void executeCommand(DBServer server, TokenBank tokenBank) {
-        String tableName = tokenBank.getTokenFromType("tableName").getName();
+        String tableName = tokenBank.getTokenFromType("tableName").getValue();
         Table table = server.databases.get(server.getCurrentDatabase()).tables.get(tableName);
         List<Token> condition = tokenBank.getTokenTypeFromFragment("condition", "where", "terminator");
         table.filterTableWithAttributesAndCondition(null, condition);

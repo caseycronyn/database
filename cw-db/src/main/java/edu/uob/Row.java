@@ -45,6 +45,10 @@ public class Row {
         attributesToValues.put(replacementName, returnedToken);
     }
 
+    void addAttribute(Attribute attribute) {
+        attributes.add(attribute);
+    }
+
     void changeAttributeName(String attributeName, String newAttributeName) {
         for (Attribute attribute : attributes) {
             if (attribute.getName().equals(attributeName)) {
@@ -52,6 +56,11 @@ public class Row {
             }
         }
     }
+
+    void addAttributes(List<Attribute> newAttributes) {
+        attributes.addAll(newAttributes);
+    }
+
 
     void addValueToRow(String attributeName, Token value) {
         attributesToValues.put(attributeName, value);
@@ -69,6 +78,8 @@ public class Row {
         return attributes;
     }
 
+    void addAttribute() {}
+
     void addNewTokenList (List<Token> newTokenListIn) {
         tokenList.addAll(newTokenListIn);
     }
@@ -82,7 +93,7 @@ public class Row {
     }
 
     void createValuesAndInitialiseValueList() {
-        addId();
+        addIdToken();
         for (int i = 1; i < attributes.size(); i++) {
             Token token = tokenList.get(i - 1);
             attributesToValues.put(attributes.get(i).getName(), token);
@@ -98,10 +109,16 @@ public class Row {
     }
 
 
-    void addId() {
+    void addIdToken() {
         Token token = new Token(Integer.toString(id), 0);
         token.setTokenType("integerLiteral");
-        attributesToValues.put(attributes.get(0).getName(), token);
+        attributesToValues.put("id", token);
+    }
+
+    void changeId(int newId) {
+        id = newId;
+        Token token = new Token(Integer.toString(newId), 0);
+        attributesToValues.replace("id", token);
     }
 
     void changeValue(String attribute, Token token) {

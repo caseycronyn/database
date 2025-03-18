@@ -145,7 +145,7 @@ public class TokenBank {
 
     void printTokenNames () {
         for (Token token : tokens) {
-            System.out.printf(token.getName() + " ");
+            System.out.printf(token.getValue() + " ");
         }
         System.out.println();
     }

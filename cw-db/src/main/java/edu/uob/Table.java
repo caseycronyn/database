@@ -148,7 +148,7 @@ public class Table {
         for (int i = 0; i < nameValuePairs.size(); i += 3) {
             Token nameToken = nameValuePairs.get(i);
             Token valueToken = nameValuePairs.get(i + 2);
-            row.changeValue(nameToken.getName(), valueToken);
+            row.changeValue(nameToken.getValue(), valueToken);
         }
     }
 
@@ -158,7 +158,7 @@ public class Table {
         Attribute idAttribute = new Attribute("id", "integerLiteral", i);
         attributes.add(idAttribute);
         for (Token token : tokens) {
-            Attribute attribute = new Attribute(token.getName(), "NULL", ++i);
+            Attribute attribute = new Attribute(token.getValue(), "NULL", ++i);
             attributes.add(attribute);
         }
         updateTable();
@@ -300,7 +300,7 @@ public class Table {
             orderedValues.clear();
 //            loop through attributes in order
             for (Attribute attribute : attributes) {
-                orderedValues.add(row.attributesToValues.get(attribute.getName()).getName());
+                orderedValues.add(row.attributesToValues.get(attribute.getName()).getValue());
             }
             String joinedLine = String.join("\t", orderedValues);
 //            System.out.println(joinedLine);
@@ -369,7 +369,7 @@ public class Table {
     }
 
     // this needs to be changed so we spit the text back
-    public void filterTableWithAttributesAndCondition(List<Token> selectedAttributes, List<Token> condition) {
+    public String filterTableWithAttributesAndCondition(List<Token> selectedAttributes, List<Token> condition) {
         StringBuilder output = new StringBuilder();
         if (selectedAttributes == null) {
             selectedAttributes = new ArrayList<>();
@@ -380,7 +380,7 @@ public class Table {
         }
         StringBuilder firstLine = new StringBuilder();
         for (Token attribute : selectedAttributes) {
-            firstLine.append(attribute.getName()).append("\t");
+            firstLine.append(attribute.getValue()).append("\t");
         }
         // System.out.println(firstLine);
         output.append(firstLine.append("\n"));
@@ -389,7 +389,7 @@ public class Table {
                 ArrayList<String> orderedValues = new ArrayList<>();
                 // loop through attributes in order
                 for (Token attribute : selectedAttributes) {
-                    String attributeValue = row.attributesToValues.get(attribute.getName()).getName();
+                    String attributeValue = row.attributesToValues.get(attribute.getValue()).getValue();
                     orderedValues.add(attributeValue);
                 }
                 String joinedLine = String.join("\t", orderedValues);
@@ -397,7 +397,12 @@ public class Table {
                 // System.out.println(joinedLine);
             }
         }
+        return output.toString();
         // System.out.println(output);
+    }
+
+    void printTable() {
+        System.out.println(filterTableWithAttributesAndCondition(null, null));
     }
 
     boolean conditionIsMet(List<Token> condition, Row row) {
@@ -429,7 +434,7 @@ public class Table {
         for (int i = 0; i < condition.size(); i++) {
             if (condition.get(i).toString().equals("(")) depth++;
             else if (condition.get(i).toString().equals(")")) depth--;
-            else if (depth == 0 && !booleanOperatorFound && condition.get(i).getName().equals(operator)) {
+            else if (depth == 0 && !booleanOperatorFound && condition.get(i).getValue().equals(operator)) {
                 booleanOperatorFound = true;
                 position = i;
             }
@@ -447,11 +452,11 @@ public class Table {
         int closeParenthesesCount = 0;
         boolean openParentheses = false;
         for (int i = 0; i < condition.size(); i++) {
-            if (condition.get(i).getName().equals("(")) {
+            if (condition.get(i).getValue().equals("(")) {
                 openParenthesesCount++;
                 openParentheses = true;
             }
-            else if (openParentheses && condition.get(i).getName().equals(")")) {
+            else if (openParentheses && condition.get(i).getValue().equals(")")) {
                 closeParenthesesCount++;
             }
             if (openParenthesesCount == closeParenthesesCount) {
@@ -486,8 +491,8 @@ public class Table {
             second++;
             third++;
         }
-        String attributeToken = condition.get(first).getName();
-        String comparator = condition.get(second).getName();
+        String attributeToken = condition.get(first).getValue();
+        String comparator = condition.get(second).getValue();
         Token valueToken = condition.get(third);
         Token valueInCell = row.attributesToValues.get(attributeToken);
 
@@ -564,8 +569,8 @@ public class Table {
     }
 
     boolean stringCondition(Token valueToken, Token valueInCell, String comparator) {
-        String value = valueInCell.getName();
-        String query = valueToken.getName();
+        String value = valueInCell.getValue();
+        String query = valueToken.getValue();
         switch (comparator) {
             case "==":
                 return (value.equals(query));

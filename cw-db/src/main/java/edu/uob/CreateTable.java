@@ -8,7 +8,7 @@ public class CreateTable extends Parser {
 
     @Override
     public void executeCommand(DBServer server, TokenBank tokenBank) {
-        String tableName = tokenBank.getTokenFromType("tableName").getName();
+        String tableName = tokenBank.getTokenFromType("tableName").getValue();
         String databaseName = server.getCurrentDatabase();
         Table table = new Table(tableName, databaseName, server.getStorageFolderPath());
         table.writeEmptyTableToFile();

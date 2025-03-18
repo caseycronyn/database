@@ -1,7 +1,6 @@
 package edu.uob;
 
 import java.io.File;
-import java.io.IOException;
 
 public class DropDatabase extends Parser {
     @Override
@@ -11,7 +10,7 @@ public class DropDatabase extends Parser {
 
     @Override
     public void executeCommand(DBServer server, TokenBank tokenBank) {
-        String databaseName = tokenBank.getTokenFromType("databaseName").getName();
+        String databaseName = tokenBank.getTokenFromType("databaseName").getValue();
         server.databases.remove(databaseName);
         File file = new File(server.getStorageFolderPath() + File.separator + databaseName);
         server.deleteDirectory(file);

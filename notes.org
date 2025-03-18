@@ -94,7 +94,7 @@ parsing then interpreting is probably simpler than trying to do both at the same
 * bnf notes
 ** DBCommand classes/ constructors needed:
 
-*** rewrite to use lexing
+*** DONE rewrite to use lexing
 **** DONE use
 **** DONE create database
 **** DONE create table
@@ -105,6 +105,11 @@ parsing then interpreting is probably simpler than trying to do both at the same
 **** DONE insert
 **** DONE select
 **** DONE select with condition
-**** TODO update
-**** TODO delete
-**** TODO join
+**** DONE update
+**** DONE delete
+**** DONE join
+
+*
+rewrite errors so they are passed up then handled in a try catch at a higher level
+
+handle repeat db names

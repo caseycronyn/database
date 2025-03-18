@@ -27,7 +27,7 @@ public class Lexer {
     }
 
     void semicolonLexer() {
-        if (tokenBank.getLastToken().getName().equals(";")) {
+        if (tokenBank.getLastToken().getValue().equals(";")) {
             tokenBank.getLastToken().setTokenType("terminator");
         }
     }
@@ -37,7 +37,7 @@ public class Lexer {
         token.nameToUpperCase();
         if (checkTokenForPattern(token, commandType)) {
             // next one
-            switch (token.getName()) {
+            switch (token.getValue()) {
                 case "CREATE":
                     token.setTokenType("createCommand");
                     tokenBank.nextToken();
@@ -119,7 +119,7 @@ public class Lexer {
         tokenBank.nextToken();
         addKeywordTokenIfEquals("set", "SET");
         Token token = tokenBank.nextToken();
-        while (!(token.getName().equals("WHERE")) && (tokenBank.numberOfTokensLeft() > 1)) {
+        while (!(token.getValue().equals("WHERE")) && (tokenBank.numberOfTokensLeft() > 1)) {
             nameValuePair();
             token = tokenBank.getCurrentToken();
         }
@@ -128,7 +128,7 @@ public class Lexer {
 
     void nameValuePair() {
         Token token = tokenBank.getCurrentToken();
-        if (token.getName().equals(",")) {
+        if (token.getValue().equals(",")) {
             token.setTokenType("comma");
             tokenBank.nextToken();
         }
@@ -145,14 +145,14 @@ public class Lexer {
         getAttributeNames();
         Token token = tokenBank.getCurrentToken();
         token.nameToUpperCase();
-        if (token.getName().equals("FROM")) {
+        if (token.getValue().equals("FROM")) {
             token.setTokenType("from");
         }
         tokenBank.nextToken();
         addPlainTextToken("tableName");
         token = tokenBank.nextToken();
         token.nameToUpperCase();
-        if (token.getName().equals("WHERE")) {
+        if (token.getValue().equals("WHERE")) {
             token.setTokenType("where");
             conditionLexer();
             // condition!! :(( AHHH!!
@@ -162,7 +162,7 @@ public class Lexer {
     void conditionLexer() {
         Token token = tokenBank.getCurrentToken();
         token.nameToUpperCase();
-        if (token.getName().equals("WHERE")) {
+        if (token.getValue().equals("WHERE")) {
             token.setTokenType("where");
             // stripParenthesesToEnd();
             parenthesesLexer();
@@ -197,12 +197,12 @@ public class Lexer {
 
         void getAttributeNames() {
             Token token = tokenBank.getCurrentToken();
-            while (!token.getName().equalsIgnoreCase("FROM")) {
+            while (!token.getValue().equalsIgnoreCase("FROM")) {
                 if (checkTokenForPattern(token, wildAttributeList)) {
-                    if (token.getName().equals("*")) {
+                    if (token.getValue().equals("*")) {
                         token.setTokenType("wildAttributeSymbol");
                     } else token.setTokenType("attributeName");
-                } else if (token.getName().equals(",")) {
+                } else if (token.getValue().equals(",")) {
                     token.setTokenType("comma");
                 }
                 token = tokenBank.nextToken();
@@ -223,7 +223,7 @@ public class Lexer {
         void alterLexer () {
             Token token = tokenBank.getCurrentToken();
             token.nameToUpperCase();
-            if (token.getName().equals("TABLE")) {
+            if (token.getValue().equals("TABLE")) {
                 token.setTokenType("tableSelector");
             }
             token = tokenBank.nextToken();
@@ -244,7 +244,7 @@ public class Lexer {
         void dropLexer () {
             Token token = tokenBank.getCurrentToken();
             token.nameToUpperCase();
-            switch (token.getName()) {
+            switch (token.getValue()) {
                 case "DATABASE":
                     token.setTokenType("databaseSelector");
                     token = tokenBank.nextToken();
@@ -265,7 +265,7 @@ public class Lexer {
         void createLexer () {
             Token token = tokenBank.getCurrentToken();
             token.nameToUpperCase();
-            switch (token.getName()) {
+            switch (token.getValue()) {
                 case "DATABASE":
                     token.setTokenType("databaseSelector");
                     tokenBank.nextToken();
@@ -308,14 +308,14 @@ public class Lexer {
             int initialTokenPosition = tokenBank.getCurrentTokenPosition();
             // token = tokenBank.nextToken();
             for (int i = initialTokenPosition; i < tokenBank.getLastTokenPosition(); i++) {
-                if (token.getName().equals("(")) {
+                if (token.getValue().equals("(")) {
                     token.setTokenType("openParenthesis");
                     parenthesesOpen = true;
                     openParenthesisCount++;
                 }
-                else if (token.getName().equals(",")) {
+                else if (token.getValue().equals(",")) {
                     token.setTokenType("comma");
-                } else if ((token.getName().equals(")")) && parenthesesOpen) {
+                } else if ((token.getValue().equals(")")) && parenthesesOpen) {
                     token.setTokenType("closeParenthesis");
                     closeParenthesisCount++;
                 }
@@ -350,17 +350,22 @@ public class Lexer {
             else if (checkTokenForPattern(token, integerLiteral)) {
                 token.setTokenType("integerLiteral");
             }
-            else if (token.getName().equals("NULL")) {
+            else if (token.getValue().equals("NULL")) {
                 token.setTokenType("NULL");
             }
             else if (checkTokenForPattern(token, stringLiteral)) {
+                removeStringQuotationMarks(token);
                 token.setTokenType("stringLiteral");
             }
         }
 
+        void removeStringQuotationMarks(Token token) {
+            token.setValue(token.getValue().replaceAll("'", ""));
+        }
+
         void useLexer () {
             Token token = tokenBank.getCurrentToken();
-            if (token.getName().equals("DATABASE")) {
+            if (token.getValue().equals("DATABASE")) {
                 token.setTokenType("databaseSelector");
             }
             token = tokenBank.nextToken();
@@ -379,7 +384,7 @@ public class Lexer {
         void addKeywordTokenIfEquals (String description, String pattern){
             Token token = tokenBank.getCurrentToken();
             token.nameToUpperCase();
-            if (token.getName().equals(pattern)) {
+            if (token.getValue().equals(pattern)) {
                 token.setTokenType(description);
             }
         }
@@ -389,15 +394,15 @@ public class Lexer {
         }
 
         boolean checkTokenIsDatabaseOrTable (Token token){
-            return (token.getName().equals("DATABASE") || token.getName().equals("TABLE"));
+            return (token.getValue().equals("DATABASE") || token.getValue().equals("TABLE"));
         }
 
         boolean checkIfAlterationType (Token token){
-            return (token.getName().equals("DROP") || token.getName().equals("ADD"));
+            return (token.getValue().equals("DROP") || token.getValue().equals("ADD"));
         }
 
         boolean checkTokenForPattern (Token token, String patternString){
-            String name = token.getName();
+            String name = token.getValue();
             Pattern pattern = Pattern.compile(patternString, Pattern.CASE_INSENSITIVE);
             Matcher matcher = pattern.matcher(name);
             return matcher.find();

@@ -1,18 +1,18 @@
 package edu.uob;
 
 public class Token {
-    private String name, tokenType;
+    private String value, tokenType;
     private Integer position;
 
     Token (String name, Integer position) {
-        this.name = name;
+        this.value = name;
         this.position = position;
         tokenType = null;
         // dataType = null;
     }
 
     Token copy() {
-        String newName = new String(name);
+        String newName = new String(value);
         String newTokenType = new String(tokenType);
         Token token = new Token(newName, position);
         token.setTokenType(newTokenType);
@@ -24,7 +24,7 @@ public class Token {
     }
 
     int returnInt() {
-        return Integer.parseInt(name);
+        return Integer.parseInt(value);
     }
 
     void setTokenType(String tokenType) {
@@ -35,16 +35,16 @@ public class Token {
         return tokenType;
     }
 
-    String getName() {
-        return name;
+    String getValue() {
+        return value;
     }
 
-    void setName(String name) {
-        this.name = name;
+    void setValue(String value) {
+        this.value = value;
     }
 
     void nameToUpperCase() {
-        name = name.toUpperCase();
+        value = value.toUpperCase();
     }
 
     int getPosition() {
@@ -56,19 +56,19 @@ public class Token {
     }
 
     int getIntegerValue() {
-        return Integer.parseInt(name);
+        return Integer.parseInt(value);
     }
 
     float getFloatValue() {
-        return Float.parseFloat(name);
+        return Float.parseFloat(value);
     }
 
     boolean getBooleanValue() {
-        return Boolean.parseBoolean(name);
+        return Boolean.parseBoolean(value);
     }
 
     boolean tokenIsParenthesis () {
-        return name.equals("openParenthesis") || name.equals("closeParenthesis");
+        return value.equals("openParenthesis") || value.equals("closeParenthesis");
     }
 
 }

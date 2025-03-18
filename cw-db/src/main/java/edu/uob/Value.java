@@ -6,7 +6,7 @@ public class Value {
     Value(Token token)
     {
         dataType = token.getTokenType();
-        stringValue = token.getName();
+        stringValue = token.getValue();
     }
 
     String getStringValue() {
