@@ -1,5 +1,6 @@
 package edu.uob;
 
+import java.io.FileNotFoundException;
 import java.util.List;
 
 public class UpdateCommand implements DBCommand {
@@ -9,7 +10,7 @@ public class UpdateCommand implements DBCommand {
     }
 
     @Override
-    public void executeCommand(DBServer server, TokenBank tokenBank) {
+    public void executeCommand(DBServer server, TokenBank tokenBank) throws FileNotFoundException {
         List<Token> nameVauePairs = tokenBank.getTokenTypeFromFragment("nameValuePairs", "set", "where");
         List<Token> condition = tokenBank.getTokenTypeFromFragment("condition", "where", "terminator");
         String tableName = tokenBank.getTokenFromType("tableName").getValue();

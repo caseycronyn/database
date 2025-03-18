@@ -94,7 +94,7 @@ public class Table {
         return attributes;
     }
 
-    void updateTable() {
+    void updateTable() throws FileNotFoundException {
         writeTableToFileFromMemory();
         updateAttributesToValues();
     }
@@ -135,7 +135,7 @@ public class Table {
         } else return "stringLiteral";
     }
 
-    void changeValuesInTableWhereCondition(List<Token> nameVauePairs, List<Token> conditions) {
+    void changeValuesInTableWhereCondition(List<Token> nameVauePairs, List<Token> conditions) throws FileNotFoundException {
         for (Row row : rows) {
             if (conditionIsMet(conditions, row)) {
                 updateValuesInRow(nameVauePairs, row);
@@ -153,7 +153,7 @@ public class Table {
     }
 
     // set all to null
-    void addAttributesToTable(List<Token> tokens) {
+    void addAttributesToTable(List<Token> tokens) throws FileNotFoundException {
         int i = 0;
         Attribute idAttribute = new Attribute("id", "integerLiteral", i);
         attributes.add(idAttribute);
@@ -277,12 +277,14 @@ public class Table {
         }
     }
 
-    public void writeTableToFileFromMemory() {
+    public void writeTableToFileFromMemory() throws FileNotFoundException {
+        String newFileName = storageFolderPath + File.separator + databaseName + File.separator + tableName + ".tab";
         PrintWriter writer = null;
         try {
-            writer = new PrintWriter(storageFolderPath + File.separator + databaseName + File.separator + tableName + ".tab");
-        } catch (Exception e) {
-            System.out.println("error in writeTableToFileFromMemory: " + e);
+            writer = new PrintWriter(newFileName);
+        }
+        catch (FileNotFoundException e) {
+            throw new FileNotFoundException("error writing to file " + newFileName);
         }
         StringBuilder firstLine = new StringBuilder();
         for (Attribute attribute : attributes) {
@@ -321,7 +323,7 @@ public class Table {
         }
     }
 
-    public void addNewAttribute(String name) {
+    public void addNewAttribute(String name) throws FileNotFoundException {
         Attribute attribute = new Attribute(name, "NULL", attributes.size());
         attributes.add(attribute);
         writeTableToFileFromMemory();
@@ -338,7 +340,7 @@ public class Table {
         // updateTable();
     }
 
-    public void addRowToTable(List<Token> valueList, Integer newID) {
+    public void addRowToTable(List<Token> valueList, Integer newID) throws FileNotFoundException {
         Row row = new Row(attributes, valueList, newID);
         rows.add(row);
         checkAndSetValueTypes();
@@ -385,7 +387,7 @@ public class Table {
         // System.out.println(firstLine);
         output.append(firstLine.append("\n"));
         for (Row row : rows) {
-            if (conditionIsMet(condition, row)) {
+            if (condition == null || conditionIsMet(condition, row)) {
                 ArrayList<String> orderedValues = new ArrayList<>();
                 // loop through attributes in order
                 for (Token attribute : selectedAttributes) {
@@ -590,7 +592,7 @@ public class Table {
         return false;
     }
 
-    void deleteFromTableOnCondition(List<Token> condition) {
+    void deleteFromTableOnCondition(List<Token> condition) throws FileNotFoundException {
         int rowCount = rows.size();
         for (int i = 0; i < rowCount; i++) {
             if (conditionIsMet(condition, rows.get(i))) {

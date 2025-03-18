@@ -113,3 +113,5 @@ parsing then interpreting is probably simpler than trying to do both at the same
 rewrite errors so they are passed up then handled in a try catch at a higher level
 
 handle repeat db names
+
+make the error message the filenotfound exception!!!

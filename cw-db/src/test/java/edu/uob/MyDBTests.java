@@ -35,14 +35,14 @@ public class MyDBTests {
     public void testDatabaseCreationWithEmptyTable() {
         String randomName = generateRandomName();
         sendCommandToServer("CREATE DATABASE " + randomName + ";");
-        sendCommandToServer("USE DATABASE " + randomName + ";");
+        sendCommandToServer("USE " + randomName + ";");
         sendCommandToServer("CREATE TABLE marks;");
     }
 
     @Test
     public void makeDatabaseAndTable() {
         sendCommandToServer("CREATE DATABASE test;");
-        sendCommandToServer("USE DATABASE test;");
+        sendCommandToServer("USE test;");
         sendCommandToServer("CREATE TABLE marks;");
     }
 
@@ -50,21 +50,21 @@ public class MyDBTests {
     public void testDatabaseCreationWithTableAndAttributes() {
         String randomName = generateRandomName();
         sendCommandToServer("CREATE DATABASE " + randomName + ";");
-        sendCommandToServer("USE DATABASE " + randomName + ";");
+        sendCommandToServer("USE " + randomName + ";");
         sendCommandToServer("CREATE TABLE marks (name, mark, pass);");
     }
 
     @Test
     public void testDatabaseDrop() {
         sendCommandToServer("CREATE DATABASE test;");
-        sendCommandToServer("USE DATABASE test;");
+        sendCommandToServer("USE test;");
         sendCommandToServer("DROP DATABASE test;");
     }
 
     @Test
     public void testTableDrop() {
         sendCommandToServer("CREATE DATABASE test;");
-        sendCommandToServer("USE DATABASE test;");
+        sendCommandToServer("USE test;");
         sendCommandToServer("CREATE TABLE marks;");
         sendCommandToServer("DROP TABLE marks;");
     }
@@ -73,7 +73,7 @@ public class MyDBTests {
     public void testAlterTable() {
         String randomName = generateRandomName();
         sendCommandToServer("CREATE DATABASE " + randomName + ";");
-        sendCommandToServer("USE DATABASE " + randomName + ";");
+        sendCommandToServer("USE " + randomName + ";");
         sendCommandToServer("CREATE TABLE marks (name, mark, pass);");
         sendCommandToServer("ALTER TABLE marks ADD age;");
         sendCommandToServer("ALTER TABLE marks DROP name;");
@@ -83,7 +83,7 @@ public class MyDBTests {
     public void testInsertCommand() {
         String randomName = generateRandomName();
         sendCommandToServer("CREATE DATABASE " + randomName + ";");
-        sendCommandToServer("USE DATABASE " + randomName + ";");
+        sendCommandToServer("USE " + randomName + ";");
         sendCommandToServer("CREATE TABLE marks (name, mark, pass);");
         sendCommandToServer("INSERT INTO marks VALUES ('Simon', 65, TRUE);");
         sendCommandToServer("INSERT INTO marks VALUES ('Hello', 22, FALSE);");
@@ -93,7 +93,7 @@ public class MyDBTests {
     public void selectCommand() {
         String randomName = generateRandomName();
         sendCommandToServer("CREATE DATABASE " + randomName + ";");
-        sendCommandToServer("USE DATABASE " + randomName + ";");
+        sendCommandToServer("USE " + randomName + ";");
         sendCommandToServer("CREATE TABLE marks (name, mark, pass);");
         sendCommandToServer("INSERT INTO marks VALUES ('Simon', 65, TRUE);");
         sendCommandToServer("INSERT INTO marks VALUES ('David', 82, TRUE);");
@@ -105,7 +105,7 @@ public class MyDBTests {
     public void selectCommandWithConditions() {
         String randomName = generateRandomName();
         sendCommandToServer("CREATE DATABASE " + randomName + ";");
-        sendCommandToServer("USE DATABASE " + randomName + ";");
+        sendCommandToServer("USE " + randomName + ";");
         sendCommandToServer("CREATE TABLE marks (name, mark, pass);");
         sendCommandToServer("INSERT INTO marks VALUES ('Simon', 65, TRUE);");
         sendCommandToServer("INSERT INTO marks VALUES ('David', 82, TRUE);");
@@ -117,7 +117,7 @@ public class MyDBTests {
     public void selectAllCommand() {
         String randomName = generateRandomName();
         sendCommandToServer("CREATE DATABASE " + randomName + ";");
-        sendCommandToServer("USE DATABASE " + randomName + ";");
+        sendCommandToServer("USE " + randomName + ";");
         sendCommandToServer("CREATE TABLE marks (name, mark, pass);");
         sendCommandToServer("INSERT INTO marks VALUES ('Simon', 65, TRUE);");
         sendCommandToServer("INSERT INTO marks VALUES ('David', 82, TRUE);");
@@ -130,7 +130,7 @@ public class MyDBTests {
     public void selectAllCommandWithCondition() {
         String randomName = generateRandomName();
         sendCommandToServer("CREATE DATABASE " + randomName + ";");
-        sendCommandToServer("USE DATABASE " + randomName + ";");
+        sendCommandToServer("USE " + randomName + ";");
         sendCommandToServer("CREATE TABLE marks (name, mark, pass);");
         sendCommandToServer("INSERT INTO marks VALUES ('Simon', 65, TRUE);");
         sendCommandToServer("INSERT INTO marks VALUES ('David', 82, TRUE);");
@@ -142,7 +142,7 @@ public class MyDBTests {
     public void selectCommandWithMultipleConditions() {
         String randomName = generateRandomName();
         sendCommandToServer("CREATE DATABASE " + randomName + ";");
-        sendCommandToServer("USE DATABASE " + randomName + ";");
+        sendCommandToServer("USE " + randomName + ";");
         sendCommandToServer("CREATE TABLE marks (name, mark, pass);");
         sendCommandToServer("INSERT INTO marks VALUES ('Simon', 65, TRUE);");
         sendCommandToServer("INSERT INTO marks VALUES ('David', 82, TRUE);");
@@ -154,7 +154,7 @@ public class MyDBTests {
     public void updateCommand() {
         String randomName = generateRandomName();
         sendCommandToServer("CREATE DATABASE " + randomName + ";");
-        sendCommandToServer("USE DATABASE " + randomName + ";");
+        sendCommandToServer("USE " + randomName + ";");
         sendCommandToServer("CREATE TABLE marks (name, mark, pass);");
         sendCommandToServer("INSERT INTO marks VALUES ('Simon', 65, TRUE);");
         sendCommandToServer("INSERT INTO marks VALUES ('David', 82, TRUE);");
@@ -166,7 +166,7 @@ public class MyDBTests {
     public void updateCommandMultiplePairs() {
         String randomName = generateRandomName();
         sendCommandToServer("CREATE DATABASE " + randomName + ";");
-        sendCommandToServer("USE DATABASE " + randomName + ";");
+        sendCommandToServer("USE " + randomName + ";");
         sendCommandToServer("CREATE TABLE marks (name, mark, pass);");
         sendCommandToServer("INSERT INTO marks VALUES ('Simon', 65, FALSE);");
         sendCommandToServer("INSERT INTO marks VALUES ('David', 82, TRUE);");
@@ -178,7 +178,7 @@ public class MyDBTests {
     public void deleteCommand() {
         String randomName = generateRandomName();
         sendCommandToServer("CREATE DATABASE " + randomName + ";");
-        sendCommandToServer("USE DATABASE " + randomName + ";");
+        sendCommandToServer("USE " + randomName + ";");
         sendCommandToServer("CREATE TABLE marks (name, mark, pass);");
         sendCommandToServer("INSERT INTO marks VALUES ('Simon', 65, TRUE);");
         sendCommandToServer("INSERT INTO marks VALUES ('David', 82, TRUE);");
@@ -191,7 +191,7 @@ public class MyDBTests {
     public void joinCommand() {
         String randomName = generateRandomName();
         sendCommandToServer("CREATE DATABASE " + randomName + ";");
-        sendCommandToServer("USE DATABASE " + randomName + ";");
+        sendCommandToServer("USE " + randomName + ";");
         sendCommandToServer("CREATE TABLE marks (name, mark, pass);");
         sendCommandToServer("INSERT INTO marks VALUES ('Simon', 65, TRUE);");
         sendCommandToServer("INSERT INTO marks VALUES ('Sion', 55, TRUE);");

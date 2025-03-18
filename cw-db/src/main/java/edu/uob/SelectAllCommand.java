@@ -9,10 +9,14 @@ public class SelectAllCommand implements DBCommand {
     }
 
     @Override
-    public void executeCommand(DBServer server, TokenBank tokenBank) {
+    public String executeCommand(DBServer server, TokenBank tokenBank) {
         String tableName = tokenBank.getTokenFromType("tableName").getValue();
         Table table = server.databases.get(server.getCurrentDatabase()).tables.get(tableName);
-        List<Token> condition = tokenBank.getTokenTypeFromFragment("condition", "where", "terminator");
+        List<Token> condition = null;
+        if (tokenBank.getTokens().size() > 5) {
+            condition = tokenBank.getTokenTypeFromFragment("condition", "where", "terminator");
+        }
         table.filterTableWithAttributesAndCondition(null, condition);
+        return "[OK]";
     }
 }

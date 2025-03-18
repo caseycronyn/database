@@ -1,6 +1,6 @@
 package edu.uob;
 
-public class DropCommand extends Parser {
+public class DropCommand implements DBCommand {
     String currentToken;
     @Override
     public DBCommand parse(TokenBank tokenBank) {

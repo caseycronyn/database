@@ -43,7 +43,7 @@ public class TokenBank {
 
     Map<String, String> createTokenQueries() {
         Map<String, String> tokenKeys = new HashMap<>();
-        tokenKeys.put("use", "useCommand databaseSelector databaseName terminator");
+        tokenKeys.put("use", "useCommand databaseName terminator");
         tokenKeys.put("create database", "createCommand databaseSelector databaseName terminator");
         tokenKeys.put("create table",  "createCommand tableSelector tableName terminator");
         tokenKeys.put("create table with attributes", "createCommand tableSelector tableName");

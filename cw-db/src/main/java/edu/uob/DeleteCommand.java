@@ -1,5 +1,6 @@
 package edu.uob;
 
+import java.io.FileNotFoundException;
 import java.util.List;
 
 public class DeleteCommand implements DBCommand {
@@ -9,11 +10,11 @@ public class DeleteCommand implements DBCommand {
     }
 
     @Override
-    public void executeCommand(DBServer server, TokenBank tokenBank) {
+    public void executeCommand(DBServer server, TokenBank tokenBank) throws FileNotFoundException {
         String tableName = tokenBank.getTokenFromType("tableName").getValue();
         Table table = server.databases.get(server.getCurrentDatabase()).tables.get(tableName);
         List<Token> condition = tokenBank.getTokenTypeFromFragment("condition", "where", "terminator");
         table.deleteFromTableOnCondition(condition);
-        // System.out.println("Deleted " + tableName);
+        return "[OK]";
     }
 }

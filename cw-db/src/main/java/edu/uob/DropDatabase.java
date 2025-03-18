@@ -2,14 +2,14 @@ package edu.uob;
 
 import java.io.File;
 
-public class DropDatabase extends Parser {
+public class DropDatabase implements DBCommand {
     @Override
     public DBCommand parse(TokenBank tokenBank) {
         return this;
     }
 
     @Override
-    public void executeCommand(DBServer server, TokenBank tokenBank) {
+    public String executeCommand(DBServer server, TokenBank tokenBank) {
         String databaseName = tokenBank.getTokenFromType("databaseName").getValue();
         server.databases.remove(databaseName);
         File file = new File(server.getStorageFolderPath() + File.separator + databaseName);
@@ -17,5 +17,6 @@ public class DropDatabase extends Parser {
         if (!file.delete()) {
             System.out.println("Error deleting " + databaseName);
         }
-    };
+        return "[OK]";
+    }
 }

@@ -9,13 +9,13 @@ public class Lexer {
     String commandType, plainText, query, tableOrDatabase, alterationType, stringLiteral, booleanLiteral, floatLiteral, integerLiteral, symbol, wildAttributeList, comparator, parentheses, booleanOperator;
     TokenBank tokenBank;
 
-    void checkForNullTokens() {
+    void checkForNullTokens() throws Exception {
         for (Token token : tokenBank.getTokens()) {
             if (token.getTokenType() == null) {
                 System.out.print("token types: ");
                 tokenBank.printTokenTypes();
                 tokenBank.printTokenNames();
-                throw new java.lang.Error("error has occurred during lexing of tokens. Some are null");
+                throw new Exception("error has occurred during lexing of tokens. Some are null");
             }
         }
     }
@@ -365,10 +365,6 @@ public class Lexer {
 
         void useLexer () {
             Token token = tokenBank.getCurrentToken();
-            if (token.getValue().equals("DATABASE")) {
-                token.setTokenType("databaseSelector");
-            }
-            token = tokenBank.nextToken();
             if (checkTokenIsPlainText(token)) {
                 token.setTokenType("databaseName");
             }
@@ -462,7 +458,7 @@ public class Lexer {
             parentheses = "\\(|\\)";
         }
 
-        void setup (TokenBank tokenBank) {
+        void setup (TokenBank tokenBank) throws Exception {
             this.tokenBank = tokenBank;
             createStrings();
             lexTokens();

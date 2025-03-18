@@ -1,6 +1,6 @@
 package edu.uob;
 
-public class CreateDatabase extends Parser {
+public class CreateDatabase implements DBCommand {
     TokenBank localtokenBank;
     String databaseName;
     @Override
@@ -9,9 +9,10 @@ public class CreateDatabase extends Parser {
     }
 
     @Override
-    public void executeCommand(DBServer server, TokenBank tokenBank){
+    public String executeCommand(DBServer server, TokenBank tokenBank){
         String databaseName = tokenBank.getTokenFromType("databaseName").getValue();
         Database database = new Database(databaseName, server.getStorageFolderPath());
         server.databases.put(databaseName, database);
-    };
+        return "[OK]";
+    }
 }

@@ -1,13 +1,15 @@
 package edu.uob;
 
-public class AlterTable extends Parser {
+import java.io.FileNotFoundException;
+
+public class AlterTable implements DBCommand {
     @Override
     public DBCommand parse(TokenBank tokenBank) {
         return this;
     }
 
     @Override
-    public void executeCommand(DBServer server, TokenBank tokenBank) {
+    public String executeCommand(DBServer server, TokenBank tokenBank) throws FileNotFoundException {
         String alterationType = tokenBank.getTokenFromType("alterationType").getValue();
         String tableName = tokenBank.getTokenFromType("tableName").getValue();
         String attributeName = tokenBank.getTokenFromType("attributeName").getValue();
@@ -19,5 +21,6 @@ public class AlterTable extends Parser {
         else if (alterationType.equals("DROP")) {
             table.removeAttribute(attributeName);;
         }
+        return "[OK]";
     }
 }

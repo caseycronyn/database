@@ -88,12 +88,21 @@ public class DBServer {
         TokenBank tokenBank = new TokenBank(tokeniser.getListOfTokens(command));
         // in the middle of
         Lexer lexer = new Lexer();
-        lexer.setup(tokenBank);
+        try {
+            lexer.setup(tokenBank);
+        }
+        catch (Exception e) {
+            return "[ERROR]: unable to lex tokens";
+        }
         // will probably need a rewrite
         Parser parser = new Parser();
 
         commandResult = parser.parse(tokenBank);
-        commandResult.executeCommand(this, tokenBank);
+        try {
+            commandResult.executeCommand(this, tokenBank);
+        } catch (FileNotFoundException e) {
+            return "[ERROR]: file not found";
+        }
         // tokenBank.printTokenTypes();
         return "[OK]";
     }
