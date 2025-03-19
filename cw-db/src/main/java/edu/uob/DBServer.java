@@ -17,7 +17,7 @@ public class DBServer {
 
     public static void main(String args[]) throws IOException {
         DBServer server = new DBServer();
-        server.blockingListenOn(8888);
+        // server.blockingListenOn(8888);
     }
 
  // NOTE double check the databases location before submission
@@ -32,7 +32,7 @@ public class DBServer {
         } catch(IOException ioe) {
             System.out.println("Can't seem to create database storage folder " + storageFolderPath);
         }
-        // initialiseServer();
+        initialiseServer();
     }
 
     public String getStorageFolderPath() {

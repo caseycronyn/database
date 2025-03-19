@@ -49,12 +49,20 @@ public class Table {
         return newTable;
     }
 
-    void initialiseRowsAndCallInitialiseTokens() {
-        initialiseAttributesFromFile();
-        for (Row row : rows) {
-
+    void initialiseTable(Database database) {
+        readInFileAndPopulateStringBuffer();
+        readInAttributesToMemoryFromStringBuffer();
+        // populateAttributesAndEntriesFromFile();
+        // populateEntriesAndMapAttributesFromFile();
+        for (int i = 1; i < stringBuffer.size(); i++) {
+            String[] entryArray = stringBuffer.get(i).split("\t");
+            Row row = new Row(attributes, null, database.getAndIncrementID(), this);
+            row.initialiseRow(entryArray);
+            rows.add(row);
         }
+        updateAttributesToValues("regex");
     }
+
 
     String getDatabaseName() {
         return databaseName;
@@ -106,32 +114,36 @@ public class Table {
         updateAttributesToValues();
     }
 
-    void updateAttributesToValues() {
+    void updateAttributesToValues(String filterType) {
         Map<String, String> valueSet = new HashMap<>();
         String value, finalValue;
         value = finalValue = null;
         for (int i = 1; i < attributes.size(); i++) {
             valueSet.clear();
             for (int j = 0; j < rows.size(); j++) {
-                value = rows.get(j).attributesToValues.get(attributes.get(i).getName()).getTokenType();
+                if (filterType.equals("tokenTypes")) {
+                    value = rows.get(j).attributesToTokens.get(attributes.get(i).getName()).getTokenType();
+                }
+                else if
                 valueSet.put(value, value);
             }
-            if (valueSet.size() == 1) {
-                finalValue = value;
-            } else if (valueSet.size() > 1) {
-                finalValue = resolveValueConflict(valueSet);
+            finalValue = value;
+            if (valueSet.size() > 1) {
+                if (filterType.equals("tokenTypes")) {
+                    finalValue = resolveValueConflict(valueSet);
+                }
             }
             attributes.get(i).setDataType(finalValue);
         }
     }
 
-    void updateTokenToCurrentAttributeNames() {
-        for (Row row : rows) {
-            for (Attribute attribute : row.getAttributes()) {
-
-            }
-        }
-    }
+    // void updateTokenToCurrentAttributeNames() {
+    //     for (Row row : rows) {
+    //         for (Attribute attribute : row.getAttributes()) {
+    //
+    //         }
+    //     }
+    // }
 
     // string + anything = string
     // bool + anything = string
@@ -195,19 +207,10 @@ public class Table {
         databaseName = databaseNameIn;
     }
 
-    public void initialiseTableFromFile() {
-        readInFileAndPopulateArrayWithAllLines();
-        populateAttributesAndEntriesFromFile();
+    public void readTableIntoMemoryFromFile() {
     }
 
-    public void populateAttributesAndEntriesFromFile() {
-        initialiseAttributesFromFile();
-
-        // populateEntriesAndMapAttributesFromFile();
-
-    }
-
-    public void initialiseAttributesFromFile() {
+    public void readInAttributesToMemoryFromStringBuffer() {
         String command = stringBuffer.get(0);
         List<String> attributeArray = new ArrayList<>();
         attributeArray.addAll(List.of(command.split("\t")));
@@ -231,11 +234,11 @@ public class Table {
         buffReader.close();
     }
 
-    public void readInFileAndPopulateArrayWithAllLines() {
+    public void readInFileAndPopulateStringBuffer() {
         stringBuffer.clear();
         BufferedReader buffReader = null;
         FileReader reader = null;
-        File fileToOpen = new File(storageFolderPath + File.separator + databaseName + File.separator + tableName + ".tab");
+        File fileToOpen = new File(storageFolderPath + File.separator + databaseName + File.separator + tableName);
         try {
             reader = new FileReader(fileToOpen);
             buffReader = new BufferedReader(reader);
@@ -250,27 +253,27 @@ public class Table {
         }
     }
 
-//     public void populateEntriesAndMapAttributesFromFile() {
-//        // loop through each line:
-//         for (int i = 1; i < stringBuffer.size(); i++) {
-//            // split words into separate terms add to word_array
-//             String[] entryArray = stringBuffer.get(i).split("\t");
-//             HashMap<String, Token> row = new HashMap<>();
-//             if (entryArray.length != attributes.size()) {
-//                 return;
-//             }
-//            // loop through word_array:
-//             for (int j = 0; j < attributes.size(); j++) {
-//                // add each key value pair to a new row
-//                 row.put(attributes.get(j), entryArray[j]);
-//             }
-//             rows.add(row);
-//            // System.out.println(row);
-//            // System.out.println(commandHolder.get(i));
-//         }
-// //        for (String entry: commandHolder) {
-// //            System.out.println(entry);
-// //        }
+    public void populateEntriesAndMapAttributesFromFile() {
+       // loop through each line:
+
+            // Row row = new Row(attributes, )
+           // split words into separate terms add to word_array
+           //  HashMap<String, Token> row = new HashMap<>();
+           //  if (entryArray.length != attributes.size()) {
+           //      return;
+           //  }
+           // loop through word_array:
+           //  for (int j = 0; j < attributes.size(); j++) {
+           //     // add each key value pair to a new row
+           //     //  row.put(attributes.get(j), entryArray[j]);
+           //  }
+            // rows.add(row);
+           // System.out.println(row);
+           // System.out.println(commandHolder.get(i));
+        }
+//        for (String entry: commandHolder) {
+//            System.out.println(entry);
+//        }
 //     }
 
     public void printEntriesHashMap() {
@@ -304,7 +307,7 @@ public class Table {
             orderedValues.clear();
 //            loop through attributes in order
             for (Attribute attribute : attributes) {
-                orderedValues.add(row.attributesToValues.get(attribute.getName()).getValue());
+                orderedValues.add(row.attributesToTokens.get(attribute.getName()).getValue());
             }
             String joinedLine = String.join("\t", orderedValues);
 //            System.out.println(joinedLine);
@@ -343,7 +346,7 @@ public class Table {
     }
 
     public void addRowToTable(List<Token> valueList, Integer newID) throws FileNotFoundException {
-        Row row = new Row(attributes, valueList, newID);
+        Row row = new Row(attributes, valueList, newID, this);
         rows.add(row);
         checkAndSetValueTypes();
         updateTable();
@@ -393,7 +396,7 @@ public class Table {
                 ArrayList<String> orderedValues = new ArrayList<>();
                 // loop through attributes in order
                 for (Token attribute : selectedAttributes) {
-                    String attributeValue = row.attributesToValues.get(attribute.getValue()).getValue();
+                    String attributeValue = row.attributesToTokens.get(attribute.getValue()).getValue();
                     orderedValues.add(attributeValue);
                 }
                 String joinedLine = String.join("\t", orderedValues);
@@ -428,6 +431,8 @@ public class Table {
         }
         return false;
     }
+
+
 
     int evaluateBooleanSubExpression(List<Token> condition, Row row, String operator) {
         // only if at top level
@@ -498,7 +503,7 @@ public class Table {
         String attributeToken = condition.get(first).getValue();
         String comparator = condition.get(second).getValue();
         Token valueToken = condition.get(third);
-        Token valueInCell = row.attributesToValues.get(attributeToken);
+        Token valueInCell = row.attributesToTokens.get(attributeToken);
 
         String dataType = null;
         for (Attribute attribute : attributes) {

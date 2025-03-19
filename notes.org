@@ -116,3 +116,9 @@ handle repeat db names
 
 make the error message the filenotfound exception!!!
 should joins be stored as files?
+
+attribute data types not set in tokens and attributes for rows tokens and tables
+
+key and value for attritoval is both value!
+
+do regex for pattern types

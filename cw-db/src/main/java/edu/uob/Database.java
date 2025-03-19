@@ -25,12 +25,12 @@ public class Database {
 
     void initialiseDatabase() {
         // tables map
-        File databaseDirectory = new File(storageFolderPath);
+        File databaseDirectory = new File(storageFolderPath + File.separator + name);
         File[] fileList = databaseDirectory.listFiles();
         if (fileList != null) {
             for (File file : fileList) {
                 Table table = new Table(file.getName(), databaseDirectory.getName(), storageFolderPath);
-                table.initialiseRowsAndCallInitialiseTokens();
+                table.initialiseTable(this);
                 addTable(table);
             }
         }
@@ -108,7 +108,7 @@ public class Database {
     Table makeNewTableAndupdateAttributesForJoin(Table tableOne, Table tableTwo) {
         // update row attributes and tokens
         for (Row row : tableOne.getRows()) {
-            for (Attribute attribute : row.getAttributes()) {
+            for (Attribute attribute : tableOne.getAttributes()) {
                 if (!attribute.getName().equals("id")) {
                     String newString = tableOne.getName() + "." + attribute.getName();
                     row.changeKeyInAttributesToValuesMap(attribute.getName(), newString);
@@ -117,7 +117,7 @@ public class Database {
             }
         }
         for (Row row : tableTwo.getRows()) {
-            for (Attribute attribute : row.getAttributes()) {
+            for (Attribute attribute : tableTwo.getAttributes()) {
                 if (!attribute.getName().equals("id")) {
                     String newString = tableTwo.getName() + "." + attribute.getName();
                     row.changeKeyInAttributesToValuesMap(attribute.getName(), newString);
@@ -135,11 +135,11 @@ public class Database {
             tableTwo.getAttributeAtIndex(i).setName(tableTwo.getName() + "." + tableTwo.getAttributeAtIndex(i).getName());
             newTable.attributes.add(tableTwo.getAttributeAtIndex(i));
         }
-        for (int i = 0; i < newTable.getRows().size(); i++) {
-            for (int j = 1; j < tableTwo.getAttributes().size(); j++) {
-                newTable.getRowNumber(i).addAttribute(tableTwo.getAttributeAtIndex(j));
-            }
-        }
+        // for (int i = 0; i < newTable.getRows().size(); i++) {
+        //     for (int j = 1; j < tableTwo.getAttributes().size(); j++) {
+        //         newTable.getRowNumber(i).addAttribute(tableTwo.getAttributeAtIndex(j));
+        //     }
+        // }
         return newTable;
     }
 

@@ -6,27 +6,42 @@ import java.util.List;
 import java.util.Map;
 
 public class Row {
-    Map<String, Token> attributesToValues = new HashMap<>();
-    List<Attribute> attributes;
+    Map<String, Token> attributesToTokens = new HashMap<>();
+    // List<Attribute> attributes;
     List<Token> tokenList;
     int id;
+    Table table;
 
-    Row (List<Attribute> attributes, List<Token> tokenList, int newID) {
-        this.attributes = attributes;
+    Row (List<Attribute> attributes, List<Token> tokenList, int newID, Table table) {
+        this.table = table;
+        // this.attributes = attributes;
         this.tokenList = tokenList;
         this.id = newID;
-        createValuesAndInitialiseValueList();
-        mapAttributesToValues();
+        if (tokenList != null) {
+            addIdToken();
+            for (int i = 1; i < table.getAttributes().size(); i++) {
+                Token token = tokenList.get(i - 1);
+                attributesToTokens.put(table.getAttributeAtIndex(i).getName(), token);
+            }
+
+            // createValuesAndInitialiseAttributesToValueListUsingTokenlist();
+            // initialiseAttributesAndValuesFromTokenlist();
+        }
+    }
+
+    void initialiseAttributesAndValuesFromTokenlist() {
+        createValuesAndInitialiseAttributesToValueListUsingTokenlist();
+        // mapAttributesToValues();
     }
 
     Row copy() {
         Map<String, Token> newAttributesToValues = new HashMap<>();
-        for (String attributeName : attributesToValues.keySet()) {
-            newAttributesToValues.put(attributeName, attributesToValues.get(attributeName).copy());
+        for (String attributeName : attributesToTokens.keySet()) {
+            newAttributesToValues.put(attributeName, attributesToTokens.get(attributeName).copy());
         }
 
         List<Attribute> newAttributes = new ArrayList<>();
-        for (Attribute attribute : attributes) {
+        for (Attribute attribute : table.getAttributes()) {
             newAttributes.add(attribute.copy());
         }
 
@@ -34,49 +49,49 @@ public class Row {
         for (Token token : tokenList) {
             newTokenList.add(token.copy());
         }
-        Row newRow = new Row(newAttributes, newTokenList, id);
+        Row newRow = new Row(newAttributes, newTokenList, id, table);
         newRow.addAttributesToValuesMap(newAttributesToValues);
 
         return newRow;
     }
 
     void changeKeyInAttributesToValuesMap(String attributeName, String replacementName) {
-        Token returnedToken = attributesToValues.remove(attributeName);
-        attributesToValues.put(replacementName, returnedToken);
+        Token returnedToken = attributesToTokens.remove(attributeName);
+        attributesToTokens.put(replacementName, returnedToken);
     }
 
-    void addAttribute(Attribute attribute) {
-        attributes.add(attribute);
-    }
+    // void addAttribute(Attribute attribute) {
+    //     attributes.add(attribute);
+    // }
 
     void changeAttributeName(String attributeName, String newAttributeName) {
-        for (Attribute attribute : attributes) {
+        for (Attribute attribute : table.getAttributes()) {
             if (attribute.getName().equals(attributeName)) {
                 attribute.setName(newAttributeName);
             }
         }
     }
 
-    void addAttributes(List<Attribute> newAttributes) {
-        attributes.addAll(newAttributes);
-    }
+    // void addAttributes(List<Attribute> newAttributes) {
+    //     attributes.addAll(newAttributes);
+    // }
 
 
     void addValueToRow(String attributeName, Token value) {
-        attributesToValues.put(attributeName, value);
+        attributesToTokens.put(attributeName, value);
     }
 
     void clearAttributes() {
-        attributesToValues.clear();
+        attributesToTokens.clear();
     }
 
     void clearTokenList() {
         tokenList.clear();
     }
 
-    List<Attribute> getAttributes() {
-        return attributes;
-    }
+    // List<Attribute> getAttributes() {
+    //     return attributes;
+    // }
 
     void addAttribute() {}
 
@@ -85,18 +100,29 @@ public class Row {
     }
 
     void addAttributesToValuesMap(Map<String, Token> attributesToValuesIn) {
-        attributesToValues.putAll(attributesToValuesIn);
+        attributesToTokens.putAll(attributesToValuesIn);
     }
 
-    void addNewAttributesList(List<Attribute> newAttributesIn) {
-        attributes.addAll(newAttributesIn);
+    void initialiseRow(String[] tokenArray) {
+        List<Token> newTokenList = new ArrayList<>();
+        for (int i = 0; i < table.getAttributes().size(); i++) {
+            Token token = new Token(tokenArray[i], i);
+            newTokenList.add(token);
+            attributesToTokens.put(table.getAttributeAtIndex(i).getName(), token);
+        }
+        // createValuesAndInitialiseAttributesToValueList();
+        // initialiseAttributesAndValues();
     }
 
-    void createValuesAndInitialiseValueList() {
+    // void addNewAttributesList(List<Attribute> newAttributesIn) {
+    //     attributes.addAll(newAttributesIn);
+    // }
+
+    void createValuesAndInitialiseAttributesToValueListUsingTokenlist() {
         addIdToken();
-        for (int i = 1; i < attributes.size(); i++) {
+        for (int i = 1; i < table.getAttributes().size(); i++) {
             Token token = tokenList.get(i - 1);
-            attributesToValues.put(attributes.get(i).getName(), token);
+            attributesToTokens.put(table.getAttributeAtIndex(i).getName(), token);
         }
     }
 
@@ -112,31 +138,28 @@ public class Row {
     void addIdToken() {
         Token token = new Token(Integer.toString(id), 0);
         token.setTokenType("integerLiteral");
-        attributesToValues.put("id", token);
+        attributesToTokens.put("id", token);
     }
 
     void changeId(int newId) {
         id = newId;
         Token token = new Token(Integer.toString(newId), 0);
-        attributesToValues.replace("id", token);
+        attributesToTokens.replace("id", token);
     }
 
     void changeValue(String attribute, Token token) {
-        attributesToValues.put(attribute, token);
+        attributesToTokens.put(attribute, token);
     }
 
     Token getValueFromAttribute(String attribute) {
-        return attributesToValues.get(attribute);
+        return attributesToTokens.get(attribute);
     }
 
-    void init() {
+    // void init() {
+    //
+    //
+    // }
 
-
-    }
-
-    void mapAttributesToValues() {
-
-    }
 
 
 }
