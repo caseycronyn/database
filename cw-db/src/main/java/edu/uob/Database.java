@@ -20,7 +20,15 @@ public class Database {
         this.storageFolderPath = storageFolderPath;
         this.ID = 1;
 //        createIDFolderAndFile();
-        createDatabaseFolder();
+        try {
+            createDatabaseFolder();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    boolean tableExists(String tableName) {
+        return tables.containsKey(tableName);
     }
 
     void initialiseDatabase() {
@@ -29,9 +37,18 @@ public class Database {
         File[] fileList = databaseDirectory.listFiles();
         if (fileList != null) {
             for (File file : fileList) {
-                Table table = new Table(file.getName(), databaseDirectory.getName(), storageFolderPath);
-                table.initialiseTable(this);
-                addTable(table);
+                String tableName = file.getName().replace(".tab", "");
+                // avoid dotfiles like .DSStore
+                if (tableName.charAt(0) != '.') {
+                    Table table = new Table(tableName, databaseDirectory.getName(), storageFolderPath);
+                    try {
+                        table.initialiseTable(this);
+                    }
+                    catch(Exception e) {
+                        System.err.println("Error while initialising table " + tableName);
+                    }
+                    addTable(table);
+                }
             }
         }
 
@@ -208,13 +225,13 @@ public class Database {
 //        }
 //    }
 
-    public void createDatabaseFolder() {
+    public void createDatabaseFolder() throws IOException {
         //        create database path
         try {
             // Create the database storage folder if it doesn't already exist !
             Files.createDirectories(Paths.get(storageFolderPath + File.separator + name));
         } catch(IOException ioe) {
-            System.out.println("Can't seem to create database storage folder " + storageFolderPath + File.separator + name);
+            throw new IOException("Can't seem to create database storage folder " + storageFolderPath + File.separator + name);
         }
     }
 

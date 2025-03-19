@@ -1,6 +1,7 @@
 package edu.uob;
 
 import java.io.*;
+import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
@@ -12,7 +13,6 @@ public class Table {
     List<Attribute> attributes = new ArrayList<>();
     // Map<String, String> attributesToValues = new HashMap<>();
     List<Row> rows = new ArrayList<>();
-    ArrayList<String> stringBuffer = new ArrayList<>();
 
     String tableName;
     String databaseName;
@@ -49,18 +49,18 @@ public class Table {
         return newTable;
     }
 
-    void initialiseTable(Database database) {
-        readInFileAndPopulateStringBuffer();
-        readInAttributesToMemoryFromStringBuffer();
+    void initialiseTable(Database database) throws IOException {
+        ArrayList<String> buffer = new ArrayList<>();
+        readInFileAndPopulateStringBuffer(buffer);
+        readInAttributesToMemoryFromStringBuffer(buffer);
         // populateAttributesAndEntriesFromFile();
         // populateEntriesAndMapAttributesFromFile();
-        for (int i = 1; i < stringBuffer.size(); i++) {
-            String[] entryArray = stringBuffer.get(i).split("\t");
+        for (int i = 1; i < buffer.size(); i++) {
+            String[] entryArray = buffer.get(i).split("\t");
             Row row = new Row(attributes, null, database.getAndIncrementID(), this);
             row.initialiseRow(entryArray);
             rows.add(row);
         }
-        updateAttributesToValues("regex");
     }
 
 
@@ -114,27 +114,28 @@ public class Table {
         updateAttributesToValues();
     }
 
-    void updateAttributesToValues(String filterType) {
+    void updateAttributesToValues() {
         Map<String, String> valueSet = new HashMap<>();
         String value, finalValue;
         value = finalValue = null;
         for (int i = 1; i < attributes.size(); i++) {
             valueSet.clear();
             for (int j = 0; j < rows.size(); j++) {
-                if (filterType.equals("tokenTypes")) {
-                    value = rows.get(j).attributesToTokens.get(attributes.get(i).getName()).getTokenType();
-                }
-                else if
+                value = rows.get(j).attributesToTokens.get(attributes.get(i).getName()).getTokenType();
                 valueSet.put(value, value);
             }
             finalValue = value;
             if (valueSet.size() > 1) {
-                if (filterType.equals("tokenTypes")) {
-                    finalValue = resolveValueConflict(valueSet);
-                }
+                finalValue = resolveValueConflict(valueSet);
             }
             attributes.get(i).setDataType(finalValue);
         }
+    }
+
+    String resolveValueConflict(Map<String, String> valueSet) {
+        if (valueSet.containsKey("floatLiteral") && valueSet.containsKey("stringLiteral")) {
+            return "floatLiteral";
+        } else return "stringLiteral";
     }
 
     // void updateTokenToCurrentAttributeNames() {
@@ -148,11 +149,6 @@ public class Table {
     // string + anything = string
     // bool + anything = string
     // float + int = float
-    String resolveValueConflict(Map<String, String> valueSet) {
-        if (valueSet.containsKey("floatLiteral") && valueSet.containsKey("stringLiteral")) {
-            return "floatLiteral";
-        } else return "stringLiteral";
-    }
 
     void changeValuesInTableWhereCondition(List<Token> nameVauePairs, List<Token> conditions) throws FileNotFoundException {
         for (Row row : rows) {
@@ -210,16 +206,18 @@ public class Table {
     public void readTableIntoMemoryFromFile() {
     }
 
-    public void readInAttributesToMemoryFromStringBuffer() {
-        String command = stringBuffer.get(0);
-        List<String> attributeArray = new ArrayList<>();
-        attributeArray.addAll(List.of(command.split("\t")));
-        int i = 0;
-        for (String attribute : attributeArray) {
-            Attribute newAttribute = new Attribute(attribute, "NULL", i++);
-            attributes.add(newAttribute);
-        }
+    public void readInAttributesToMemoryFromStringBuffer(ArrayList<String> stringBuffer) {
+        if (stringBuffer.size() > 0) {
+            String command = stringBuffer.get(0);
+            List<String> attributeArray = new ArrayList<>();
+            attributeArray.addAll(List.of(command.split("\t")));
+            int i = 0;
+            for (String attribute : attributeArray) {
+                Attribute newAttribute = new Attribute(attribute, "NULL", i++);
+                attributes.add(newAttribute);
+            }
 //        System.out.println(attributes);
+        }
     }
 
 
@@ -234,43 +232,38 @@ public class Table {
         buffReader.close();
     }
 
-    public void readInFileAndPopulateStringBuffer() {
-        stringBuffer.clear();
+    public void readInFileAndPopulateStringBuffer(ArrayList<String> stringBuffer) throws IOException {
         BufferedReader buffReader = null;
         FileReader reader = null;
-        File fileToOpen = new File(storageFolderPath + File.separator + databaseName + File.separator + tableName);
-        try {
-            reader = new FileReader(fileToOpen);
-            buffReader = new BufferedReader(reader);
-            String line;
-            while ((line = buffReader.readLine()) != null) {
-                stringBuffer.add(line);
+        File fileToOpen = new File(storageFolderPath + File.separator + databaseName + File.separator + tableName + ".tab");
+        reader = new FileReader(fileToOpen);
+        buffReader = new BufferedReader(reader);
+        String line;
+        while ((line = buffReader.readLine()) != null) {
+            stringBuffer.add(line);
 //            System.out.println(line);
-            }
-            buffReader.close();
-        } catch (Exception e) {
-            System.out.println("error in readInFileAndPopulateArrayWithAllLines: " + e);
         }
+        buffReader.close();
     }
 
     public void populateEntriesAndMapAttributesFromFile() {
-       // loop through each line:
+        // loop through each line:
 
-            // Row row = new Row(attributes, )
-           // split words into separate terms add to word_array
-           //  HashMap<String, Token> row = new HashMap<>();
-           //  if (entryArray.length != attributes.size()) {
-           //      return;
-           //  }
-           // loop through word_array:
-           //  for (int j = 0; j < attributes.size(); j++) {
-           //     // add each key value pair to a new row
-           //     //  row.put(attributes.get(j), entryArray[j]);
-           //  }
-            // rows.add(row);
-           // System.out.println(row);
-           // System.out.println(commandHolder.get(i));
-        }
+        // Row row = new Row(attributes, )
+        // split words into separate terms add to word_array
+        //  HashMap<String, Token> row = new HashMap<>();
+        //  if (entryArray.length != attributes.size()) {
+        //      return;
+        //  }
+        // loop through word_array:
+        //  for (int j = 0; j < attributes.size(); j++) {
+        //     // add each key value pair to a new row
+        //     //  row.put(attributes.get(j), entryArray[j]);
+        //  }
+        // rows.add(row);
+        // System.out.println(row);
+        // System.out.println(commandHolder.get(i));
+    }
 //        for (String entry: commandHolder) {
 //            System.out.println(entry);
 //        }
@@ -319,13 +312,11 @@ public class Table {
         writer.close();
     }
 
-    public void writeEmptyTableToFile() {
+    public void writeEmptyTableToFile() throws IOException {
         try {
-            // Create the database storage folder if it doesn't already exist !
             Files.createFile(Paths.get(storageFolderPath + File.separator + databaseName + File.separator + tableName + ".tab"));
-        } catch (IOException ioe) {
-            System.out.println("Can't seem to create file " + storageFolderPath);
         }
+        catch (FileAlreadyExistsException ignore){};
     }
 
     public void addNewAttribute(String name) throws FileNotFoundException {

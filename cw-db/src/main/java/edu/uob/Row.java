@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Row {
+public class Row extends TokenBank {
     Map<String, Token> attributesToTokens = new HashMap<>();
     // List<Attribute> attributes;
     List<Token> tokenList;
@@ -54,6 +54,7 @@ public class Row {
 
         return newRow;
     }
+
 
     void changeKeyInAttributesToValuesMap(String attributeName, String replacementName) {
         Token returnedToken = attributesToTokens.remove(attributeName);
@@ -104,10 +105,9 @@ public class Row {
     }
 
     void initialiseRow(String[] tokenArray) {
-        List<Token> newTokenList = new ArrayList<>();
         for (int i = 0; i < table.getAttributes().size(); i++) {
             Token token = new Token(tokenArray[i], i);
-            newTokenList.add(token);
+            setValueTokenType(token);
             attributesToTokens.put(table.getAttributeAtIndex(i).getName(), token);
         }
         // createValuesAndInitialiseAttributesToValueList();

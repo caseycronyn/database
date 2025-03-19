@@ -4,8 +4,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class TokenBank {
+    String[] whiteSpaceSymbols, nonWhiteSpaceSymbols, commandArray, commandTypeArray, tokenisedQuery, symbolArray, comparatorArray;
+    String commandType, plainText, query, tableOrDatabase, alterationType, stringLiteral, booleanLiteral, floatLiteral, integerLiteral, symbol, wildAttributeList, comparator, parentheses, booleanOperator;
+
     ArrayList<Token> tokens = new ArrayList<>();
     int currentTokenPosition;
     String currentTable;
@@ -14,6 +19,7 @@ public class TokenBank {
     Map<String, Token> tokenToTypeMap;
 
     TokenBank(ArrayList<String> tokenNames) {
+        createStrings();
         setTokens(tokenNames);
         currentTokenPosition = 0;
     }
@@ -39,6 +45,15 @@ public class TokenBank {
 
     Token getTokenFromType(String tokenType) {
         return tokenToTypeMap.get(tokenType);
+    }
+
+    boolean tokenExistsInQuery(String tokenType) {
+        for (Token token : tokens) {
+            if (token.getTokenType().equals(tokenType)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     Map<String, String> createTokenQueries() {
@@ -200,9 +215,62 @@ public class TokenBank {
     }
 
 
+    boolean checkTokenForPattern (Token token, String patternString){
+        String name = token.getValue();
+        Pattern pattern = Pattern.compile(patternString, Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(name);
+        return matcher.find();
+    }
 
-    boolean tokenIsParenthesis (Token token) {
-        return token.getTokenType().equals("openParenthesis") || token.getTokenType().equals("closeParenthesis");
+    boolean tokenIsComparator(Token token) {
+        return checkTokenForPattern(token, comparator);
+    }
+
+    boolean tokenIsParenthesis(Token token) {
+        return checkTokenForPattern(token, parentheses);
+    }
+
+    boolean tokenIsBoolean(Token token) {
+        return checkTokenForPattern(token, booleanLiteral);
+    }
+
+    boolean tokenIsWildAttributeList(Token token) {
+        return checkTokenForPattern(token, wildAttributeList);
+    }
+
+    void setValueTokenType(Token token) {
+        if (whiteSpaceSymbols == null) {
+            createStrings();
+        }
+        // Token token = tokenBank.getCurrentToken();
+        if (checkTokenForPattern(token, booleanLiteral)) {
+            token.setTokenType("booleanLiteral");
+        }
+        else if (checkTokenForPattern(token, floatLiteral)) {
+            token.setTokenType("floatLiteral");
+        }
+        else if (checkTokenForPattern(token, integerLiteral)) {
+            token.setTokenType("integerLiteral");
+        }
+        else if (token.getValue().equals("NULL")) {
+            token.setTokenType("NULL");
+        }
+        else if (checkTokenForPattern(token, stringLiteral)) {
+            removeStringQuotationMarks(token);
+            token.setTokenType("stringLiteral");
+        }
+    }
+
+    void removeStringQuotationMarks(Token token) {
+        token.setValue(token.getValue().replaceAll("'", ""));
+    }
+
+    boolean tokenIsCommandType(Token token) {
+        return checkTokenForPattern(token, commandType);
+    }
+
+    boolean tokenIsPlainText (Token token){
+        return checkTokenForPattern(token, plainText);
     }
 
     boolean tokenIsACondition(Token token) {
@@ -219,7 +287,7 @@ public class TokenBank {
 //        tokenArray.addAll(Arrays.asList(query.split(" ")));
 ////        remove semicolon ';' at the end
 //        tokenArray.remove(tokenArray.size() - 1);
-////        System.out.println(tokenArray);
+    ////        System.out.println(tokenArray);
 //    }
 
 //    String query = "  INSERT  INTO  people   VALUES(  'Simon Lock'  ,35, 'simon@bristol.ac.uk' , 1.8  ) ; ";
@@ -229,4 +297,42 @@ public class TokenBank {
 //        t.setup();
 //    }
 
+    void createStrings() {
+        // optional whitespace in these
+        whiteSpaceSymbols = new String[]{"Command", "CommandType", "Use", "Create", "CreateDatabase", "CreateTable", "Drop", "Alter", "Insert", "Select", "Update", "Delete", "Join", "NameValueList", "NameValuePair", "AlterationType", "ValueList", "WildAttribList", "AttributeList", "Condition", "FirstCondition", "SecondCondition", "BoolOperator", "Comparator"};
+
+        // no additional whitespace
+        nonWhiteSpaceSymbols = new String[]{"Digit", "Uppercase", "Lowercase", "Letter", "PlainText", "Symbol", "Space", "DigitSequence", "IntegerLiteral", "FloatLiteral", "BooleanLiteral", "CharLiteral", "StringLiteral", "Value", "TableName", "AttributeName", "DatabaseName"};
+
+        commandArray = new String[]{"CommandType", ";"};
+
+        commandTypeArray = new String[]{"Use", "Create", "Drop", "Alter", "Insert", "Select", "Update", "Delete", "Join"};
+        commandType = String.join("|", commandTypeArray).toUpperCase();
+
+        tableOrDatabase = "TABLE|DATABASE";
+
+        alterationType = "ADD|DROP";
+
+        plainText = "\\p{Alnum}+";
+
+        symbolArray = new String[]{"!", "#", "$", "%", "&", "(", ")", "*", "+", ",", "-", ".", "/", ":", ";", ">", "=", "<", "?", "@", "\\[", "\\\\", "\\]", "^", "_", "`", "{", "}", "~"};
+        symbol = String.join("", symbolArray);
+
+        stringLiteral = "^'[\\s\\p{Alnum}" + symbol + "]*'$";
+
+        booleanLiteral = "TRUE|FALSE";
+
+        booleanOperator = "AND|OR";
+
+        floatLiteral = "^[+-]?\\p{Digit}+\\.\\p{Digit}+$";
+
+        integerLiteral = "^[+-]?\\p{Digit}+$";
+
+        wildAttributeList = plainText + "|\\*";
+
+        comparatorArray = new String[]{"==", ">", "<", ">=", "<=", "!=", "LIKE"};
+        comparator = String.join("|", comparatorArray);
+
+        parentheses = "\\(|\\)";
+    }
 }

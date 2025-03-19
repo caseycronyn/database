@@ -16,7 +16,7 @@ public class SelectCommand implements DBCommand {
 
         List<Token> attributeNames = tokenBank.getTokenTypeFromFragment("attributeName", "selectCommand", "from");
         List<Token> condition = null;
-        if (tokenBank.getTokens().size() > 5) {
+        if (tokenBank.tokenExistsInQuery("where")) {
             condition = tokenBank.getTokenTypeFromFragment("condition", "where", "terminator");
         }
         String returnString = "[OK]\n" + table.filterTableWithAttributesAndCondition(attributeNames, condition);

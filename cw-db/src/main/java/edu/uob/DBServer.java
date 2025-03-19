@@ -32,31 +32,36 @@ public class DBServer {
         } catch(IOException ioe) {
             System.out.println("Can't seem to create database storage folder " + storageFolderPath);
         }
-        initialiseServer();
+        try {
+            initialiseServer();
+        }
+        catch(Exception e) {
+            System.out.println("Can't initialise server " + storageFolderPath + ": " + e);
+        }
     }
 
     public String getStorageFolderPath() {
         return storageFolderPath;
     }
 
-    public void initialiseServer() throws NullPointerException {
-        try{
-            // databases map
-            File storageDirectory = new File(storageFolderPath);
-            File[] fileList = storageDirectory.listFiles();
-            if (fileList != null) {
-                for (File file : fileList) {
+    public void initialiseServer() throws NullPointerException{
+        // databases map
+        File storageDirectory = new File(storageFolderPath);
+        File[] fileList = storageDirectory.listFiles();
+        if (fileList != null) {
+            for (File file : fileList) {
+                // avoid hidden folders
+                if (!file.getName().startsWith(".")) {
                     Database database = new Database(file.getName(), storageFolderPath);
+                    try {
+                        database.initialiseDatabase();
+                    }
+                    catch(Exception e) {
+                        System.out.println("Can't initialise database " + file.getName());
+                    }
                     databases.put(file.getName(), database);
                 }
             }
-            // databases
-            for (Database database : databases.values()) {
-                database.initialiseDatabase();
-            }
-        }
-        catch (NullPointerException npe) {
-            System.out.println("Can't initialise database storage folder " + storageFolderPath);
         }
     }
 
@@ -105,9 +110,8 @@ public class DBServer {
         Tokeniser tokeniser = new Tokeniser();
         TokenBank tokenBank = new TokenBank(tokeniser.getListOfTokens(command));
         // in the middle of
-        Lexer lexer = new Lexer();
         try {
-            lexer.setup(tokenBank);
+            Lexer lexer = new Lexer(tokenBank);
         }
         catch (Exception e) {
             return "[ERROR]: unable to lex tokens";

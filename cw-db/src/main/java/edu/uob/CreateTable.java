@@ -1,5 +1,7 @@
 package edu.uob;
 
+import java.io.IOException;
+
 public class CreateTable implements DBCommand{
     @Override
     public DBCommand parse(TokenBank tokenBank) {
@@ -11,7 +13,11 @@ public class CreateTable implements DBCommand{
         String tableName = tokenBank.getTokenFromType("tableName").getValue();
         String databaseName = server.getCurrentDatabase();
         Table table = new Table(tableName, databaseName, server.getStorageFolderPath());
-        table.writeEmptyTableToFile();
+        try {
+            table.writeEmptyTableToFile();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         server.databases.get(databaseName).tables.put(tableName, table);
         return "[OK]";
     }
