@@ -10,7 +10,7 @@ public class DeleteCommand implements DBCommand {
     }
 
     @Override
-    public void executeCommand(DBServer server, TokenBank tokenBank) throws FileNotFoundException {
+    public String executeCommand(DBServer server, TokenBank tokenBank) throws FileNotFoundException {
         String tableName = tokenBank.getTokenFromType("tableName").getValue();
         Table table = server.databases.get(server.getCurrentDatabase()).tables.get(tableName);
         List<Token> condition = tokenBank.getTokenTypeFromFragment("condition", "where", "terminator");

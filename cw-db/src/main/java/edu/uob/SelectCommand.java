@@ -19,8 +19,7 @@ public class SelectCommand implements DBCommand {
         if (tokenBank.getTokens().size() > 5) {
             condition = tokenBank.getTokenTypeFromFragment("condition", "where", "terminator");
         }
-        table.filterTableWithAttributesAndCondition(attributeNames, condition);
-        return "PL"
-        
+        String returnString = "[OK]\n" + table.filterTableWithAttributesAndCondition(attributeNames, condition);
+        return returnString;
     }
 }

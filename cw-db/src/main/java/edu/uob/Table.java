@@ -12,8 +12,8 @@ public class Table {
     List<Attribute> attributes = new ArrayList<>();
     // Map<String, String> attributesToValues = new HashMap<>();
     List<Row> rows = new ArrayList<>();
+    ArrayList<String> stringBuffer = new ArrayList<>();
 
-    // ArrayList<String> commandHolder = new ArrayList<>();
     String tableName;
     String databaseName;
     String storageFolderPath;
@@ -47,6 +47,13 @@ public class Table {
         newTable.addAttributes(newAttributes);
 
         return newTable;
+    }
+
+    void initialiseRowsAndCallInitialiseTokens() {
+        initialiseAttributesFromFile();
+        for (Row row : rows) {
+
+        }
     }
 
     String getDatabaseName() {
@@ -180,7 +187,7 @@ public class Table {
 
     // public void setAttributes(List<Token> tokens) {
     //     for (Token token : tokens) {
-    //         attributes.add(token.getName());
+    //         attributes.add(token.getValue());
     //     }
     // }
 
@@ -188,34 +195,29 @@ public class Table {
         databaseName = databaseNameIn;
     }
 
-    // public void initialiseTableFromFile() {
-    //     readInFileAndPopulateArrayWithAllLines();
-    //     populateAttributesAndEntriesFromFile();
-    // }
+    public void initialiseTableFromFile() {
+        readInFileAndPopulateArrayWithAllLines();
+        populateAttributesAndEntriesFromFile();
+    }
 
-//     public void populateAttributesAndEntriesFromFile() {
-//         try {
-//             populateAttributesFromFile();
-//             populateEntriesAndMapAttributesFromFile();
-//         }
-// //        TODO is this ok?
-//         catch (Exception e) {
-//             System.out.println("error in populateAttributesAndEntries: " + e);
-//         }
+    public void populateAttributesAndEntriesFromFile() {
+        initialiseAttributesFromFile();
 
-    // }
+        // populateEntriesAndMapAttributesFromFile();
 
-//     public void populateAttributesFromFile() {
-//         String command = commandHolder.get(0);
-//         List<String> attributeArray = new ArrayList<>();
-//         attributeArray.addAll(List.of(command.split("\t")));
-//         int i = 0;
-//         for (String attribute : attributeArray) {
-//             Attribute newAttribute = new Attribute(attribute, "NULL", i++);
-//             attributes.add(newAttribute);
-//         }
-// //        System.out.println(attributes);
-//     }
+    }
+
+    public void initialiseAttributesFromFile() {
+        String command = stringBuffer.get(0);
+        List<String> attributeArray = new ArrayList<>();
+        attributeArray.addAll(List.of(command.split("\t")));
+        int i = 0;
+        for (String attribute : attributeArray) {
+            Attribute newAttribute = new Attribute(attribute, "NULL", i++);
+            attributes.add(newAttribute);
+        }
+//        System.out.println(attributes);
+    }
 
 
     public void readInFileAndPrint() throws IOException {
@@ -229,42 +231,42 @@ public class Table {
         buffReader.close();
     }
 
-//     public void readInFileAndPopulateArrayWithAllLines() {
-//         commandHolder.clear();
-//         BufferedReader buffReader = null;
-//         FileReader reader = null;
-//         File fileToOpen = new File(storageFolderPath + File.separator + databaseName + File.separator + tableName + ".tab");
-//         try {
-//             reader = new FileReader(fileToOpen);
-//             buffReader = new BufferedReader(reader);
-//             String line;
-//             while ((line = buffReader.readLine()) != null) {
-//                 commandHolder.add(line);
-// //            System.out.println(line);
-//             }
-//             buffReader.close();
-//         } catch (Exception e) {
-//             System.out.println("error in readInFileAndPopulateArrayWithAllLines: " + e);
-//         }
-//     }
+    public void readInFileAndPopulateArrayWithAllLines() {
+        stringBuffer.clear();
+        BufferedReader buffReader = null;
+        FileReader reader = null;
+        File fileToOpen = new File(storageFolderPath + File.separator + databaseName + File.separator + tableName + ".tab");
+        try {
+            reader = new FileReader(fileToOpen);
+            buffReader = new BufferedReader(reader);
+            String line;
+            while ((line = buffReader.readLine()) != null) {
+                stringBuffer.add(line);
+//            System.out.println(line);
+            }
+            buffReader.close();
+        } catch (Exception e) {
+            System.out.println("error in readInFileAndPopulateArrayWithAllLines: " + e);
+        }
+    }
 
 //     public void populateEntriesAndMapAttributesFromFile() {
-// //        loop through each line:
-//         for (int i = 1; i < commandHolder.size(); i++) {
-// //            split words into separate terms add to word_array
-//             String[] entryArray = commandHolder.get(i).split("\t");
+//        // loop through each line:
+//         for (int i = 1; i < stringBuffer.size(); i++) {
+//            // split words into separate terms add to word_array
+//             String[] entryArray = stringBuffer.get(i).split("\t");
 //             HashMap<String, Token> row = new HashMap<>();
 //             if (entryArray.length != attributes.size()) {
 //                 return;
 //             }
-// //            loop through word_array:
+//            // loop through word_array:
 //             for (int j = 0; j < attributes.size(); j++) {
-// //                add each key value pair to a new row
-// //                 row.put(attributes.get(j), entryArray[j]);
+//                // add each key value pair to a new row
+//                 row.put(attributes.get(j), entryArray[j]);
 //             }
 //             rows.add(row);
-// //            System.out.println(row);
-// //            System.out.println(commandHolder.get(i));
+//            // System.out.println(row);
+//            // System.out.println(commandHolder.get(i));
 //         }
 // //        for (String entry: commandHolder) {
 // //            System.out.println(entry);

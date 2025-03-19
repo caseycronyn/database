@@ -1,14 +1,11 @@
 package edu.uob;
 
 import java.io.*;
-import java.lang.reflect.Array;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.nio.file.Paths;
 import java.nio.file.Files;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Objects;
 
 /** This class implements the DB server. */
 public class DBServer {
@@ -17,11 +14,10 @@ public class DBServer {
 
     private static final char END_OF_TRANSMISSION = 4;
     private String storageFolderPath;
-    DBCommand commandResult;
 
     public static void main(String args[]) throws IOException {
         DBServer server = new DBServer();
-        // server.blockingListenOn(8888);
+        server.blockingListenOn(8888);
     }
 
  // NOTE double check the databases location before submission
@@ -36,10 +32,32 @@ public class DBServer {
         } catch(IOException ioe) {
             System.out.println("Can't seem to create database storage folder " + storageFolderPath);
         }
+        // initialiseServer();
     }
 
     public String getStorageFolderPath() {
         return storageFolderPath;
+    }
+
+    public void initialiseServer() throws NullPointerException {
+        try{
+            // databases map
+            File storageDirectory = new File(storageFolderPath);
+            File[] fileList = storageDirectory.listFiles();
+            if (fileList != null) {
+                for (File file : fileList) {
+                    Database database = new Database(file.getName(), storageFolderPath);
+                    databases.put(file.getName(), database);
+                }
+            }
+            // databases
+            for (Database database : databases.values()) {
+                database.initialiseDatabase();
+            }
+        }
+        catch (NullPointerException npe) {
+            System.out.println("Can't initialise database storage folder " + storageFolderPath);
+        }
     }
 
     public void deleteDirectory(File file) {
@@ -94,17 +112,16 @@ public class DBServer {
         catch (Exception e) {
             return "[ERROR]: unable to lex tokens";
         }
-        // will probably need a rewrite
         Parser parser = new Parser();
 
-        commandResult = parser.parse(tokenBank);
+        DBCommand commandResult = parser.parse(tokenBank);
         try {
-            commandResult.executeCommand(this, tokenBank);
+            String returnString = commandResult.executeCommand(this, tokenBank);
+            // System.out.println(returnString);
+            return returnString;
         } catch (FileNotFoundException e) {
             return "[ERROR]: file not found";
         }
-        // tokenBank.printTokenTypes();
-        return "[OK]";
     }
 
 

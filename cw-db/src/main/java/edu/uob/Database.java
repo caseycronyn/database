@@ -23,6 +23,20 @@ public class Database {
         createDatabaseFolder();
     }
 
+    void initialiseDatabase() {
+        // tables map
+        File databaseDirectory = new File(storageFolderPath);
+        File[] fileList = databaseDirectory.listFiles();
+        if (fileList != null) {
+            for (File file : fileList) {
+                Table table = new Table(file.getName(), databaseDirectory.getName(), storageFolderPath);
+                table.initialiseRowsAndCallInitialiseTokens();
+                addTable(table);
+            }
+        }
+
+    }
+
     public Table combineTablesIntoNewTable(String tableOneName, String tableTwoName, String attributeOneName, String attributeTwoName) {
         String combinedTableName = tableOneName + "." + tableTwoName;
         Table tableOne = tables.get(tableOneName).copy();

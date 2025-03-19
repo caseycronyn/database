@@ -129,11 +129,6 @@ public class Row {
         return attributesToValues.get(attribute);
     }
 
-    Value createValue() {
-        return null;
-
-    }
-
     void init() {
 
 

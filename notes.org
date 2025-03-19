@@ -115,3 +115,4 @@ rewrite errors so they are passed up then handled in a try catch at a higher lev
 handle repeat db names
 
 make the error message the filenotfound exception!!!
+should joins be stored as files?

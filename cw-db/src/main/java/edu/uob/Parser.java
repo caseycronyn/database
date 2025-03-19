@@ -1,7 +1,6 @@
 package edu.uob;
 
 import java.io.FileNotFoundException;
-
 /*
 Parser builds subclass of
 DBcmd as it parses. This is
@@ -14,7 +13,7 @@ The context given by parsing
 types facilitates error
 handling and command building
  */
-public class Parser extends Lexer implements DBCommand {
+public class Parser implements DBCommand {
 
     @Override
     public DBCommand parse(TokenBank tokenBank) {
@@ -92,16 +91,8 @@ public class Parser extends Lexer implements DBCommand {
         return this;
     }
 
-
     @Override
-    public void executeCommand(DBServer server, TokenBank tokenBank) throws FileNotFoundException {
+    public String executeCommand(DBServer server, TokenBank tokenBank) throws FileNotFoundException {
+        return null;
     }
-
-    ;
-
-
-    // public List<Token>
-
-
-
 }
