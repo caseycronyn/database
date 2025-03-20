@@ -39,8 +39,12 @@ public class Token {
         return checkForPattern(comparator);
     }
 
-    boolean isBoolean() {
+    boolean isBooleanLiteral() {
         return checkForPattern(booleanLiteral);
+    }
+
+    boolean isBooleanOperator() {
+        return checkForPattern(booleanOperator);
     }
 
     boolean isWildAttributeList() {

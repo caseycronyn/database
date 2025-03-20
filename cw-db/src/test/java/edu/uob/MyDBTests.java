@@ -28,6 +28,7 @@ public class MyDBTests {
                 "Server took too long to respond (probably stuck in an infinite loop)");
     }
 
+    // very basic tests of functionality
     @Test
     public void testDatabaseCreationWithEmptyTable() {
         String randomName = generateRandomName();
@@ -203,6 +204,8 @@ public class MyDBTests {
 
         sendCommandToServer("JOIN coursework AND marks ON submission AND id;");
     }
+
+    // new tests
 
 }
 

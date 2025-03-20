@@ -166,7 +166,7 @@ public class Lexer {
             while (!tokenBank.checkIfAtFinalToken()) {
                 token = tokenBank.nextToken();
                 if (token.getTokenType() == null) {
-                    if (token.isBoolean()) {
+                    if (token.isBooleanOperator()) {
                         token.setTokenType("booleanOperator");
                     } else if (tokenBank.numberOfTokensLeft() > 2) {
                         attributeComparatorValue();
