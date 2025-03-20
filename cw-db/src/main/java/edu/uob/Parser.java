@@ -16,7 +16,7 @@ handling and command building
 public class Parser implements DBCommand {
 
     @Override
-    public DBCommand parse(TokenBank tokenBank) {
+    public DBCommand parse(TokenBank tokenBank) throws Exception {
         tokenBank.initialise();
         String query = tokenBank.getQueryAsTokenTypes();
         if (query.equals(tokenBank.getQueryAsTokenTypes("use"))) {
@@ -71,24 +71,9 @@ public class Parser implements DBCommand {
             DBCommand joinCommand = new JoinCommand();
             return joinCommand.parse(tokenBank);
         }
-
-        //     DBCommand createCommand = new CreateCommand();
-        //     return createCommand.parse(tokenBank);
-        // case "DROP":
-        //     DBCommand dropCommand = new DropCommand();
-        //     return dropCommand.parse(tokenBank);
-        // case "ALTER":
-        //     DBCommand alterCommand = new AlterCommand();
-        //     return alterCommand.parse(tokenBank);
-        // case "INSERT":
-        //     DBCommand insertCommand = new InsertCommand();
-        //     return insertCommand.parse(tokenBank);
-        // case "SELECT":
-        //     DBCommand selectCommand = new SelectCommand();
-        //     return selectCommand.parse(tokenBank);
-        // default:
-        //     return this;
-        return this;
+        else {
+            throw new Exception("Something has gone wrong in the parsing stage");
+        }
     }
 
     @Override

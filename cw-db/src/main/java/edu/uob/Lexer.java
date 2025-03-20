@@ -101,9 +101,6 @@ public class Lexer {
         addKeywordTokenIfEquals("and", "AND");
         tokenBank.nextToken();
         addPlainTextToken("attributeTwoName");
-        // tokenBank.printTokenNames();
-        // tokenBank.printTokenTypes();
-
     }
 
     void deleteLexer() {
@@ -288,14 +285,14 @@ public class Lexer {
                 token.setTokenType("tableName");
             }
             if (tokenBank.tokens.size() > 4) {
-                token = tokenBank.nextToken();
+                tokenBank.nextToken();
                 parenthesesLexer();
                 setNullTokensInParentheses("attributeName");
             }
         }
 
         // parentheses is passed in
-        // lexes all parentheses
+        // lexers all parentheses
         void parenthesesLexer () {
             boolean parenthesesOpen = false;
             int openParenthesisCount = 0;
@@ -357,31 +354,9 @@ public class Lexer {
             }
         }
 
-
-        boolean checkTokenIsDatabaseOrTable (Token token){
-            return (token.getValue().equals("DATABASE") || token.getValue().equals("TABLE"));
-        }
-
         boolean checkIfAlterationType (Token token){
             return (token.getValue().equals("DROP") || token.getValue().equals("ADD"));
         }
-
-
-        void stripParenthesesToEnd () {
-            Token token = tokenBank.getCurrentToken();
-            int startPosition = tokenBank.getCurrentTokenPosition();
-            int i = startPosition;
-            while (i <= tokenBank.getLastTokenPosition()) {
-                token = tokenBank.getTokenAtPosition(i);
-                if (token.isParenthesis()) {
-                    tokenBank.deleteToken(token.getPosition());
-                } else {
-                    i++;
-                }
-            }
-            tokenBank.setCurrentTokenToPosition(startPosition);
-        }
-
 
         void setup () throws Exception {
             lexTokens();

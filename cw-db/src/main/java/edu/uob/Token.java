@@ -6,8 +6,8 @@ import java.util.regex.Pattern;
 public class Token {
     private String value, tokenType;
     private Integer position;
-    String[] whiteSpaceSymbols, nonWhiteSpaceSymbols, commandArray, commandTypeArray, tokenisedQuery, symbolArray, comparatorArray;
-    String commandType, plainText, query, tableOrDatabase, alterationType, stringLiteral, booleanLiteral, floatLiteral, integerLiteral, symbol, wildAttributeList, comparator, parentheses, booleanOperator;
+    String[] whiteSpaceSymbols, nonWhiteSpaceSymbols, commandArray, commandTypeArray, symbolArray, comparatorArray;
+    String commandType, plainText, tableOrDatabase, alterationType, stringLiteral, booleanLiteral, floatLiteral, integerLiteral, symbol, wildAttributeList, comparator, parentheses, booleanOperator;
 
     Token (String name, Integer position) {
         this.value = name;
@@ -18,10 +18,8 @@ public class Token {
     }
 
     Token copy() {
-        String newName = new String(value);
-        String newTokenType = new String(tokenType);
-        Token token = new Token(newName, position);
-        token.setTokenType(newTokenType);
+        Token token = new Token(value, position);
+        token.setTokenType(tokenType);
         return token;
     }
 
@@ -39,10 +37,6 @@ public class Token {
 
     boolean isComparator() {
         return checkForPattern(comparator);
-    }
-
-    boolean isParenthesis() {
-        return checkForPattern(parentheses);
     }
 
     boolean isBoolean() {
@@ -95,13 +89,6 @@ public class Token {
 
     public boolean isAValue() {
         return (getTokenType().contains("Literal") || getTokenType().equals("NULL"));
-    }
-    void setDataType() {
-        // this.dataType = dataType;
-    }
-
-    int returnInt() {
-        return Integer.parseInt(value);
     }
 
     void setTokenType(String tokenType) {

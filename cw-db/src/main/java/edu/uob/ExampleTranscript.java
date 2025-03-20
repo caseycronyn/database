@@ -8,7 +8,7 @@ class ExampleTranscript {
     List<HashMap<String, String>> queries = new ArrayList<>();
 
     public static void main(String[] args) {
-        ExampleTranscript exampleTranscript = new ExampleTranscript();
+        new ExampleTranscript();
     }
     ExampleTranscript() {
         setup();
@@ -119,7 +119,7 @@ class ExampleTranscript {
                 [ERROR]: Table does not exist
             """,
                 """
-                [ERROR]: Attribute does not exist 
+                [ERROR]: Attribute does not exist
             """,
         };
 

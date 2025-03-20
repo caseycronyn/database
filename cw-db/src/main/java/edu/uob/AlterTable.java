@@ -19,7 +19,7 @@ public class AlterTable implements DBCommand {
             table.addNewAttribute(attributeName);
         }
         else if (alterationType.equals("DROP")) {
-            table.removeAttribute(attributeName);;
+            table.removeAttribute(attributeName);
         }
         return "[OK]";
     }

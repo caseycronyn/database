@@ -6,18 +6,19 @@ import java.net.Socket;
 import java.nio.file.Paths;
 import java.nio.file.Files;
 import java.util.HashMap;
+import java.util.Map;
 
 /** This class implements the DB server. */
 public class DBServer {
-    HashMap<String, Database> databases = new HashMap();
+    Map<String, Database> databases = new HashMap<>();
     String currentDatabase = null;
 
     private static final char END_OF_TRANSMISSION = 4;
-    private String storageFolderPath;
+    private final String storageFolderPath;
 
     public static void main(String args[]) throws IOException {
         DBServer server = new DBServer();
-        // server.blockingListenOn(8888);
+        server.blockingListenOn(8888);
     }
 
  // NOTE double check the databases location before submission
@@ -69,18 +70,17 @@ public class DBServer {
         }
     }
 
-    public void deleteDirectory(File file) {
-        // function to delete subdirectories and files
-        // store all the paths of files and folders present
-        // inside directory
-        for (File subfile : file.listFiles()) {
-            // if it is a subfolder,e.g Rohan and Ritik,
-            //  recursively call function to empty subfolder
-            if (subfile.isDirectory()) {
-                deleteDirectory(subfile);
+    public void deleteDirectory(File filePointer) {
+        File[] files = (filePointer.listFiles());
+        if (files != null) {
+            for (File file : files) {
+                if (file.isDirectory()) {
+                    deleteDirectory(file);
+                }
+                if (!file.delete()) {
+                    System.out.println("Error deleting " + file.getName());
+                }
             }
-            // delete files and empty subfolders
-            subfile.delete();
         }
     }
 
@@ -92,18 +92,6 @@ public class DBServer {
         return currentDatabase;
     }
 
-//     public void createNewTableFromFile(String tableName, String databaseName) {
-//         Table table = new Table(tableName, databaseName, storageFolderPath);
-//         table.initialiseTableFromFile();
-//         table.writeTableToFileFromMemory();
-//         databases.get(databaseName).addNewTableFromFile(tableName);
-// //        databaseName.addNewtable(tableName);
-//     }
-
-//    public void removeTable(String tableName) {
-//        databases.get(currentDatabase).
-//    }
-
     /**
     * KEEP this signature (i.e. {@code edu.uob.DBServer.handleCommand(String)}) otherwise we won't be
     * able to mark your submission correctly.
@@ -113,22 +101,22 @@ public class DBServer {
     public String handleCommand(String command) {
         Tokeniser tokeniser = new Tokeniser();
         TokenBank tokenBank = new TokenBank(tokeniser.getListOfTokens(command));
-        // in the middle of
         try {
-            Lexer lexer = new Lexer(tokenBank);
+            new Lexer(tokenBank);
         }
         catch (Exception e) {
             return "[ERROR]: unable to lex tokens";
         }
         Parser parser = new Parser();
-
-        DBCommand commandResult = parser.parse(tokenBank);
         try {
-            String returnString = commandResult.executeCommand(this, tokenBank);
-            // System.out.println(returnString);
-            return returnString;
-        } catch (FileNotFoundException e) {
+            DBCommand commandResult = parser.parse(tokenBank);
+            return commandResult.executeCommand(this, tokenBank);
+        }
+        catch (FileNotFoundException e) {
             return "[ERROR]: file not found";
+        }
+        catch (Exception e) {
+            return e.getMessage();
         }
     }
 

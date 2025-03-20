@@ -19,7 +19,6 @@ public class SelectCommand implements DBCommand {
         if (tokenBank.tokenExistsInQuery("where")) {
             condition = tokenBank.getTokenTypeFromFragment("condition", "where", "terminator");
         }
-        String returnString = "[OK]\n" + table.filterTableWithAttributesAndCondition(attributeNames, condition);
-        return returnString;
+        return "[OK]\n" + table.filterTableWithAttributesAndCondition(attributeNames, condition);
     }
 }

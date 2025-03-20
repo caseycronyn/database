@@ -12,10 +12,7 @@ public class Attribute {
     }
 
     Attribute copy() {
-        String newName = new String(name);
-        String newDataType = new String(dataType);
-        Attribute newAttribute = new Attribute(newName, newDataType, index);
-        return newAttribute;
+        return new Attribute(name, dataType, index);
     }
 
     int getIndex() {

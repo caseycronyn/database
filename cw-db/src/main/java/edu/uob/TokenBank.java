@@ -4,14 +4,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class TokenBank {
 
     ArrayList<Token> tokens = new ArrayList<>();
     int currentTokenPosition;
-    String currentTable;
     Integer lastTokenPosition;
     Map<String, String> tokenQueries;
     Map<String, Token> tokenToTypeMap;
@@ -92,13 +89,6 @@ public class TokenBank {
         return tokens.get(tokens.size() - 1);
     }
 
-    String getCurrentTable() {
-        return currentTable;
-    }
-
-    void setCurrentTable(String currentTable) {
-        this.currentTable = currentTable;
-    }
 
     TokenBank() {
         currentTokenPosition = 0;
@@ -137,22 +127,8 @@ public class TokenBank {
         return tokens.get(currentTokenPosition);
     }
 
-    Token previousToken () {
-        currentTokenPosition--;
-        return tokens.get(currentTokenPosition);
-    }
-
     void setCurrentTokenToPosition (int position){
         currentTokenPosition = position;
-    }
-
-    void deleteToken(int tokenPosition) {
-        tokens.remove(tokenPosition);
-        lastTokenPosition--;
-        // update indices after token
-        for (int i = tokenPosition; i < tokens.size(); i++) {
-            tokens.get(i).setPosition(i);
-        }
     }
 
     void printTokenNames () {
@@ -178,11 +154,6 @@ public class TokenBank {
         return result.toString();
     }
 
-    Token getTokenAtPosition(int position) {
-        return tokens.get(position);
-    }
-
-
     public List<Token> getTokenTypeFromFragment(String description, String startToken, String endToken) {
         int start = getTokenFromType(startToken).getPosition();
         setCurrentTokenToPosition(start + 1);
@@ -206,21 +177,4 @@ public class TokenBank {
         }
         return newTokens;
     }
-
-//    ArrayList<String> tokenArray = new ArrayList<>();
-
-//    Tokenizer (String query) {
-//        tokenArray.addAll(Arrays.asList(query.split(" ")));
-////        remove semicolon ';' at the end
-//        tokenArray.remove(tokenArray.size() - 1);
-    ////        System.out.println(tokenArray);
-//    }
-
-//    String query = "  INSERT  INTO  people   VALUES(  'Simon Lock'  ,35, 'simon@bristol.ac.uk' , 1.8  ) ; ";
-
-//    public static void main(String [] args) {
-//        Test t = new Test();
-//        t.setup();
-//    }
-
 }

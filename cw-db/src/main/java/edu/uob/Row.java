@@ -7,14 +7,12 @@ import java.util.Map;
 
 public class Row extends TokenBank {
     Map<String, Token> attributesToTokens = new HashMap<>();
-    // List<Attribute> attributes;
     List<Token> tokenList;
     int id;
     Table table;
 
-    Row (List<Attribute> attributes, List<Token> tokenList, int newID, Table table) {
+    Row (List<Token> tokenList, int newID, Table table) {
         this.table = table;
-        // this.attributes = attributes;
         this.tokenList = tokenList;
         this.id = newID;
         if (tokenList != null) {
@@ -23,15 +21,7 @@ public class Row extends TokenBank {
                 Token token = tokenList.get(i - 1);
                 attributesToTokens.put(table.getAttributeAtIndex(i).getName(), token);
             }
-
-            // createValuesAndInitialiseAttributesToValueListUsingTokenlist();
-            // initialiseAttributesAndValuesFromTokenlist();
         }
-    }
-
-    void initialiseAttributesAndValuesFromTokenlist() {
-        createValuesAndInitialiseAttributesToValueListUsingTokenlist();
-        // mapAttributesToValues();
     }
 
     Row copy() {
@@ -40,16 +30,11 @@ public class Row extends TokenBank {
             newAttributesToValues.put(attributeName, attributesToTokens.get(attributeName).copy());
         }
 
-        List<Attribute> newAttributes = new ArrayList<>();
-        for (Attribute attribute : table.getAttributes()) {
-            newAttributes.add(attribute.copy());
-        }
-
         List<Token> newTokenList = new ArrayList<>();
         for (Token token : tokenList) {
             newTokenList.add(token.copy());
         }
-        Row newRow = new Row(newAttributes, newTokenList, id, table);
+        Row newRow = new Row(newTokenList, id, table);
         newRow.addAttributesToValuesMap(newAttributesToValues);
 
         return newRow;
@@ -61,10 +46,6 @@ public class Row extends TokenBank {
         attributesToTokens.put(replacementName, returnedToken);
     }
 
-    // void addAttribute(Attribute attribute) {
-    //     attributes.add(attribute);
-    // }
-
     void changeAttributeName(String attributeName, String newAttributeName) {
         for (Attribute attribute : table.getAttributes()) {
             if (attribute.getName().equals(attributeName)) {
@@ -73,31 +54,8 @@ public class Row extends TokenBank {
         }
     }
 
-    // void addAttributes(List<Attribute> newAttributes) {
-    //     attributes.addAll(newAttributes);
-    // }
-
-
     void addValueToRow(String attributeName, Token value) {
         attributesToTokens.put(attributeName, value);
-    }
-
-    void clearAttributes() {
-        attributesToTokens.clear();
-    }
-
-    void clearTokenList() {
-        tokenList.clear();
-    }
-
-    // List<Attribute> getAttributes() {
-    //     return attributes;
-    // }
-
-    void addAttribute() {}
-
-    void addNewTokenList (List<Token> newTokenListIn) {
-        tokenList.addAll(newTokenListIn);
     }
 
     void addAttributesToValuesMap(Map<String, Token> attributesToValuesIn) {
@@ -110,30 +68,11 @@ public class Row extends TokenBank {
             token.setValueTokenType();
             attributesToTokens.put(table.getAttributeAtIndex(i).getName(), token);
         }
-        // createValuesAndInitialiseAttributesToValueList();
-        // initialiseAttributesAndValues();
-    }
-
-    // void addNewAttributesList(List<Attribute> newAttributesIn) {
-    //     attributes.addAll(newAttributesIn);
-    // }
-
-    void createValuesAndInitialiseAttributesToValueListUsingTokenlist() {
-        addIdToken();
-        for (int i = 1; i < table.getAttributes().size(); i++) {
-            Token token = tokenList.get(i - 1);
-            attributesToTokens.put(table.getAttributeAtIndex(i).getName(), token);
-        }
     }
 
     int getId() {
         return id;
     }
-
-    List<Token> getTokenList() {
-        return tokenList;
-    }
-
 
     void addIdToken() {
         Token token = new Token(Integer.toString(id), 0);
@@ -154,12 +93,4 @@ public class Row extends TokenBank {
     Token getValueFromAttribute(String attribute) {
         return attributesToTokens.get(attribute);
     }
-
-    // void init() {
-    //
-    //
-    // }
-
-
-
 }
