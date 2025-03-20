@@ -66,7 +66,6 @@ public class Database {
         setAllTableIds(newTable);
         newTable.removeAttribute(tableOneName + "." + attributeOneName);
         newTable.removeAttribute(tableTwoName + "." + attributeTwoName);
-        newTable.printTable();
         return newTable;
     }
 
@@ -123,7 +122,7 @@ public class Database {
                 if (!attribute.getName().equals("id")) {
                     String newString = table.getName() + "." + attribute.getName();
                     row.changeKeyInAttributesToValuesMap(attribute.getName(), newString);
-                    row.changeAttributeName(attribute.getName(), newString);
+                    // row.changeAttributeName(attribute.getName(), newString);
                 }
             }
         }

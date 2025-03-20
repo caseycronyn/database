@@ -147,11 +147,12 @@ public class Token {
         commandTypeArray = new String[]{"Use", "Create", "Drop", "Alter", "Insert", "Select", "Update", "Delete", "Join"};
         commandType = String.join("|", commandTypeArray).toUpperCase();
 
+
         tableOrDatabase = "TABLE|DATABASE";
 
         alterationType = "ADD|DROP";
 
-        plainText = "\\p{Alnum}+";
+        plainText = "^\\p{Alnum}+$";
 
         symbolArray = new String[]{"!", "#", "$", "%", "&", "(", ")", "*", "+", ",", "-", ".", "/", ":", ";", ">", "=", "<", "?", "@", "\\[", "\\\\", "\\]", "^", "_", "`", "{", "}", "~"};
         symbol = String.join("", symbolArray);

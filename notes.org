@@ -109,7 +109,7 @@ parsing then interpreting is probably simpler than trying to do both at the same
 **** DONE delete
 **** DONE join
 
-*
+* notes
 rewrite errors so they are passed up then handled in a try catch at a higher level
 
 handle repeat db names
@@ -131,3 +131,10 @@ message "Can't initialise database storage folder /Users/caseycronyn/Developer/b
 be careful of bad checks like "tokens > 5." these are bound to go wrong if not completely thought through
 
 need to account for any other weirdness too like odd files or folders
+
+need to add relevant permissions for all methods and variables
+
+
+
+
+de chatgpt the method for joins

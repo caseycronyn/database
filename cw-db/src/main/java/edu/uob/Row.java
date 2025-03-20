@@ -24,7 +24,7 @@ public class Row extends TokenBank {
         }
     }
 
-    Row copy() {
+    Row copy(Table newTable) {
         Map<String, Token> newAttributesToValues = new HashMap<>();
         for (String attributeName : attributesToTokens.keySet()) {
             newAttributesToValues.put(attributeName, attributesToTokens.get(attributeName).copy());
@@ -34,7 +34,7 @@ public class Row extends TokenBank {
         for (Token token : tokenList) {
             newTokenList.add(token.copy());
         }
-        Row newRow = new Row(newTokenList, id, table);
+        Row newRow = new Row(newTokenList, id, newTable);
         newRow.addAttributesToValuesMap(newAttributesToValues);
 
         return newRow;

@@ -12,6 +12,7 @@ public class TokenBank {
     Integer lastTokenPosition;
     Map<String, String> tokenQueries;
     Map<String, Token> tokenToTypeMap;
+    String query;
 
     TokenBank(ArrayList<String> tokenNames) {
         setTokens(tokenNames);
@@ -22,6 +23,7 @@ public class TokenBank {
         tokenQueries = createTokenQueries();
         tokenToTypeMap = createTokenTypesToTokens();
         currentTokenPosition = 0;
+        query = getCurrentQueryAsTokenTypes();
     }
 
     Map<String, Token> createTokenTypesToTokens() {
@@ -32,8 +34,16 @@ public class TokenBank {
         return getTokenFromType;
     }
 
+    boolean tokenQueryIsValid() {
+        for (String pattern : tokenQueries.values()) {
+            if (pattern.contains(query)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
-    String getQueryAsTokenTypes(String key) {
+    String getPatternFromTokenQueriesMap(String key) {
         return tokenQueries.get(key);
     }
 
@@ -145,7 +155,7 @@ public class TokenBank {
         System.out.println();
     }
 
-    String getQueryAsTokenTypes() {
+    String getCurrentQueryAsTokenTypes() {
         StringBuilder result = new StringBuilder();
         for (Token token : tokens) {
             result.append(token.getTokenType()).append(" ");

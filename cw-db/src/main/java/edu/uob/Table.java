@@ -33,12 +33,12 @@ public class Table {
             newAttributes.add(attribute.copy());
         }
 
-        List<Row> newRows = new ArrayList<>();
-        for (Row row : rows) {
-            newRows.add(row.copy());
-        }
 
         Table newTable = new Table(tableName, databaseName, storageFolderPath);
+        List<Row> newRows = new ArrayList<>();
+        for (Row row : rows) {
+            newRows.add(row.copy(newTable));
+        }
         newTable.addRows(newRows);
         newTable.addAttributes(newAttributes);
 
@@ -261,13 +261,16 @@ public class Table {
             }
         }
         StringBuilder firstLine = new StringBuilder();
-        for (Token attribute : selectedAttributes) {
-            firstLine.append(attribute.getValue()).append("\t");
+        for (int i = 0; i < selectedAttributes.size(); i++) {
+            firstLine.append(selectedAttributes.get(i).getValue());
+            if (i != selectedAttributes.size() - 1) {
+                firstLine.append("\t");
+            }
         }
         // System.out.println(firstLine);
         output.append(firstLine.append("\n"));
         for (Row row : rows) {
-            if (condition == null || conditionIsMet(condition, row)) {
+            if (conditionIsMet(condition, row)) {
                 ArrayList<String> orderedValues = new ArrayList<>();
                 // loop through attributes in order
                 for (Token attribute : selectedAttributes) {
@@ -285,6 +288,10 @@ public class Table {
 
     void printTable() {
         System.out.println(filterTableWithAttributesAndCondition(null, null));
+    }
+
+    String getTableAsSting() {
+        return filterTableWithAttributesAndCondition(null, null);
     }
 
     boolean conditionIsMet(List<Token> condition, Row row) {
@@ -455,7 +462,7 @@ public class Table {
             case "!=":
                 return (!value.equals(query));
             case "LIKE":
-                return (query.contains(value));
+                return (value.contains(query));
         }
         return false;
     }
@@ -466,6 +473,7 @@ public class Table {
             if (conditionIsMet(condition, rows.get(i))) {
                 rows.remove(i);
                 i--;
+                rowCount--;
             }
         }
         updateTable();

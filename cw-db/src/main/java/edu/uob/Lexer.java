@@ -12,10 +12,10 @@ public class Lexer {
     void checkForNullTokens() throws Exception {
         for (Token token : tokenBank.getTokens()) {
             if (token.getTokenType() == null) {
-                System.out.print("token types: ");
-                tokenBank.printTokenTypes();
-                tokenBank.printTokenNames();
-                throw new Exception("error has occurred during lexing of tokens. Some are null");
+                // System.out.print("token types: ");
+                // tokenBank.printTokenTypes();
+                // tokenBank.printTokenNames();
+                throw new Exception("Some tokens are null");
             }
         }
     }
@@ -358,10 +358,17 @@ public class Lexer {
             return (token.getValue().equals("DROP") || token.getValue().equals("ADD"));
         }
 
+        void checkIfValidQuery() throws Exception {
+            if (!tokenBank.tokenQueryIsValid()) {
+                throw new Exception("token query is not in a valid order");
+            }
+        }
+
         void setup () throws Exception {
             lexTokens();
             tokenBank.initialise();
             checkForNullTokens();
+            // checkIfValidQuery();
         }
 }
 

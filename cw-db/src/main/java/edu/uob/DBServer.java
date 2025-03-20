@@ -105,7 +105,7 @@ public class DBServer {
             new Lexer(tokenBank);
         }
         catch (Exception e) {
-            return "[ERROR]: unable to lex tokens";
+            return "[ERROR] found during lexing: " + e.getMessage();
         }
         Parser parser = new Parser();
         try {
@@ -113,10 +113,10 @@ public class DBServer {
             return commandResult.executeCommand(this, tokenBank);
         }
         catch (FileNotFoundException e) {
-            return "[ERROR]: file not found";
+            return "[ERROR]: " + e.getMessage();
         }
         catch (Exception e) {
-            return e.getMessage();
+            return "[ERROR]: " + e.getMessage();
         }
     }
 

@@ -1,0 +1,4 @@
+command errors:
+
+wrong name type for various words:
+- symbol

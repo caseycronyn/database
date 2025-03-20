@@ -15,6 +15,6 @@ public class JoinCommand implements DBCommand{
         Database database = server.databases.get(server.getCurrentDatabase());
         Table table = database.combineTablesIntoNewTable(tableOneName, tableTwoName, joinOne, joinTwo);
         database.addTable(table);
-        return "[OK]";
+        return "[OK]\n" + table.filterTableWithAttributesAndCondition(null, null);
     }
 }
