@@ -44,6 +44,10 @@ public class DBServer {
         return storageFolderPath;
     }
 
+    boolean databaseExists(String databaseName) {
+        return databases.containsKey(databaseName);
+    }
+
     public void initialiseServer() throws NullPointerException{
         // databases map
         File storageDirectory = new File(storageFolderPath);

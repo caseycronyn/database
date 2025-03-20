@@ -129,3 +129,5 @@ i think i need to make the tokenbank checkers belong to the token class. makes m
 message "Can't initialise database storage folder /Users/caseycronyn/Developer/bristol/java/assignments/database/databases" when database already exists?
 
 be careful of bad checks like "tokens > 5." these are bound to go wrong if not completely thought through
+
+need to account for any other weirdness too like odd files or folders

@@ -107,7 +107,7 @@ public class Row extends TokenBank {
     void initialiseRow(String[] tokenArray) {
         for (int i = 0; i < table.getAttributes().size(); i++) {
             Token token = new Token(tokenArray[i], i);
-            setValueTokenType(token);
+            token.setValueTokenType();
             attributesToTokens.put(table.getAttributeAtIndex(i).getName(), token);
         }
         // createValuesAndInitialiseAttributesToValueList();

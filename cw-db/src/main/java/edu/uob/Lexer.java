@@ -1,9 +1,5 @@
 package edu.uob;
 
-import java.io.IOException;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 // will decide what kind of token each string is
 public class Lexer {
     TokenBank tokenBank;
@@ -39,7 +35,7 @@ public class Lexer {
     void commandTypeLexer() {
         Token token = tokenBank.getFirstToken();
         token.nameToUpperCase();
-        if (tokenBank.tokenIsCommandType(token)) {
+        if (token.isCommandType()) {
             // next one
             switch (token.getValue()) {
                 case "CREATE":
@@ -140,7 +136,7 @@ public class Lexer {
         tokenBank.nextToken();
         addKeywordTokenIfEquals("equals", "=");
         token = tokenBank.nextToken();
-        tokenBank.setValueTokenType(token);
+        token.setValueTokenType();
         tokenBank.nextToken();
     }
 
@@ -173,7 +169,7 @@ public class Lexer {
             while (!tokenBank.checkIfAtFinalToken()) {
                 token = tokenBank.nextToken();
                 if (token.getTokenType() == null) {
-                    if (tokenBank.tokenIsBoolean(token)) {
+                    if (token.isBoolean()) {
                         token.setTokenType("booleanOperator");
                     } else if (tokenBank.numberOfTokensLeft() > 2) {
                         attributeComparatorValue();
@@ -187,18 +183,18 @@ public class Lexer {
         void attributeComparatorValue () {
             addPlainTextToken("attributeName");
             Token token = tokenBank.nextToken();
-            if (tokenBank.tokenIsComparator(token)) {
+            if (token.isComparator()) {
                 token.setTokenType("comparator");
             }
             token = tokenBank.nextToken();
-            tokenBank.setValueTokenType(token);
+            token.setValueTokenType();
         }
 
 
         void getAttributeNames() {
             Token token = tokenBank.getCurrentToken();
             while (!token.getValue().equalsIgnoreCase("FROM")) {
-                if (tokenBank.tokenIsWildAttributeList(token)) {
+                if (token.isWildAttributeList()) {
                     if (token.getValue().equals("*")) {
                         token.setTokenType("wildAttributeSymbol");
                     } else token.setTokenType("attributeName");
@@ -227,7 +223,7 @@ public class Lexer {
                 token.setTokenType("tableSelector");
             }
             token = tokenBank.nextToken();
-            if (tokenBank.tokenIsPlainText(token)) {
+            if (token.isPlainText()) {
                 token.setTokenType("tableName");
             }
             token = tokenBank.nextToken();
@@ -236,7 +232,7 @@ public class Lexer {
                 token.setTokenType("alterationType");
             }
             token = tokenBank.nextToken();
-            if (tokenBank.tokenIsPlainText(token)) {
+            if (token.isPlainText()) {
                 token.setTokenType("attributeName");
             }
         }
@@ -248,14 +244,14 @@ public class Lexer {
                 case "DATABASE":
                     token.setTokenType("databaseSelector");
                     token = tokenBank.nextToken();
-                    if (tokenBank.tokenIsPlainText(token)) {
+                    if (token.isPlainText()) {
                         token.setTokenType("databaseName");
                     }
                     break;
                 case "TABLE":
                     token.setTokenType("tableSelector");
                     token = tokenBank.nextToken();
-                    if (tokenBank.tokenIsPlainText(token)) {
+                    if (token.isPlainText()) {
                         token.setTokenType("tableName");
                     }
                     break;
@@ -281,14 +277,14 @@ public class Lexer {
 
         void createDatabaseLexer () {
             Token token = tokenBank.getCurrentToken();
-            if (tokenBank.tokenIsPlainText(token)) {
+            if (token.isPlainText()) {
                 token.setTokenType("databaseName");
             }
         }
 
         void createTable () {
             Token token = tokenBank.getCurrentToken();
-            if (tokenBank.tokenIsPlainText(token)) {
+            if (token.isPlainText()) {
                 token.setTokenType("tableName");
             }
             if (tokenBank.tokens.size() > 4) {
@@ -332,8 +328,8 @@ public class Lexer {
             while (!token.getTokenType().equals("closeParenthesis")) {
                 token = tokenBank.nextToken();
                 if (description.equals("valueList")) {
-                    tokenBank.setValueTokenType(token);
-                } else if (tokenBank.tokenIsPlainText(token)) {
+                    token.setValueTokenType();
+                } else if (token.isPlainText()) {
                     token.setTokenType(description);
                 }
             }
@@ -341,14 +337,14 @@ public class Lexer {
 
         void useLexer () {
             Token token = tokenBank.getCurrentToken();
-            if (tokenBank.tokenIsPlainText(token)) {
+            if (token.isPlainText()) {
                 token.setTokenType("databaseName");
             }
         }
 
         void addPlainTextToken (String description){
             Token token = tokenBank.getCurrentToken();
-            if (tokenBank.tokenIsPlainText(token)) {
+            if (token.isPlainText()) {
                 token.setTokenType(description);
             }
         }
@@ -377,7 +373,7 @@ public class Lexer {
             int i = startPosition;
             while (i <= tokenBank.getLastTokenPosition()) {
                 token = tokenBank.getTokenAtPosition(i);
-                if (tokenBank.tokenIsParenthesis(token)) {
+                if (token.isParenthesis()) {
                     tokenBank.deleteToken(token.getPosition());
                 } else {
                     i++;

@@ -8,8 +8,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class TokenBank {
-    String[] whiteSpaceSymbols, nonWhiteSpaceSymbols, commandArray, commandTypeArray, tokenisedQuery, symbolArray, comparatorArray;
-    String commandType, plainText, query, tableOrDatabase, alterationType, stringLiteral, booleanLiteral, floatLiteral, integerLiteral, symbol, wildAttributeList, comparator, parentheses, booleanOperator;
 
     ArrayList<Token> tokens = new ArrayList<>();
     int currentTokenPosition;
@@ -19,7 +17,6 @@ public class TokenBank {
     Map<String, Token> tokenToTypeMap;
 
     TokenBank(ArrayList<String> tokenNames) {
-        createStrings();
         setTokens(tokenNames);
         currentTokenPosition = 0;
     }
@@ -195,13 +192,13 @@ public class TokenBank {
             if (token.getTokenType().equals(description)) {
                 newTokens.add(token);
             }
-            else if (description.equals("valueList") && tokenIsAValue(token)) {
+            else if (description.equals("valueList") && token.isAValue()) {
                 newTokens.add(token);
             }
-            else if (description.equals("condition") && (tokenIsACondition(token) || token.getTokenType().equals("booleanOperator"))) {
+            else if (description.equals("condition") && (token.isACondition() || token.getTokenType().equals("booleanOperator"))) {
                 newTokens.add(token);
             }
-            else if (description.equals("nameValuePairs") && tokenIsNameValuePair(token)) {
+            else if (description.equals("nameValuePairs") && token.isNameValuePair()) {
                 newTokens.add(token);
             }
             token = nextToken();
@@ -210,77 +207,6 @@ public class TokenBank {
         return newTokens;
     }
 
-    boolean tokenIsNameValuePair (Token token) {
-        return token.getTokenType().equals("attributeName") || token.getTokenType().equals("equals") || tokenIsAValue(token);
-    }
-
-
-    boolean checkTokenForPattern (Token token, String patternString){
-        String name = token.getValue();
-        Pattern pattern = Pattern.compile(patternString, Pattern.CASE_INSENSITIVE);
-        Matcher matcher = pattern.matcher(name);
-        return matcher.find();
-    }
-
-    boolean tokenIsComparator(Token token) {
-        return checkTokenForPattern(token, comparator);
-    }
-
-    boolean tokenIsParenthesis(Token token) {
-        return checkTokenForPattern(token, parentheses);
-    }
-
-    boolean tokenIsBoolean(Token token) {
-        return checkTokenForPattern(token, booleanLiteral);
-    }
-
-    boolean tokenIsWildAttributeList(Token token) {
-        return checkTokenForPattern(token, wildAttributeList);
-    }
-
-    void setValueTokenType(Token token) {
-        if (whiteSpaceSymbols == null) {
-            createStrings();
-        }
-        // Token token = tokenBank.getCurrentToken();
-        if (checkTokenForPattern(token, booleanLiteral)) {
-            token.setTokenType("booleanLiteral");
-        }
-        else if (checkTokenForPattern(token, floatLiteral)) {
-            token.setTokenType("floatLiteral");
-        }
-        else if (checkTokenForPattern(token, integerLiteral)) {
-            token.setTokenType("integerLiteral");
-        }
-        else if (token.getValue().equals("NULL")) {
-            token.setTokenType("NULL");
-        }
-        else if (checkTokenForPattern(token, stringLiteral)) {
-            removeStringQuotationMarks(token);
-            token.setTokenType("stringLiteral");
-        }
-    }
-
-    void removeStringQuotationMarks(Token token) {
-        token.setValue(token.getValue().replaceAll("'", ""));
-    }
-
-    boolean tokenIsCommandType(Token token) {
-        return checkTokenForPattern(token, commandType);
-    }
-
-    boolean tokenIsPlainText (Token token){
-        return checkTokenForPattern(token, plainText);
-    }
-
-    boolean tokenIsACondition(Token token) {
-        return (token.getTokenType().equals("attributeName") || token.getTokenType().equals("comparator") || tokenIsAValue(token));
-    }
-
-
-    public boolean tokenIsAValue(Token token) {
-        return (token.getTokenType().contains("Literal") || token.getTokenType().equals("NULL"));
-    }
 //    ArrayList<String> tokenArray = new ArrayList<>();
 
 //    Tokenizer (String query) {
@@ -297,42 +223,4 @@ public class TokenBank {
 //        t.setup();
 //    }
 
-    void createStrings() {
-        // optional whitespace in these
-        whiteSpaceSymbols = new String[]{"Command", "CommandType", "Use", "Create", "CreateDatabase", "CreateTable", "Drop", "Alter", "Insert", "Select", "Update", "Delete", "Join", "NameValueList", "NameValuePair", "AlterationType", "ValueList", "WildAttribList", "AttributeList", "Condition", "FirstCondition", "SecondCondition", "BoolOperator", "Comparator"};
-
-        // no additional whitespace
-        nonWhiteSpaceSymbols = new String[]{"Digit", "Uppercase", "Lowercase", "Letter", "PlainText", "Symbol", "Space", "DigitSequence", "IntegerLiteral", "FloatLiteral", "BooleanLiteral", "CharLiteral", "StringLiteral", "Value", "TableName", "AttributeName", "DatabaseName"};
-
-        commandArray = new String[]{"CommandType", ";"};
-
-        commandTypeArray = new String[]{"Use", "Create", "Drop", "Alter", "Insert", "Select", "Update", "Delete", "Join"};
-        commandType = String.join("|", commandTypeArray).toUpperCase();
-
-        tableOrDatabase = "TABLE|DATABASE";
-
-        alterationType = "ADD|DROP";
-
-        plainText = "\\p{Alnum}+";
-
-        symbolArray = new String[]{"!", "#", "$", "%", "&", "(", ")", "*", "+", ",", "-", ".", "/", ":", ";", ">", "=", "<", "?", "@", "\\[", "\\\\", "\\]", "^", "_", "`", "{", "}", "~"};
-        symbol = String.join("", symbolArray);
-
-        stringLiteral = "^'[\\s\\p{Alnum}" + symbol + "]*'$";
-
-        booleanLiteral = "TRUE|FALSE";
-
-        booleanOperator = "AND|OR";
-
-        floatLiteral = "^[+-]?\\p{Digit}+\\.\\p{Digit}+$";
-
-        integerLiteral = "^[+-]?\\p{Digit}+$";
-
-        wildAttributeList = plainText + "|\\*";
-
-        comparatorArray = new String[]{"==", ">", "<", ">=", "<=", "!=", "LIKE"};
-        comparator = String.join("|", comparatorArray);
-
-        parentheses = "\\(|\\)";
-    }
 }
