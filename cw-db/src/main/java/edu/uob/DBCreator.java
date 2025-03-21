@@ -5,8 +5,8 @@ public class DBCreator implements DBCommand {
     public String executeCommand(DBManager DBManager, TokenBank tokenBank){
         String databaseName = tokenBank.getTokenFromType("databaseName").getValue();
         if (!DBManager.databaseExists(databaseName)) {
-            Database database = new Database(databaseName, DBManager.getStorageFolderPath());
-            DBManager.databases.put(databaseName, database);
+            Database newDatabase = new Database(databaseName, DBManager.getStorageFolderPath());
+            DBManager.addDatabase(newDatabase);
         }
         return "[OK]";
     }

@@ -5,11 +5,11 @@ public class CommandJoiner implements DBCommand{
     public String executeCommand(DBManager dbManager, TokenBank tokenBank) {
         String tableOneName = tokenBank.getTokenFromType("tableOneName").getValue();
         String tableTwoName = tokenBank.getTokenFromType("tableTwoName").getValue();
-        String joinOne = tokenBank.getTokenFromType("attributeOneName").getValue();
-        String joinTwo = tokenBank.getTokenFromType("attributeTwoName").getValue();
-        Database database = dbManager.getCurrentDatabase();
-        Table table = database.combineTablesIntoNewTable(tableOneName, tableTwoName, joinOne, joinTwo);
-        database.addTable(table);
-        return "[OK]\n" + table.filterTableWithAttributesAndCondition(null, null);
+        String attributeNameOne = tokenBank.getTokenFromType("attributeOneName").getValue();
+        String attributeNameTwo = tokenBank.getTokenFromType("attributeTwoName").getValue();
+        Database currentDatabase = dbManager.getCurrentDatabase();
+        Table joinedTable = currentDatabase.joinTables(tableOneName, tableTwoName, attributeNameOne, attributeNameTwo);
+        currentDatabase.addTable(joinedTable);
+        return "[OK]\n" + joinedTable.filterTableWithAttributesAndCondition(null, null);
     }
 }

@@ -8,7 +8,7 @@ public class TableAlterer implements DBCommand {
         String alterationType = tokenBank.getTokenFromType("alterationType").getValue();
         String tableName = tokenBank.getTokenFromType("tableName").getValue();
         String attributeName = tokenBank.getTokenFromType("attributeName").getValue();
-        Table table = DBManager.getCurrentDatabase().tables.get(tableName);
+        Table table = DBManager.getCurrentDatabase().tableMap.get(tableName);
 
         if (alterationType.equals("ADD")) {
             table.addNewAttribute(attributeName);

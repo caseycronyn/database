@@ -21,7 +21,7 @@ public class TokenBank {
         currentTokenPosition = 0;
 
         Lexer lexer = new Lexer(this);
-        lexer.setup();
+        lexer.initialiseLexer();
     }
 
     void initialise() {

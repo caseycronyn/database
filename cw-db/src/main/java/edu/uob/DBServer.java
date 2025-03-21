@@ -42,7 +42,7 @@ public class DBServer {
             return commandResult.executeCommand(this.DBManager, tokenBank);
         }
         catch (Exception e) {
-            return String.format("[ERROR]: %s", e.getMessage());
+            return String.format("[ERROR]: " + e.getMessage());
         }
     }
 

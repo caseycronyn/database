@@ -30,7 +30,7 @@ public class Table {
 
         List<Attribute> newAttributes = new ArrayList<>();
         for (Attribute attribute : attributes) {
-            newAttributes.add(attribute.copy());
+            newAttributes.add(attribute.copyAttribute());
         }
 
 
@@ -51,7 +51,7 @@ public class Table {
         readInAttributesToMemoryFromStringBuffer(buffer);
         for (int i = 1; i < buffer.size(); i++) {
             String[] entryArray = buffer.get(i).split("\t");
-            Row row = new Row(null, database.getAndIncrementID(), this);
+            Row row = new Row(null, database.getNewID(), this);
             row.initialiseRow(entryArray);
             rows.add(row);
         }

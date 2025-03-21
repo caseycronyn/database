@@ -1,8 +1,7 @@
 package edu.uob;
 
 public class Attribute {
-    String name;
-    String dataType;
+    String name, dataType;
     int index;
 
     Attribute(String name, String dataType, int index) {
@@ -11,7 +10,7 @@ public class Attribute {
         this.index = index;
     }
 
-    Attribute copy() {
+    Attribute copyAttribute() {
         return new Attribute(name, dataType, index);
     }
 
@@ -19,19 +18,19 @@ public class Attribute {
         return index;
     }
 
-    void setDataType(String dataType) {
-        this.dataType = dataType;
-    }
-
     String getDataType() {
         return dataType;
     }
 
-    void setName(String name) {
-        this.name = name;
+    void setDataType(String dataType) {
+        this.dataType = dataType;
     }
 
     String getName() {
         return name;
+    }
+
+    void setName(String name) {
+        this.name = name;
     }
 }

@@ -20,7 +20,7 @@ public class TableCreator implements DBCommand{
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        database.tables.put(tableName, table);
+        database.tableMap.put(tableName, table);
         return "[OK]";
     }
 }

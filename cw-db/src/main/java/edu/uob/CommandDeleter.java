@@ -5,11 +5,13 @@ import java.util.List;
 
 public class CommandDeleter implements DBCommand {
     @Override
-    public String executeCommand(DBManager DBManager, TokenBank tokenBank) throws FileNotFoundException {
+    public String executeCommand(DBManager dbManager, TokenBank tokenBank) throws FileNotFoundException {
+        Database currentDatabase = dbManager.getCurrentDatabase();
         String tableName = tokenBank.getTokenFromType("tableName").getValue();
-        Table table = DBManager.getCurrentDatabase().tables.get(tableName);
-        List<Token> condition = tokenBank.getTokenTypeFromFragment("condition", "where", "terminator");
-        table.deleteFromTableOnCondition(condition);
+        Table currentTable = currentDatabase.getTable(tableName);
+
+        List<Token> conditionFilter = tokenBank.getTokenTypeFromFragment("condition", "where", "terminator");
+        currentTable.deleteFromTableOnCondition(conditionFilter);
         return "[OK]";
     }
 }

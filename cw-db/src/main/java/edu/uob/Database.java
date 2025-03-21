@@ -10,9 +10,8 @@ import java.util.Map;
 // formats the string then passes it into the appropriate table method
 // all these will need to be made more robust at a later point
 public class Database {
-    HashMap<String, Table> tables = new HashMap<>();
-    String name;
-    String storageFolderPath;
+    HashMap<String, Table> tableMap = new HashMap<>();
+    String name, storageFolderPath;
     Integer ID;
 
     Database (String name, String storageFolderPath) {
@@ -21,59 +20,63 @@ public class Database {
         this.ID = 1;
 //        createIDFolderAndFile();
         try {
-            createDatabaseFolder();
+            createDBFolder();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
     boolean tableExists(String tableName) {
-        return tables.containsKey(tableName);
+        return tableMap.containsKey(tableName);
     }
 
     String getName() {
         return name;
     }
 
+    Table getTable(String tableName) {
+        return tableMap.get(tableName);
+    }
+
     void initialiseDatabase() {
         // tables map
-        File databaseDirectory = new File(storageFolderPath + File.separator + name);
-        File[] fileList = databaseDirectory.listFiles();
+        File dbDirectory = new File(storageFolderPath + File.separator + name);
+        File[] fileList = dbDirectory.listFiles();
         if (fileList != null) {
             for (File file : fileList) {
                 String tableName = file.getName().replace(".tab", "");
                 // avoid dotfiles like .DSStore
                 if (tableName.charAt(0) != '.') {
-                    Table table = new Table(tableName, databaseDirectory.getName(), storageFolderPath);
+                    Table newTable = new Table(tableName, dbDirectory.getName(), storageFolderPath);
                     try {
-                        table.initialiseTable(this);
+                        newTable.initialiseTable(this);
                     }
                     catch(Exception e) {
                         System.err.println("Error while initialising table " + tableName);
                     }
-                    addTable(table);
+                    addTable(newTable);
                 }
             }
         }
 
     }
 
-    public Table combineTablesIntoNewTable(String tableOneName, String tableTwoName, String attributeOneName, String attributeTwoName) {
-        Table tableOne = tables.get(tableOneName).copy();
-        Table tableTwo = tables.get(tableTwoName).copy();
+    public Table joinTables(String tableOneName, String tableTwoName, String attributeOneName, String attributeTwoName) {
+        Table tableOne = tableMap.get(tableOneName).copy();
+        Table tableTwo = tableMap.get(tableTwoName).copy();
 
-        Map<Integer, Integer> tableJoinOnID = getMapOfTableJoinOnID(tableOne, tableTwo, attributeOneName, attributeTwoName);
-        Table newTable = makeNewTableAndUpdateAttributesForJoin(tableOne, tableTwo);
+        Map<Integer, Integer> indicesMap = mapTwoTables(tableOne, tableTwo, attributeOneName, attributeTwoName);
+        Table newTable = joinTableAttributes(tableOne, tableTwo);
 
-        combineTableValuesOnMatchingIndices(newTable, tableOne, tableTwo, tableJoinOnID);
+        mapTablesIndices(newTable, tableOne, tableTwo, indicesMap);
 
-        setAllTableIds(newTable);
+        initialiseTableIDs(newTable);
         newTable.removeAttribute(tableOneName + "." + attributeOneName);
         newTable.removeAttribute(tableTwoName + "." + attributeTwoName);
         return newTable;
     }
 
-    void combineTableValuesOnMatchingIndices(Table newTable, Table tableOne, Table tableTwo, Map<Integer, Integer> tableJoinOnID) {
+    void mapTablesIndices(Table newTable, Table tableOne, Table tableTwo, Map<Integer, Integer> tableJoinOnID) {
         // mapping
         int tableOneIndex = tableOne.getRowNumber(0).getId();
         // loop though rows in table one
@@ -96,14 +99,14 @@ public class Database {
 
     }
 
-    void setAllTableIds(Table table) {
+    void initialiseTableIDs(Table table) {
         for (Row row : table.getRows()) {
-            row.changeId(getAndIncrementID());
+            row.changeId(getNewID());
         }
     }
 
     // edits all attributes and makes a copy of the
-    Table makeNewTableAndUpdateAttributesForJoin(Table tableOne, Table tableTwo) {
+    Table joinTableAttributes(Table tableOne, Table tableTwo) {
         // update row attributes and tokens
         updateRowAttributes(tableOne);
         updateRowAttributes(tableTwo);
@@ -132,10 +135,10 @@ public class Database {
         }
     }
 
-    Map<Integer, Integer> getMapOfTableJoinOnID(Table tableOne, Table tableTwo, String attributeOneName, String attributeTwoName) {
+    Map<Integer, Integer> mapTwoTables(Table tableOne, Table tableTwo, String attributeOneName, String attributeTwoName) {
         // maps table one's rows to table two's rows
         boolean matchFound;
-        Map<Integer, Integer> tableJoinOnID = new HashMap<>();
+        Map<Integer, Integer> tableJoinMap = new HashMap<>();
         for (Row rowOne : tableOne.getRows()) {
             matchFound = false;
             String tableOneTarget = rowOne.getValueFromAttribute(attributeOneName).getValue();
@@ -144,29 +147,27 @@ public class Database {
                 if (!matchFound && tableOneTarget.equals(tableTwoCandidate)) {
                     int rowOneID = rowOne.getId();
                     int rowTwoID = rowTwo.getId();
-                    tableJoinOnID.put(rowOneID, rowTwoID);
+                    tableJoinMap.put(rowOneID, rowTwoID);
                     matchFound = true;
                 }
             }
         }
-        return tableJoinOnID;
+        return tableJoinMap;
     }
 
     void addTable(Table table) {
-        tables.put(table.getName(), table);
+        tableMap.put(table.getName(), table);
     }
 
-    public void createDatabaseFolder() throws IOException {
-        //        create database path
+    public void createDBFolder() throws IOException {
         try {
-            // Create the database storage folder if it doesn't already exist !
             Files.createDirectories(Paths.get(storageFolderPath + File.separator + name));
         } catch(IOException ioe) {
             throw new IOException("Can't seem to create database storage folder " + storageFolderPath + File.separator + name);
         }
     }
 
-    public int getAndIncrementID() {
+    public int getNewID() {
         return ID++;
     }
 
