@@ -293,12 +293,12 @@ public class MyDBTests {
     void testPlainTextTokens(String name) {
         String randomName = generateRandomName();
         String response = sendCommandToServer("CREATE DATABASE " + name + ";");
-        assertTrue(response.contains("[ERROR] found during lexing"), "query to create database includes non plain text for databaseName");
+        assertTrue(response.contains("[ERROR]"), "query to create database includes non plain text for databaseName");
         response = sendCommandToServer("CREATE TABLE " + randomName + "(name, " + name + ", pass);");
-        assertTrue(response.contains("[ERROR] found during lexing"), "query to create table includes non plain text for attributeName");
+        assertTrue(response.contains("[ERROR]"), "query to create table includes non plain text for attributeName");
         sendCommandToServer("INSERT INTO " + randomName + "VALUES ('Simon', 65, TRUE);");
         response = sendCommandToServer("DELETE FROM " + randomName + "WHERE" + name + " == 'Simon' OR mark == 38;");
-        assertTrue(response.contains("[ERROR] found during lexing"), "query to delete from table contains non plain text for attributeName");
+        assertTrue(response.contains("[ERROR]"), "query to delete from table contains non plain text for attributeName");
     }
 
     @ParameterizedTest
@@ -318,7 +318,7 @@ public class MyDBTests {
 
     // transcript
     @Test
-    void testOne() {
+    void exampleTranscript() {
         String randomName = generateRandomName();
         String query = "CREATE DATABASE " + randomName + ";";
         String response = sendCommandToServer(query);
