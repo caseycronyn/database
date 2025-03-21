@@ -18,7 +18,6 @@ public class Database {
         this.name = name;
         this.storageFolderPath = storageFolderPath;
         this.ID = 1;
-//        createIDFolderAndFile();
         try {
             createDBFolder();
         } catch (IOException e) {
@@ -62,8 +61,8 @@ public class Database {
     }
 
     public Table joinTables(String tableOneName, String tableTwoName, String attributeOneName, String attributeTwoName) {
-        Table tableOne = tableMap.get(tableOneName).copy();
-        Table tableTwo = tableMap.get(tableTwoName).copy();
+        Table tableOne = tableMap.get(tableOneName).copyTable();
+        Table tableTwo = tableMap.get(tableTwoName).copyTable();
 
         Map<Integer, Integer> indicesMap = mapTwoTables(tableOne, tableTwo, attributeOneName, attributeTwoName);
         Table newTable = joinTableAttributes(tableOne, tableTwo);
@@ -77,26 +76,23 @@ public class Database {
     }
 
     void mapTablesIndices(Table newTable, Table tableOne, Table tableTwo, Map<Integer, Integer> tableJoinOnID) {
-        // mapping
-        int tableOneIndex = tableOne.getRowNumber(0).getId();
+        int tableOneIndex = tableOne.getRowAtIndex(0).getId();
         // loop though rows in table one
         for (int i = 0; i < tableOne.getRows().size(); i++) {
             // loop through attributes of table two skipping id
-            for (int j = 1; j < tableTwo.getAttributes().size(); j++) {
+            for (int j = 1; j < tableTwo.getAttributeList().size(); j++) {
                 // add matching Token of mapped row to row i of new table
                 Integer tableTwoIndex = tableJoinOnID.get(tableOneIndex);
-                Row tableTwoRow = tableTwo.getRowByIndices(tableTwoIndex);
+                Row tableTwoRow = tableTwo.getRowAtID(tableTwoIndex);
 
                 String attributeName = tableTwo.getAttributeAtIndex(j).getName();
-                Token matchingToken = tableTwoRow.getValueFromAttribute(attributeName);
+                Token matchingToken = tableTwoRow.getAttributeValue(attributeName);
 
-                Row tableOneRow = newTable.getRowNumber(i);
-                tableOneRow.addValueToRow(attributeName, matchingToken);
+                Row tableOneRow = newTable.getRowAtIndex(i);
+                tableOneRow.addRowValue(attributeName, matchingToken);
             }
             tableOneIndex++;
         }
-
-
     }
 
     void initialiseTableIDs(Table table) {
@@ -105,18 +101,16 @@ public class Database {
         }
     }
 
-    // edits all attributes and makes a copy of the
     Table joinTableAttributes(Table tableOne, Table tableTwo) {
-        // update row attributes and tokens
         updateRowAttributes(tableOne);
         updateRowAttributes(tableTwo);
         // change table attribute names
-        for (int i = 1; i < tableOne.getAttributes().size(); i++) {
+        for (int i = 1; i < tableOne.getAttributeList().size(); i++) {
             tableOne.getAttributeAtIndex(i).setName(tableOne.getName() + "." + tableOne.getAttributeAtIndex(i).getName());
         }
         // create table and add tableTwo's attributes
-        Table newTable = tableOne.copy();
-        for (int i = 1; i < tableTwo.getAttributes().size(); i++) {
+        Table newTable = tableOne.copyTable();
+        for (int i = 1; i < tableTwo.getAttributeList().size(); i++) {
             tableTwo.getAttributeAtIndex(i).setName(tableTwo.getName() + "." + tableTwo.getAttributeAtIndex(i).getName());
             newTable.attributes.add(tableTwo.getAttributeAtIndex(i));
         }
@@ -125,25 +119,23 @@ public class Database {
 
     void updateRowAttributes (Table table) {
         for (Row row : table.getRows()) {
-            for (Attribute attribute : table.getAttributes()) {
+            for (Attribute attribute : table.getAttributeList()) {
                 if (!attribute.getName().equals("id")) {
                     String newString = table.getName() + "." + attribute.getName();
-                    row.changeKeyInAttributesToValuesMap(attribute.getName(), newString);
-                    // row.changeAttributeName(attribute.getName(), newString);
+                    row.setMapAttribute(attribute.getName(), newString);
                 }
             }
         }
     }
 
     Map<Integer, Integer> mapTwoTables(Table tableOne, Table tableTwo, String attributeOneName, String attributeTwoName) {
-        // maps table one's rows to table two's rows
         boolean matchFound;
         Map<Integer, Integer> tableJoinMap = new HashMap<>();
         for (Row rowOne : tableOne.getRows()) {
             matchFound = false;
-            String tableOneTarget = rowOne.getValueFromAttribute(attributeOneName).getValue();
+            String tableOneTarget = rowOne.getAttributeValue(attributeOneName).getValue();
             for (Row rowTwo : tableTwo.getRows()) {
-                String tableTwoCandidate = rowTwo.getValueFromAttribute(attributeTwoName).getValue();
+                String tableTwoCandidate = rowTwo.getAttributeValue(attributeTwoName).getValue();
                 if (!matchFound && tableOneTarget.equals(tableTwoCandidate)) {
                     int rowOneID = rowOne.getId();
                     int rowTwoID = rowTwo.getId();
@@ -159,6 +151,10 @@ public class Database {
         tableMap.put(table.getName(), table);
     }
 
+    void removeTable(String tableName) {
+        tableMap.remove(tableName);
+    }
+
     public void createDBFolder() throws IOException {
         try {
             Files.createDirectories(Paths.get(storageFolderPath + File.separator + name));
@@ -170,5 +166,4 @@ public class Database {
     public int getNewID() {
         return ID++;
     }
-
 }

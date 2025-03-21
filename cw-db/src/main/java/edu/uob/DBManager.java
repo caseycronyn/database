@@ -17,7 +17,6 @@ public class DBManager {
     }
 
     public void initialiseServer() throws NullPointerException{
-        // databases map
         File storageDirectory = new File(storageFolderPath);
         File[] fileList = storageDirectory.listFiles();
         if (fileList != null) {
@@ -40,11 +39,8 @@ public class DBManager {
     public DBManager() {
         this.databases = new HashMap<>();
         this.currentDatabase = null;
-
         storageFolderPath = Paths.get("databases").toAbsolutePath().toString();
-
         try {
-            // Create the database storage folder if it doesn't already exist !
             Files.createDirectories(Paths.get(storageFolderPath));
         } catch(IOException ioe) {
             System.out.println("Can't seem to create database storage folder " + storageFolderPath);

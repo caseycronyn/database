@@ -8,6 +8,7 @@ public class CommandSelector implements DBCommand {
         Database currentDatabase = dbManager.getCurrentDatabase();
         String tableName = tokenBank.getTokenFromType("tableName").getValue();
         Table table = currentDatabase.tableMap.get(tableName);
+
         if (table == null) {
             return "[ERROR]: Table " + tableName + " not found";
         }
@@ -15,7 +16,7 @@ public class CommandSelector implements DBCommand {
         if (tokenBank.tokenExistsInQuery("where")) {
             conditionFilter = tokenBank.getTokenTypeFromFragment("condition", "where", "terminator");
         }
-
+        // select all
         List<Token> attributeFilter = null;
         boolean isWildAttribute = tokenBank.tokenValueExists("*");
         if (!isWildAttribute) {
@@ -27,6 +28,6 @@ public class CommandSelector implements DBCommand {
         if (!currentDatabase.tableExists(tableName)) {
             return "[ERROR]: Table " + tableName + " not found";
         }
-        return "[OK]\n" + table.filterTableWithAttributesAndCondition(attributeFilter, conditionFilter);
+        return "[OK]\n" + table.filterTable(attributeFilter, conditionFilter);
     }
 }

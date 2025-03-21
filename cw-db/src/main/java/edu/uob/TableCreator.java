@@ -7,20 +7,21 @@ import java.util.List;
 public class TableCreator implements DBCommand{
     @Override
     public String executeCommand(DBManager DBManager, TokenBank tokenBank) throws FileNotFoundException {
+        Database currentDatabase = DBManager.getCurrentDatabase();
         String tableName = tokenBank.getTokenFromType("tableName").getValue();
-        Database database = DBManager.getCurrentDatabase();
-        Table table = new Table(tableName, database.getName(), DBManager.getStorageFolderPath());
+        Table table = new Table(tableName, currentDatabase.getName(), DBManager.getStorageFolderPath());
+
         boolean withAttributes = tokenBank.tokenValueExists("(");
         if (withAttributes) {
             List<Token> attributes = tokenBank.getTokenTypeFromFragment("attributeName", "openParenthesis", "closeParenthesis");
-            table.addAttributesToTable(attributes);
+            table.addAttributeList(attributes);
         }
         try {
-            table.writeEmptyTableToFile();
+            table.writeEmptyFile();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        database.tableMap.put(tableName, table);
+        currentDatabase.tableMap.put(tableName, table);
         return "[OK]";
     }
 }

@@ -4,38 +4,38 @@ public class DbCommandFactory {
 
     public DBCommand createCommand(TokenBank tokenBank) throws Exception {
         tokenBank.initialise();
-        String query = tokenBank.getCurrentQueryAsTokenTypes();
-        if (query.equals(tokenBank.getPatternFromTokenQueriesMap("use"))) {
+        String query = tokenBank.getQueryAsTypes();
+        if (query.equals(tokenBank.getTokenTypeQuery("use"))) {
             return new CommandUser();
         }
-        else if (query.equals(tokenBank.getPatternFromTokenQueriesMap("create database"))) {
+        else if (query.equals(tokenBank.getTokenTypeQuery("create database"))) {
             return new DBCreator();
         }
-        else if (query.contains(tokenBank.getPatternFromTokenQueriesMap("create table"))) {
+        else if (query.contains(tokenBank.getTokenTypeQuery("create table"))) {
             return new TableCreator();
         }
-        else if (query.equals(tokenBank.getPatternFromTokenQueriesMap("drop database"))) {
+        else if (query.equals(tokenBank.getTokenTypeQuery("drop database"))) {
             return new DBDeleter();
         }
-        else if (query.equals(tokenBank.getPatternFromTokenQueriesMap("drop table"))) {
+        else if (query.equals(tokenBank.getTokenTypeQuery("drop table"))) {
             return new TableDropper();
         }
-        else if (query.equals(tokenBank.getPatternFromTokenQueriesMap("alter"))) {
+        else if (query.equals(tokenBank.getTokenTypeQuery("alter"))) {
             return new TableAlterer();
         }
-        else if (query.contains(tokenBank.getPatternFromTokenQueriesMap("insert"))) {
+        else if (query.contains(tokenBank.getTokenTypeQuery("insert"))) {
             return new CommandInserter();
         }
-        else if (query.contains(tokenBank.getPatternFromTokenQueriesMap("select"))) {
+        else if (query.contains(tokenBank.getTokenTypeQuery("select"))) {
             return new CommandSelector();
         }
-        else if (query.contains(tokenBank.getPatternFromTokenQueriesMap("update"))) {
+        else if (query.contains(tokenBank.getTokenTypeQuery("update"))) {
             return new CommandUpdater();
         }
-        else if (query.contains(tokenBank.getPatternFromTokenQueriesMap("delete"))) {
+        else if (query.contains(tokenBank.getTokenTypeQuery("delete"))) {
             return new CommandDeleter();
         }
-        else if (query.equals(tokenBank.getPatternFromTokenQueriesMap("join"))) {
+        else if (query.equals(tokenBank.getTokenTypeQuery("join"))) {
             return new CommandJoiner();
         }
         else {

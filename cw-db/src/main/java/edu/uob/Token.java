@@ -6,80 +6,78 @@ import java.util.regex.Pattern;
 public class Token {
     private String value, tokenType;
     private final Integer position;
-    String[] whiteSpaceSymbols, nonWhiteSpaceSymbols, commandArray, commandTypeArray, symbolArray, comparatorArray;
+    String[] commandTypeArray, symbolArray, comparatorArray, whiteSpaceSymbols;
     String commandType, plainText, tableOrDatabase, alterationType, stringLiteral, booleanLiteral, floatLiteral, integerLiteral, symbol, wildAttributeList, comparator, parentheses, booleanOperator;
 
-    Token (String name, Integer position) {
+    Token(String name, Integer position) {
         this.value = name;
         this.position = position;
         tokenType = null;
         createStrings();
-        // dataType = null;
     }
 
-    Token copy() {
-        Token token = new Token(value, position);
-        token.setTokenType(tokenType);
-        return token;
+    Token copyToken() {
+        Token tokenCopy = new Token(value, position);
+        tokenCopy.setTokenType(tokenType);
+        return tokenCopy;
     }
 
-    boolean isNameValuePair () {
+    boolean isValuePair() {
         return getTokenType().equals("attributeName") || getTokenType().equals("equals") || isAValue();
     }
 
 
-    boolean checkForPattern(String patternString){
-        String name = getValue();
+    boolean checkPattern(String patternString){
+        String value = getValue();
         Pattern pattern = Pattern.compile(patternString, Pattern.CASE_INSENSITIVE);
-        Matcher matcher = pattern.matcher(name);
+        Matcher matcher = pattern.matcher(value);
         return matcher.find();
     }
 
     boolean isComparator() {
-        return checkForPattern(comparator);
+        return checkPattern(comparator);
     }
 
     boolean isBooleanOperator() {
-        return checkForPattern(booleanOperator);
+        return checkPattern(booleanOperator);
     }
 
     boolean isWildAttributeList() {
-        return checkForPattern(wildAttributeList);
+        return checkPattern(wildAttributeList);
     }
 
-    void setValueTokenType() {
+    void setValueType() {
         if (whiteSpaceSymbols == null) {
             createStrings();
         }
-        // Token token = tokenBank.getCurrentToken();
-        if (checkForPattern(booleanLiteral)) {
+        if (checkPattern(booleanLiteral)) {
             setTokenType("booleanLiteral");
         }
-        else if (checkForPattern(floatLiteral)) {
+        else if (checkPattern(floatLiteral)) {
             setTokenType("floatLiteral");
         }
-        else if (checkForPattern(integerLiteral)) {
+        else if (checkPattern(integerLiteral)) {
             setTokenType("integerLiteral");
         }
         else if (getValue().equals("NULL")) {
             setTokenType("NULL");
         }
-        else if (checkForPattern(stringLiteral)) {
-            removeStringQuotationMarks();
+        else if (checkPattern(stringLiteral)) {
+            removeQuotes();
             setTokenType("stringLiteral");
         }
     }
 
-    void removeStringQuotationMarks() {
+    void removeQuotes() {
         setValue(getValue().replaceAll("'", ""));
     }
 
     boolean isCommandType() {
-        return checkForPattern(commandType);
+        return checkPattern(commandType);
     }
 
     boolean isPlainText (){
-        return checkForPattern(plainText);
+        return checkPattern(plainText);
     }
 
     boolean isACondition() {
@@ -107,7 +105,7 @@ public class Token {
         this.value = value;
     }
 
-    void nameToUpperCase() {
+    void nameToUpper() {
         value = value.toUpperCase();
     }
 
@@ -128,17 +126,8 @@ public class Token {
     }
 
     void createStrings() {
-        // optional whitespace in these
-        whiteSpaceSymbols = new String[]{"Command", "CommandType", "Use", "Create", "CreateDatabase", "CreateTable", "Drop", "Alter", "Insert", "Select", "Update", "Delete", "Join", "NameValueList", "NameValuePair", "AlterationType", "ValueList", "WildAttribList", "AttributeList", "Condition", "FirstCondition", "SecondCondition", "BoolOperator", "Comparator"};
-
-        // no additional whitespace
-        nonWhiteSpaceSymbols = new String[]{"Digit", "Uppercase", "Lowercase", "Letter", "PlainText", "Symbol", "Space", "DigitSequence", "IntegerLiteral", "FloatLiteral", "BooleanLiteral", "CharLiteral", "StringLiteral", "Value", "TableName", "AttributeName", "DatabaseName"};
-
-        commandArray = new String[]{"CommandType", ";"};
-
         commandTypeArray = new String[]{"Use", "Create", "Drop", "Alter", "Insert", "Select", "Update", "Delete", "Join"};
         commandType = String.join("|", commandTypeArray).toUpperCase();
-
 
         tableOrDatabase = "TABLE|DATABASE";
 
@@ -165,5 +154,7 @@ public class Token {
         comparator = String.join("|", comparatorArray);
 
         parentheses = "\\(|\\)";
+
+        whiteSpaceSymbols = new String[]{"Command", "CommandType", "Use", "Create", "CreateDatabase", "CreateTable", "Drop", "Alter", "Insert", "Select", "Update", "Delete", "Join", "NameValueList", "NameValuePair", "AlterationType", "ValueList", "WildAttribList", "AttributeList", "Condition", "FirstCondition", "SecondCondition", "BoolOperator", "Comparator"};
     }
 }

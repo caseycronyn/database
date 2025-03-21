@@ -5,13 +5,14 @@ import java.io.FileNotFoundException;
 public class TableAlterer implements DBCommand {
     @Override
     public String executeCommand(DBManager DBManager, TokenBank tokenBank) throws FileNotFoundException {
-        String alterationType = tokenBank.getTokenFromType("alterationType").getValue();
+        Database currentDatabase = DBManager.getCurrentDatabase();
         String tableName = tokenBank.getTokenFromType("tableName").getValue();
-        String attributeName = tokenBank.getTokenFromType("attributeName").getValue();
-        Table table = DBManager.getCurrentDatabase().tableMap.get(tableName);
+        Table table = currentDatabase.tableMap.get(tableName);
 
+        String alterationType = tokenBank.getTokenFromType("alterationType").getValue();
+        String attributeName = tokenBank.getTokenFromType("attributeName").getValue();
         if (alterationType.equals("ADD")) {
-            table.addNewAttribute(attributeName);
+            table.addAttribute(attributeName);
         }
         else if (alterationType.equals("DROP")) {
             table.removeAttribute(attributeName);

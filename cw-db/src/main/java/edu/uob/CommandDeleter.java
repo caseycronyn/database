@@ -11,7 +11,7 @@ public class CommandDeleter implements DBCommand {
         Table currentTable = currentDatabase.getTable(tableName);
 
         List<Token> conditionFilter = tokenBank.getTokenTypeFromFragment("condition", "where", "terminator");
-        currentTable.deleteFromTableOnCondition(conditionFilter);
+        currentTable.deleteOnFilter(conditionFilter);
         return "[OK]";
     }
 }

@@ -6,62 +6,51 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
 
-//populates the tables rows and columns by passing in the formatted string. this class also holds the data for rows and columns
-//the columns are ordered
 public class Table {
-    // List<HashMap<String, Token>> rowsOfAttributesMappedToTokens = new ArrayList<>();
     List<Attribute> attributes = new ArrayList<>();
-    // Map<String, String> attributesToValues = new HashMap<>();
     List<Row> rows = new ArrayList<>();
+    String tableName, databaseName, storageFolderPath;
 
-    String tableName;
-    String databaseName;
-    String storageFolderPath;
-
-    //    TODO this looks a bit crap
     public Table(String tableName, String databaseName, String storageFolderPath) {
         this.tableName = tableName;
         this.databaseName = databaseName;
         this.storageFolderPath = storageFolderPath;
-        // this.attributes.add("id");
     }
 
-    Table copy() {
-
+    Table copyTable() {
         List<Attribute> newAttributes = new ArrayList<>();
         for (Attribute attribute : attributes) {
             newAttributes.add(attribute.copyAttribute());
         }
 
-
         Table newTable = new Table(tableName, databaseName, storageFolderPath);
         List<Row> newRows = new ArrayList<>();
         for (Row row : rows) {
-            newRows.add(row.copy(newTable));
+            newRows.add(row.copyRow(newTable));
         }
-        newTable.addRows(newRows);
-        newTable.addAttributes(newAttributes);
+        newTable.appendRows(newRows);
+        newTable.appendAttributes(newAttributes);
 
         return newTable;
     }
 
     void initialiseTable(Database database) throws IOException {
         ArrayList<String> buffer = new ArrayList<>();
-        readInFileAndPopulateStringBuffer(buffer);
-        readInAttributesToMemoryFromStringBuffer(buffer);
+        fillStringBuffer(buffer);
+        readInAttributes(buffer);
         for (int i = 1; i < buffer.size(); i++) {
-            String[] entryArray = buffer.get(i).split("\t");
+            String[] tabArray = buffer.get(i).split("\t");
             Row row = new Row(null, database.getNewID(), this);
-            row.initialiseRow(entryArray);
+            row.initialiseRow(tabArray);
             rows.add(row);
         }
     }
 
-    void addRows(List<Row> rowsIn) {
+    void appendRows(List<Row> rowsIn) {
         rows.addAll(rowsIn);
     }
 
-    void addAttributes(List<Attribute> attributesIn) {
+    void appendAttributes(List<Attribute> attributesIn) {
         attributes.addAll(attributesIn);
     }
 
@@ -77,108 +66,95 @@ public class Table {
         return attributes.get(index);
     }
 
-    List<Attribute> getAttributes() {
+    List<Attribute> getAttributeList() {
         return attributes;
     }
 
     void updateTable() throws FileNotFoundException {
-        writeTableToFileFromMemory();
-        updateAttributesToValues();
+        writeToFile();
+        updateAttributeTypes();
     }
 
-    void updateAttributesToValues() {
+    void updateAttributeTypes() {
         Map<String, String> valueSet = new HashMap<>();
-        String value = null;
+        String dataType = null;
         for (int i = 1; i < attributes.size(); i++) {
             valueSet.clear();
             for (Row row : rows) {
-                value = row.attributesToTokens.get(attributes.get(i).getName()).getTokenType();
-                valueSet.put(value, value);
+                dataType = row.attributeValueMap.get(attributes.get(i).getName()).getTokenType();
+                valueSet.put(dataType, dataType);
             }
             if (valueSet.size() > 1) {
-                value = resolveValueConflict(valueSet);
+                dataType = fixTypeConflict(valueSet);
             }
-            attributes.get(i).setDataType(value);
+            attributes.get(i).setDataType(dataType);
         }
     }
 
-    String resolveValueConflict(Map<String, String> valueSet) {
+    String fixTypeConflict(Map<String, String> valueSet) {
         if (valueSet.containsKey("floatLiteral") && valueSet.containsKey("stringLiteral")) {
             return "floatLiteral";
         } else return "stringLiteral";
     }
 
-    // void updateTokenToCurrentAttributeNames() {
-    //     for (Row row : rows) {
-    //         for (Attribute attribute : row.getAttributes()) {
-    //
-    //         }
-    //     }
-    // }
-
-    // string + anything = string
-    // bool + anything = string
-    // float + int = float
-
-    void changeValuesInTableWhereCondition(List<Token> nameValuePairs, List<Token> conditions) throws FileNotFoundException {
+    void updateFilteredRows(List<Token> nameValuePairs, List<Token> conditions) throws FileNotFoundException {
         for (Row row : rows) {
             if (conditionIsMet(conditions, row)) {
-                updateValuesInRow(nameValuePairs, row);
+                updateRowTypes(nameValuePairs, row);
             }
         }
         updateTable();
     }
 
-    void updateValuesInRow(List<Token> nameValuePairs, Row row) {
+    void updateRowTypes(List<Token> nameValuePairs, Row row) {
         for (int i = 0; i < nameValuePairs.size(); i += 3) {
             Token nameToken = nameValuePairs.get(i);
-            Token valueToken = nameValuePairs.get(i + 2);
-            row.changeValue(nameToken.getValue(), valueToken);
+            Token typeToken = nameValuePairs.get(i + 2);
+            row.setValue(nameToken.getValue(), typeToken);
         }
     }
 
-    // set all to null
-    void addAttributesToTable(List<Token> tokens) throws FileNotFoundException {
+    void addAttributeList(List<Token> tokens) throws FileNotFoundException {
         int i = 0;
-        Attribute idAttribute = new Attribute("id", "integerLiteral", i);
-        attributes.add(idAttribute);
+        Attribute ID = new Attribute("id", "integerLiteral", i);
+        attributes.add(ID);
         for (Token token : tokens) {
-            Attribute attribute = new Attribute(token.getValue(), "NULL", ++i);
-            attributes.add(attribute);
+            Attribute newAttribute = new Attribute(token.getValue(), "NULL", ++i);
+            attributes.add(newAttribute);
         }
         updateTable();
     }
 
-    public void readInAttributesToMemoryFromStringBuffer(ArrayList<String> stringBuffer) {
+    public void readInAttributes(ArrayList<String> stringBuffer) {
         if (!stringBuffer.isEmpty()) {
             String command = stringBuffer.get(0);
-            List<String> attributeArray = new ArrayList<>(List.of(command.split("\t")));
+            List<String> attributeList = new ArrayList<>(List.of(command.split("\t")));
             int i = 0;
-            for (String attribute : attributeArray) {
+            for (String attribute : attributeList) {
                 Attribute newAttribute = new Attribute(attribute, "NULL", i++);
                 attributes.add(newAttribute);
             }
         }
     }
 
-    public void readInFileAndPopulateStringBuffer(ArrayList<String> stringBuffer) throws IOException {
-        BufferedReader buffReader;
-        FileReader reader;
-        File fileToOpen = new File(storageFolderPath + File.separator + databaseName + File.separator + tableName + ".tab");
-        reader = new FileReader(fileToOpen);
-        buffReader = new BufferedReader(reader);
+    public void fillStringBuffer(ArrayList<String> stringBuffer) throws IOException {
+        BufferedReader bufferReader;
+        FileReader fileReader;
+        File newFile = new File(storageFolderPath + File.separator + databaseName + File.separator + tableName + ".tab");
+        fileReader = new FileReader(newFile);
+        bufferReader = new BufferedReader(fileReader);
         String line;
-        while ((line = buffReader.readLine()) != null) {
+        while ((line = bufferReader.readLine()) != null) {
             stringBuffer.add(line);
         }
-        buffReader.close();
+        bufferReader.close();
     }
 
-    public void writeTableToFileFromMemory() throws FileNotFoundException {
+    public void writeToFile() throws FileNotFoundException {
         String newFileName = storageFolderPath + File.separator + databaseName + File.separator + tableName + ".tab";
-        PrintWriter writer;
+        PrintWriter printWriter;
         try {
-            writer = new PrintWriter(newFileName);
+            printWriter = new PrintWriter(newFileName);
         }
         catch (FileNotFoundException e) {
             throw new FileNotFoundException("error writing to file " + newFileName);
@@ -187,34 +163,34 @@ public class Table {
         for (Attribute attribute : attributes) {
             firstLine.append(attribute.getName()).append("\t");
         }
-        writer.println(firstLine);
+        printWriter.println(firstLine);
         ArrayList<String> orderedValues = new ArrayList<>();
         // for each row of entries: make ordered array
         for (Row row : rows) {
             orderedValues.clear();
             // loop through attributes in order
             for (Attribute attribute : attributes) {
-                orderedValues.add(row.attributesToTokens.get(attribute.getName()).getValue());
+                orderedValues.add(row.attributeValueMap.get(attribute.getName()).getValue());
             }
             String joinedLine = String.join("\t", orderedValues);
-            writer.println(joinedLine);
+            printWriter.println(joinedLine);
         }
-        writer.close();
+        printWriter.close();
     }
 
-    public void writeEmptyTableToFile() throws IOException {
+    public void writeEmptyFile() throws IOException {
         try {
             Files.createFile(Paths.get(storageFolderPath + File.separator + databaseName + File.separator + tableName + ".tab"));
         }
         catch (FileAlreadyExistsException ignore){}
     }
 
-    public void addNewAttribute(String name) throws FileNotFoundException {
-        Attribute attribute = new Attribute(name, "NULL", attributes.size());
-        attributes.add(attribute);
+    public void addAttribute(String name) throws FileNotFoundException {
+        Attribute newAttribute = new Attribute(name, "NULL", attributes.size());
+        attributes.add(newAttribute);
         for (Row row : rows) {
-            Token token = new Token(null, attributes.size());
-            row.addAttributeToValueMap(name, token);
+            Token newToken = new Token(null, attributes.size());
+            row.addAttributeToMap(name, newToken);
         }
         updateTable();
     }
@@ -224,35 +200,32 @@ public class Table {
         attributes.removeIf(attribute -> attribute.getName().equals(name));
     }
 
-    public void addRowToTable(List<Token> valueList, Integer newID) throws FileNotFoundException {
-        Row row = new Row(valueList, newID, this);
-        rows.add(row);
+    public void addRow(List<Token> valueList, Integer newID) throws FileNotFoundException {
+        Row newRow = new Row(valueList, newID, this);
+        rows.add(newRow);
         updateTable();
     }
 
-    Row getRowNumber(int index) {
+    Row getRowAtIndex(int index) {
         return rows.get(index);
     }
 
-    Row getRowByIndices(int index) {
+    Row getRowAtID(int ID) {
         for (Row row : rows) {
-            if (row.getValueFromAttribute("id").getIntegerValue() == index) {
+            if (row.getAttributeValue("id").getIntegerValue() == ID) {
                 return row;
             }
         }
         return null;
     }
 
-    // this needs to be changed so we spit the text back
-    public String filterTableWithAttributesAndCondition(List<Token> selectedAttributes, List<Token> condition) {
+    public String filterTable(List<Token> selectedAttributes, List<Token> condition) {
+        // select all if null
         if (selectedAttributes == null) {
-            selectedAttributes = new ArrayList<>();
-            for (Attribute attribute : attributes) {
-                Token token = new Token(attribute.getName(), -1);
-                selectedAttributes.add(token);
-            }
+            selectedAttributes = getAttributeTokens();
         }
-        StringBuilder output = new StringBuilder();
+        // attributes
+        StringBuilder outputString = new StringBuilder();
         StringBuilder firstLine = new StringBuilder();
         for (int i = 0; i < selectedAttributes.size(); i++) {
             firstLine.append(selectedAttributes.get(i).getValue());
@@ -260,25 +233,34 @@ public class Table {
                 firstLine.append("\t");
             }
         }
-        // System.out.println(firstLine);
-        output.append(firstLine.append("\n"));
+        outputString.append(firstLine.append("\n"));
+        return filterRows(selectedAttributes, condition, outputString);
+    }
+
+    String filterRows(List<Token> selectedAttributes, List<Token> condition, StringBuilder output) {
         for (Row row : rows) {
             if (conditionIsMet(condition, row)) {
                 ArrayList<String> orderedValues = new ArrayList<>();
-                // loop through attributes in order
                 for (Token attribute : selectedAttributes) {
-                    String attributeValue = row.attributesToTokens.get(attribute.getValue()).getValue();
+                    String attributeValue = row.attributeValueMap.get(attribute.getValue()).getValue();
                     if (attributeValue != null) {
                         orderedValues.add(attributeValue);
                     }
                 }
                 String joinedLine = String.join("\t", orderedValues);
                 output.append(joinedLine).append("\n");
-                // System.out.println(joinedLine);
             }
         }
         return output.toString();
-        // System.out.println(output);
+    }
+
+    List<Token> getAttributeTokens() {
+        List<Token> attributeTokens = new ArrayList<>();
+        for (Attribute attribute : attributes) {
+            Token newToken = new Token(attribute.getName(), -1);
+            attributeTokens.add(newToken);
+        }
+        return attributeTokens;
     }
 
 
@@ -293,77 +275,75 @@ public class Table {
 
     boolean attributeExists(String attributeName) {
         for (Attribute attribute : attributes) {
-            if (attribute.getName().equals(attributeName)) {
-                return true;
-            }
+            if (attribute.getName().equals(attributeName)) return true;
         }
         return false;
     }
 
     boolean conditionIsMet(List<Token> condition, Row row) {
         if (condition == null) return true;
-        int orPosition = evaluateBooleanSubExpression(condition, "OR");
+        int orPosition = resolveSegment(condition, "OR");
         if (orPosition != -1) {
             List<Token> leftHandSide = condition.subList(0, orPosition);
             List<Token> rightHandSide = condition.subList(orPosition + 1, condition.size());
             return (conditionIsMet(leftHandSide, row) || conditionIsMet(rightHandSide, row));
         }
-        int andPosition = evaluateBooleanSubExpression(condition, "AND");
+        int andPosition = resolveSegment(condition, "AND");
         if (andPosition != -1) {
             List<Token> leftHandSide = condition.subList(0, andPosition);
             List<Token> rightHandSide = condition.subList(andPosition + 1, condition.size());
             return (conditionIsMet(leftHandSide, row) && conditionIsMet(rightHandSide, row));
         }
         if (condition.size() == 3 || condition.size() == 5) {
-            return tertiaryCondition(condition, row);
+            return attributeSegment(condition, row);
         }
         return false;
     }
 
 
 
-    int evaluateBooleanSubExpression(List<Token> condition, String operator) {
-        //  find boolean operator only if at top level
-        int depth = 0;
-        boolean booleanOperatorFound = false;
-        int position = 0;
+    int resolveSegment(List<Token> condition, String operator) {
+        //  find boolean operator if at top level
+        int parenthesesDepth = 0;
+        boolean booleanFound = false;
+        int booleanPosition = 0;
         for (int i = 0; i < condition.size(); i++) {
-            if (condition.get(i).toString().equals("(")) depth++;
-            else if (condition.get(i).toString().equals(")")) depth--;
-            else if (depth == 0 && !booleanOperatorFound && condition.get(i).getValue().equals(operator)) {
-                booleanOperatorFound = true;
-                position = i;
+            if (condition.get(i).toString().equals("(")) parenthesesDepth++;
+            else if (condition.get(i).toString().equals(")")) parenthesesDepth--;
+            else if (parenthesesDepth == 0 && !booleanFound && condition.get(i).getValue().equals(operator)) {
+                booleanFound = true;
+                booleanPosition = i;
             }
         }
         // split conditional
-        if (booleanOperatorFound) {
-            return position;
-        }
+        if (booleanFound) return booleanPosition;
         return -1;
     }
 
-    boolean tertiaryCondition(List<Token> condition, Row row) {
-        int first, second, third;
-        first = 0;
-        second = 1;
-        third = 2;
+    boolean attributeSegment(List<Token> condition, Row row) {
+        int tokenOne = 0;
+        int tokenTwo = 1;
+        int tokenThree = 2;
         if (condition.size() == 5) {
-            first++;
-            second++;
-            third++;
+            tokenOne++;
+            tokenTwo++;
+            tokenThree++;
         }
-        String attributeToken = condition.get(first).getValue();
-        String comparator = condition.get(second).getValue();
-        Token valueToken = condition.get(third);
-        Token valueInCell = row.attributesToTokens.get(attributeToken);
+        String attributeToken = condition.get(tokenOne).getValue();
+        String comparator = condition.get(tokenTwo).getValue();
+        Token valueToken = condition.get(tokenThree);
+        Token attributeValue = row.attributeValueMap.get(attributeToken);
 
+        return dataTypeSwitch(attributeToken, comparator, valueToken, attributeValue);
+    }
+
+    boolean dataTypeSwitch(String attributeToken, String comparator, Token valueToken, Token valueInCell) {
         String dataType = null;
         for (Attribute attribute : attributes) {
             if (attributeToken.equals(attribute.getName())) {
                 dataType = attributes.get(attribute.getIndex()).getDataType();
             }
         }
-
         if (dataType != null) {
             switch (dataType) {
                 case "booleanLiteral":
@@ -453,7 +433,7 @@ public class Table {
         return false;
     }
 
-    void deleteFromTableOnCondition(List<Token> condition) throws FileNotFoundException {
+    void deleteOnFilter(List<Token> condition) throws FileNotFoundException {
         int rowCount = rows.size();
         for (int i = 0; i < rowCount; i++) {
             if (conditionIsMet(condition, rows.get(i))) {

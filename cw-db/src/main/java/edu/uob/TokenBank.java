@@ -26,12 +26,12 @@ public class TokenBank {
 
     void initialise() {
         tokenQueries = createTokenQueries();
-        tokenToTypeMap = createTokenTypesToTokens();
+        tokenToTypeMap = makeTokenTypeMap();
         currentTokenPosition = 0;
-        query = getCurrentQueryAsTokenTypes();
+        query = getQueryAsTypes();
     }
 
-    Map<String, Token> createTokenTypesToTokens() {
+    Map<String, Token> makeTokenTypeMap() {
         Map<String, Token> getTokenFromType = new HashMap<>();
         for (Token token : tokens) {
             getTokenFromType.put(token.getTokenType(), token);
@@ -39,7 +39,7 @@ public class TokenBank {
         return getTokenFromType;
     }
 
-    String getPatternFromTokenQueriesMap(String key) {
+    String getTokenTypeQuery(String key) {
         return tokenQueries.get(key);
     }
 
@@ -65,32 +65,15 @@ public class TokenBank {
         return false;
     }
 
-    Map<String, String> createTokenQueries() {
-        Map<String, String> tokenKeys = new HashMap<>();
-        tokenKeys.put("use", "useCommand databaseName terminator");
-        tokenKeys.put("create database", "createCommand databaseSelector databaseName terminator");
-        tokenKeys.put("create table",  "createCommand tableSelector tableName");
-        tokenKeys.put("drop database", "dropCommand databaseSelector databaseName terminator");
-        tokenKeys.put("drop table", "dropCommand tableSelector tableName terminator");
-        tokenKeys.put("alter", "alterCommand tableSelector tableName alterationType attributeName terminator");
-        tokenKeys.put("insert", "insertCommand into tableName values");
-        tokenKeys.put("select", "attributeName from tableName");
-        tokenKeys.put("select with condition", "selectCommand wildAttributeSymbol from tableName ... ");
-        tokenKeys.put("update", "updateCommand tableName set attributeName equals");
-        tokenKeys.put("delete", "deleteCommand from tableName where");
-        tokenKeys.put("join", "joinCommand tableOneName and tableTwoName on attributeOneName and attributeTwoName terminator");
-        return tokenKeys;
-    }
-
     int getLastTokenPosition() {
         return lastTokenPosition;
     }
 
-    boolean checkIfAtFinalToken() {
+    boolean checkIfAtEnd() {
         return (lastTokenPosition == currentTokenPosition);
     }
 
-    int numberOfTokensLeft() {
+    int getTokensLeft() {
         return tokens.size() - currentTokenPosition - 1;
     }
 
@@ -100,11 +83,6 @@ public class TokenBank {
 
     Token getLastToken() {
         return tokens.get(tokens.size() - 1);
-    }
-
-
-    TokenBank() {
-        currentTokenPosition = 0;
     }
 
     void setTokens(ArrayList<String> tokenNames) {
@@ -143,21 +121,7 @@ public class TokenBank {
         currentTokenPosition = position;
     }
 
-    void printTokenNames () {
-        for (Token token : tokens) {
-            System.out.printf(token.getValue() + " ");
-        }
-        System.out.println();
-    }
-
-    void printTokenTypes() {
-        for (Token token : tokens) {
-            System.out.printf(token.getTokenType() + " ");
-        }
-        System.out.println();
-    }
-
-    String getCurrentQueryAsTokenTypes() {
+    String getQueryAsTypes() {
         StringBuilder result = new StringBuilder();
         for (Token token : tokens) {
             result.append(token.getTokenType()).append(" ");
@@ -167,8 +131,8 @@ public class TokenBank {
     }
 
     public List<Token> getTokenTypeFromFragment(String description, String startToken, String endToken) {
-        int start = getTokenFromType(startToken).getPosition();
-        setCurrentTokenToPosition(start + 1);
+        int startPosition = getTokenFromType(startToken).getPosition();
+        setCurrentTokenToPosition(startPosition + 1);
         Token token = getCurrentToken();
         List<Token> newTokens = new ArrayList<>();
         while (!token.getTokenType().equals(endToken)) {
@@ -181,12 +145,29 @@ public class TokenBank {
             else if (description.equals("condition") && (token.isACondition() || token.getTokenType().equals("booleanOperator"))) {
                 newTokens.add(token);
             }
-            else if (description.equals("nameValuePairs") && token.isNameValuePair()) {
+            else if (description.equals("nameValuePairs") && token.isValuePair()) {
                 newTokens.add(token);
             }
             token = nextToken();
 
         }
         return newTokens;
+    }
+
+    Map<String, String> createTokenQueries() {
+        Map<String, String> tokenKeys = new HashMap<>();
+        tokenKeys.put("use", "useCommand databaseName terminator");
+        tokenKeys.put("create database", "createCommand databaseSelector databaseName terminator");
+        tokenKeys.put("create table",  "createCommand tableSelector tableName");
+        tokenKeys.put("drop database", "dropCommand databaseSelector databaseName terminator");
+        tokenKeys.put("drop table", "dropCommand tableSelector tableName terminator");
+        tokenKeys.put("alter", "alterCommand tableSelector tableName alterationType attributeName terminator");
+        tokenKeys.put("insert", "insertCommand into tableName values");
+        tokenKeys.put("select", "attributeName from tableName");
+        tokenKeys.put("select with condition", "selectCommand wildAttributeSymbol from tableName ... ");
+        tokenKeys.put("update", "updateCommand tableName set attributeName equals");
+        tokenKeys.put("delete", "deleteCommand from tableName where");
+        tokenKeys.put("join", "joinCommand tableOneName and tableTwoName on attributeOneName and attributeTwoName terminator");
+        return tokenKeys;
     }
 }

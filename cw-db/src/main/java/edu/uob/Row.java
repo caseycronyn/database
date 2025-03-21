@@ -5,88 +5,87 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Row extends TokenBank {
-    Map<String, Token> attributesToTokens = new HashMap<>();
+public class Row {
+    Map<String, Token> attributeValueMap = new HashMap<>();
     List<Token> tokenList;
     int id;
     Table table;
 
-    Row (List<Token> tokenList, int newID, Table table) {
+    Row(List<Token> tokenList, int newID, Table table) {
         this.table = table;
         this.tokenList = tokenList;
         this.id = newID;
         if (tokenList != null) {
-            addIdToken();
-            for (int i = 1; i < table.getAttributes().size(); i++) {
+            addID();
+            for (int i = 1; i < table.getAttributeList().size(); i++) {
                 Token token = tokenList.get(i - 1);
-                attributesToTokens.put(table.getAttributeAtIndex(i).getName(), token);
+                attributeValueMap.put(table.getAttributeAtIndex(i).getName(), token);
             }
         }
     }
 
-    Row copy(Table newTable) {
+    Row copyRow(Table newTable) {
         Map<String, Token> newAttributesToValues = new HashMap<>();
-        for (String attributeName : attributesToTokens.keySet()) {
-            newAttributesToValues.put(attributeName, attributesToTokens.get(attributeName).copy());
+        for (String attributeName : attributeValueMap.keySet()) {
+            newAttributesToValues.put(attributeName, attributeValueMap.get(attributeName).copyToken());
         }
 
         List<Token> newTokenList = new ArrayList<>();
         for (Token token : tokenList) {
-            newTokenList.add(token.copy());
+            newTokenList.add(token.copyToken());
         }
         Row newRow = new Row(newTokenList, id, newTable);
-        newRow.addAttributesToValuesMap(newAttributesToValues);
+        newRow.appendToValueMap(newAttributesToValues);
 
         return newRow;
     }
 
-
-    void changeKeyInAttributesToValuesMap(String attributeName, String replacementName) {
-        Token returnedToken = attributesToTokens.remove(attributeName);
-        attributesToTokens.put(replacementName, returnedToken);
-    }
-
-    void addValueToRow(String attributeName, Token value) {
-        attributesToTokens.put(attributeName, value);
-    }
-
-    void addAttributeToValueMap(String attributeName, Token value) {
-        attributesToTokens.put(attributeName, value);
-    }
-
-    void addAttributesToValuesMap(Map<String, Token> attributesToValuesIn) {
-        attributesToTokens.putAll(attributesToValuesIn);
-    }
-
     void initialiseRow(String[] tokenArray) {
-        for (int i = 0; i < table.getAttributes().size(); i++) {
+        for (int i = 0; i < table.getAttributeList().size(); i++) {
             Token token = new Token(tokenArray[i], i);
-            token.setValueTokenType();
-            attributesToTokens.put(table.getAttributeAtIndex(i).getName(), token);
+            token.setValueType();
+            attributeValueMap.put(table.getAttributeAtIndex(i).getName(), token);
         }
+    }
+
+    void setMapAttribute(String attributeName, String replacementName) {
+        Token returnedToken = attributeValueMap.remove(attributeName);
+        attributeValueMap.put(replacementName, returnedToken);
+    }
+
+    void addRowValue(String attributeName, Token value) {
+        attributeValueMap.put(attributeName, value);
+    }
+
+    void addAttributeToMap(String attributeName, Token value) {
+        attributeValueMap.put(attributeName, value);
+    }
+
+    void appendToValueMap(Map<String, Token> attributesToValuesIn) {
+        attributeValueMap.putAll(attributesToValuesIn);
     }
 
     int getId() {
         return id;
     }
 
-    void addIdToken() {
+    void addID() {
         Token token = new Token(Integer.toString(id), 0);
         token.setTokenType("integerLiteral");
-        attributesToTokens.put("id", token);
+        attributeValueMap.put("id", token);
     }
 
     void changeId(int newId) {
         id = newId;
         Token token = new Token(Integer.toString(newId), 0);
-        attributesToTokens.replace("id", token);
+        attributeValueMap.replace("id", token);
     }
 
-    void changeValue(String attribute, Token token) {
-        attributesToTokens.put(attribute, token);
+    void setValue(String attribute, Token token) {
+        attributeValueMap.put(attribute, token);
     }
 
-    Token getValueFromAttribute(String attribute) {
-        return attributesToTokens.get(attribute);
+    Token getAttributeValue(String attribute) {
+        return attributeValueMap.get(attribute);
     }
 }

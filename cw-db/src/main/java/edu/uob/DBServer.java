@@ -14,10 +14,10 @@ public class DBServer {
         server.blockingListenOn(8888);
     }
 
- // NOTE double check the databases location before submission
+    // NOTE double check the databases location before submission
     /**
-    * KEEP this signature otherwise we won't be able to mark your submission correctly.
-    */
+     * KEEP this signature otherwise we won't be able to mark your submission correctly.
+     */
     public DBServer() {
         DBManager = new DBManager();
         try {
@@ -29,11 +29,11 @@ public class DBServer {
     }
 
     /**
-    * KEEP this signature (i.e. {@code edu.uob.DBServer.handleCommand(String)}) otherwise we won't be
-    * able to mark your submission correctly.
-    *
-    * <p>This method handles all incoming DB commands and carries out the required actions.
-    */
+     * KEEP this signature (i.e. {@code edu.uob.DBServer.handleCommand(String)}) otherwise we won't be
+     * able to mark your submission correctly.
+     *
+     * <p>This method handles all incoming DB commands and carries out the required actions.
+     */
     public String handleCommand(String command) {
         try {
             TokenBank tokenBank = new TokenBank(command);
@@ -66,8 +66,8 @@ public class DBServer {
 
     private void blockingHandleConnection(ServerSocket serverSocket) throws IOException {
         try (Socket s = serverSocket.accept();
-        BufferedReader reader = new BufferedReader(new InputStreamReader(s.getInputStream()));
-        BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(s.getOutputStream()))) {
+             BufferedReader reader = new BufferedReader(new InputStreamReader(s.getInputStream()));
+             BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(s.getOutputStream()))) {
 
             System.out.println("Connection established: " + serverSocket.getInetAddress());
             while (!Thread.interrupted()) {

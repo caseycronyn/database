@@ -8,10 +8,11 @@ public class CommandInserter implements DBCommand {
     public String executeCommand(DBManager dbManager, TokenBank tokenBank) throws FileNotFoundException {
         Database currentDatabase = dbManager.getCurrentDatabase();
         String tableName = tokenBank.getTokenFromType("tableName").getValue();
-        Table table = dbManager.getCurrentDatabase().tableMap.get(tableName);
+        Table table = currentDatabase.tableMap.get(tableName);
+        int newID = currentDatabase.getNewID();
+
         List<Token> valueList = tokenBank.getTokenTypeFromFragment("valueList", "openParenthesis", "closeParenthesis");
-        int newID = dbManager.getCurrentDatabase().getNewID();
-        table.addRowToTable(valueList, newID);
+        table.addRow(valueList, newID);
         return "[OK]";
     }
 }

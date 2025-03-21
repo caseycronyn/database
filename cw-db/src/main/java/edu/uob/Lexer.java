@@ -23,7 +23,6 @@ public class Lexer {
         }
     }
 
-    // should return a hashmap of tokens to set in tokenbank or an error if something is wrong. sets token types
     void lexTokens() {
         semicolonLexer();
         commandTypeLexer();
@@ -37,9 +36,8 @@ public class Lexer {
 
     void commandTypeLexer() {
         Token token = tokenBank.getFirstToken();
-        token.nameToUpperCase();
+        token.nameToUpper();
         if (token.isCommandType()) {
-            // next one
             switch (token.getValue()) {
                 case "CREATE":
                     token.setTokenType("createCommand");
@@ -119,7 +117,7 @@ public class Lexer {
         tokenBank.nextToken();
         keyWordLexer("set", "SET");
         Token token = tokenBank.nextToken();
-        while (!(token.getValue().equals("WHERE")) && (tokenBank.numberOfTokensLeft() > 1)) {
+        while (!(token.getValue().equals("WHERE")) && (tokenBank.getTokensLeft() > 1)) {
             nameValueLexer();
             token = tokenBank.getCurrentToken();
         }
@@ -136,7 +134,7 @@ public class Lexer {
         tokenBank.nextToken();
         keyWordLexer("equals", "=");
         token = tokenBank.nextToken();
-        token.setValueTokenType();
+        token.setValueType();
         tokenBank.nextToken();
     }
 
@@ -144,24 +142,23 @@ public class Lexer {
         tokenBank.getCurrentToken();
         attributeLexer();
         Token token = tokenBank.getCurrentToken();
-        token.nameToUpperCase();
+        token.nameToUpper();
         if (token.getValue().equals("FROM")) {
             token.setTokenType("from");
         }
         tokenBank.nextToken();
         plainTextLexer("tableName");
         token = tokenBank.nextToken();
-        token.nameToUpperCase();
+        token.nameToUpper();
         if (token.getValue().equals("WHERE")) {
             token.setTokenType("where");
             conditionLexer();
-            // condition!! :(( AHHH!!
         }
     }
 
     void conditionLexer() {
         Token token = tokenBank.getCurrentToken();
-        token.nameToUpperCase();
+        token.nameToUpper();
         if (token.getValue().equals("WHERE")) {
             token.setTokenType("where");
             parenthesesLexer();
@@ -170,12 +167,12 @@ public class Lexer {
     }
 
     void valuePairLexer() {
-        while (!tokenBank.checkIfAtFinalToken()) {
+        while (!tokenBank.checkIfAtEnd()) {
             Token token = tokenBank.nextToken();
             if (token.getTokenType() == null) {
                 if (token.isBooleanOperator()) {
                     token.setTokenType("booleanOperator");
-                } else if (tokenBank.numberOfTokensLeft() > 2) {
+                } else if (tokenBank.getTokensLeft() > 2) {
                     attributeComparatorValue();
                 }
             }
@@ -183,183 +180,181 @@ public class Lexer {
     }
 
 
-        void attributeComparatorValue() {
-            plainTextLexer("attributeName");
-            Token token = tokenBank.nextToken();
-            if (token.isComparator()) {
-                token.setTokenType("comparator");
-            }
-            token = tokenBank.nextToken();
-            token.setValueTokenType();
+    void attributeComparatorValue() {
+        plainTextLexer("attributeName");
+        Token token = tokenBank.nextToken();
+        if (token.isComparator()) {
+            token.setTokenType("comparator");
         }
+        token = tokenBank.nextToken();
+        token.setValueType();
+    }
 
 
-        void attributeLexer() {
-            Token token = tokenBank.getCurrentToken();
-            while (!token.getValue().equalsIgnoreCase("FROM")) {
-                if (token.isWildAttributeList()) {
-                    token.setTokenType("attributeName");
-                } else if (token.getValue().equals(",")) {
-                    token.setTokenType("comma");
-                }
-                token = tokenBank.nextToken();
-            }
-        }
-
-        void insertLexer() {
-            keyWordLexer("into", "INTO");
-            tokenBank.nextToken();
-            plainTextLexer("tableName");
-            tokenBank.nextToken();
-            keyWordLexer("values", "VALUES");
-            tokenBank.incrementCurrentTokenPosition();
-            parenthesesLexer();
-            enclosedTokenLexer("valueList");
-        }
-
-        void alterLexer() {
-            Token token = tokenBank.getCurrentToken();
-            token.nameToUpperCase();
-            if (token.getValue().equals("TABLE")) {
-                token.setTokenType("tableSelector");
-            }
-            token = tokenBank.nextToken();
-            if (token.isPlainText()) {
-                token.setTokenType("tableName");
-            }
-            token = tokenBank.nextToken();
-            token.nameToUpperCase();
-            if (alterationLexer(token)) {
-                token.setTokenType("alterationType");
-            }
-            token = tokenBank.nextToken();
-            if (token.isPlainText()) {
+    void attributeLexer() {
+        Token token = tokenBank.getCurrentToken();
+        while (!token.getValue().equalsIgnoreCase("FROM")) {
+            if (token.isWildAttributeList()) {
                 token.setTokenType("attributeName");
+            } else if (token.getValue().equals(",")) {
+                token.setTokenType("comma");
             }
+            token = tokenBank.nextToken();
         }
+    }
 
-        void dropLexer() {
-            Token token = tokenBank.getCurrentToken();
-            token.nameToUpperCase();
-            switch (token.getValue()) {
-                case "DATABASE":
-                    token.setTokenType("databaseSelector");
-                    token = tokenBank.nextToken();
-                    if (token.isPlainText()) {
-                        token.setTokenType("databaseName");
-                    }
-                    break;
-                case "TABLE":
-                    token.setTokenType("tableSelector");
-                    token = tokenBank.nextToken();
-                    if (token.isPlainText()) {
-                        token.setTokenType("tableName");
-                    }
-                    break;
-            }
+    void insertLexer() {
+        keyWordLexer("into", "INTO");
+        tokenBank.nextToken();
+        plainTextLexer("tableName");
+        tokenBank.nextToken();
+        keyWordLexer("values", "VALUES");
+        tokenBank.incrementCurrentTokenPosition();
+        parenthesesLexer();
+        enclosedTokenLexer("valueList");
+    }
+
+    void alterLexer() {
+        Token token = tokenBank.getCurrentToken();
+        token.nameToUpper();
+        if (token.getValue().equals("TABLE")) {
+            token.setTokenType("tableSelector");
         }
-
-        void createLexer() {
-            Token token = tokenBank.getCurrentToken();
-            token.nameToUpperCase();
-            switch (token.getValue()) {
-                case "DATABASE":
-                    token.setTokenType("databaseSelector");
-                    tokenBank.nextToken();
-                    createDatabaseLexer();
-                    break;
-                case "TABLE":
-                    token.setTokenType("tableSelector");
-                    tokenBank.nextToken();
-                    createTableLexer();
-                    break;
-            }
+        token = tokenBank.nextToken();
+        if (token.isPlainText()) {
+            token.setTokenType("tableName");
         }
-
-        void createDatabaseLexer(){
-            Token token = tokenBank.getCurrentToken();
-            if (token.isPlainText()) {
-                token.setTokenType("databaseName");
-            }
+        token = tokenBank.nextToken();
+        token.nameToUpper();
+        if (alterationLexer(token)) {
+            token.setTokenType("alterationType");
         }
+        token = tokenBank.nextToken();
+        if (token.isPlainText()) {
+            token.setTokenType("attributeName");
+        }
+    }
 
-        void createTableLexer(){
-            Token token = tokenBank.getCurrentToken();
-            if (token.isPlainText()) {
-                token.setTokenType("tableName");
-            }
-            if (tokenBank.tokens.size() > 4) {
+    void dropLexer() {
+        Token token = tokenBank.getCurrentToken();
+        token.nameToUpper();
+        switch (token.getValue()) {
+            case "DATABASE":
+                token.setTokenType("databaseSelector");
+                token = tokenBank.nextToken();
+                if (token.isPlainText()) {
+                    token.setTokenType("databaseName");
+                }
+                break;
+            case "TABLE":
+                token.setTokenType("tableSelector");
+                token = tokenBank.nextToken();
+                if (token.isPlainText()) {
+                    token.setTokenType("tableName");
+                }
+                break;
+        }
+    }
+
+    void createLexer() {
+        Token token = tokenBank.getCurrentToken();
+        token.nameToUpper();
+        switch (token.getValue()) {
+            case "DATABASE":
+                token.setTokenType("databaseSelector");
                 tokenBank.nextToken();
-                parenthesesLexer();
-                enclosedTokenLexer("attributeName");
-            }
+                createDatabaseLexer();
+                break;
+            case "TABLE":
+                token.setTokenType("tableSelector");
+                tokenBank.nextToken();
+                createTableLexer();
+                break;
         }
+    }
 
-        // lexers all parentheses
-        void parenthesesLexer () {
-            boolean parenthesesOpen = false;
-            int openParenthesisCount = 0;
-            int closeParenthesisCount = 0;
-            Token token = tokenBank.getCurrentToken();
-            int initialTokenPosition = tokenBank.getCurrentTokenPosition();
-            // token = tokenBank.nextToken();
-            for (int i = initialTokenPosition; i < tokenBank.getLastTokenPosition(); i++) {
-                if (token.getValue().equals("(")) {
-                    token.setTokenType("openParenthesis");
-                    parenthesesOpen = true;
-                    openParenthesisCount++;
-                }
-                else if (token.getValue().equals(",")) {
-                    token.setTokenType("comma");
-                } else if ((token.getValue().equals(")")) && parenthesesOpen) {
-                    token.setTokenType("closeParenthesis");
-                    closeParenthesisCount++;
-                }
-                token = tokenBank.nextToken();
-            }
-            if (openParenthesisCount != closeParenthesisCount) {
-                throw new UnbalancedParenthesesException("Unbalanced parentheses detected in Lexer ");
-            }
-            tokenBank.setCurrentTokenToPosition(initialTokenPosition);
+    void createDatabaseLexer(){
+        Token token = tokenBank.getCurrentToken();
+        if (token.isPlainText()) {
+            token.setTokenType("databaseName");
         }
+    }
 
-        void enclosedTokenLexer(String description){
-            Token token = tokenBank.getCurrentToken();
-            while (!token.getTokenType().equals("closeParenthesis")) {
-                token = tokenBank.nextToken();
-                if (description.equals("valueList")) {
-                    token.setValueTokenType();
-                } else if (token.isPlainText()) {
-                    token.setTokenType(description);
-                }
-            }
+    void createTableLexer(){
+        Token token = tokenBank.getCurrentToken();
+        if (token.isPlainText()) {
+            token.setTokenType("tableName");
         }
-
-        void useLexer() {
-            Token token = tokenBank.getCurrentToken();
-            if (token.isPlainText()) {
-                token.setTokenType("databaseName");
-            }
+        if (tokenBank.tokens.size() > 4) {
+            tokenBank.nextToken();
+            parenthesesLexer();
+            enclosedTokenLexer("attributeName");
         }
+    }
 
-        void plainTextLexer(String description){
-            Token token = tokenBank.getCurrentToken();
-            if (token.isPlainText()) {
+    void parenthesesLexer () {
+        boolean parenthesesOpen = false;
+        int openParenthesisCount = 0;
+        int closeParenthesisCount = 0;
+        Token token = tokenBank.getCurrentToken();
+        int initialTokenPosition = tokenBank.getCurrentTokenPosition();
+        for (int i = initialTokenPosition; i < tokenBank.getLastTokenPosition(); i++) {
+            if (token.getValue().equals("(")) {
+                token.setTokenType("openParenthesis");
+                parenthesesOpen = true;
+                openParenthesisCount++;
+            }
+            else if (token.getValue().equals(",")) {
+                token.setTokenType("comma");
+            } else if ((token.getValue().equals(")")) && parenthesesOpen) {
+                token.setTokenType("closeParenthesis");
+                closeParenthesisCount++;
+            }
+            token = tokenBank.nextToken();
+        }
+        if (openParenthesisCount != closeParenthesisCount) {
+            throw new UnbalancedParenthesesException("Unbalanced parentheses detected in Lexer ");
+        }
+        tokenBank.setCurrentTokenToPosition(initialTokenPosition);
+    }
+
+    void enclosedTokenLexer(String description){
+        Token token = tokenBank.getCurrentToken();
+        while (!token.getTokenType().equals("closeParenthesis")) {
+            token = tokenBank.nextToken();
+            if (description.equals("valueList")) {
+                token.setValueType();
+            } else if (token.isPlainText()) {
                 token.setTokenType(description);
             }
         }
+    }
 
-        void keyWordLexer(String description, String pattern){
-            Token token = tokenBank.getCurrentToken();
-            token.nameToUpperCase();
-            if (token.getValue().equals(pattern)) {
-                token.setTokenType(description);
-            }
+    void useLexer() {
+        Token token = tokenBank.getCurrentToken();
+        if (token.isPlainText()) {
+            token.setTokenType("databaseName");
         }
+    }
 
-        boolean alterationLexer(Token token){
-            return (token.getValue().equals("DROP") || token.getValue().equals("ADD"));
+    void plainTextLexer(String description){
+        Token token = tokenBank.getCurrentToken();
+        if (token.isPlainText()) {
+            token.setTokenType(description);
         }
+    }
+
+    void keyWordLexer(String description, String pattern){
+        Token token = tokenBank.getCurrentToken();
+        token.nameToUpper();
+        if (token.getValue().equals(pattern)) {
+            token.setTokenType(description);
+        }
+    }
+
+    boolean alterationLexer(Token token){
+        return (token.getValue().equals("DROP") || token.getValue().equals("ADD"));
+    }
 
 }
 
