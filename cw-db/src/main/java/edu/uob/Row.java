@@ -58,6 +58,10 @@ public class Row extends TokenBank {
         attributesToTokens.put(attributeName, value);
     }
 
+    void addAttributeToValueMap(String attributeName, Token value) {
+        attributesToTokens.put(attributeName, value);
+    }
+
     void addAttributesToValuesMap(Map<String, Token> attributesToValuesIn) {
         attributesToTokens.putAll(attributesToValuesIn);
     }

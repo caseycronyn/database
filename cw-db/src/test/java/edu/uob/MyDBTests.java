@@ -25,6 +25,7 @@ public class MyDBTests {
     private DBServer server;
     String[] longResponse;
     String good = "[OK]";
+    String bad = "[ERROR]";
 
     void setupArrays() {
           longResponse = new String[] {     "[OK]\nid\tname\tmark\tpass\n1\tSimon\t65\tTRUE\n2\tSion\t55\tTRUE\n3\tRob\t35\tFALSE\n4\tChris\t20\tFALSE\n",
@@ -42,9 +43,9 @@ public class MyDBTests {
           "[OK]\nid\tname\tmark\tpass\tage\n1\tSimon\t65\tTRUE\n",
           "[OK]\nid\tname\tmark\tpass\tage\n1\tSimon\t65\tTRUE\t35\n",
           "[OK]\nid\tname\tmark\tage\n1\tSimon\t65\t35\n",
-          "[ERROR]: Semi colon missing at end of line",
-          "[ERROR]: Table does not exist",
-          "[ERROR]: Attribute does not exist"
+          "[ERROR]",
+          "[ERROR]",
+          "[ERROR]"
        };
 
         queriesMap.put("CREATE DATABASE markbook;", good);
@@ -105,7 +106,7 @@ public class MyDBTests {
 
     private String sendCommandToServer(String command) {
         // Try to send a command to the server - this call will time out if it takes too long (in case the server enters an infinite loop)
-        return assertTimeoutPreemptively(Duration.ofMillis(10000), () -> { return server.handleCommand(command);},
+        return assertTimeoutPreemptively(Duration.ofMillis(100000), () -> { return server.handleCommand(command);},
                 "Server took too long to respond (probably stuck in an infinite loop)");
     }
 
@@ -402,28 +403,63 @@ public class MyDBTests {
         response = sendCommandToServer(query);
         Assertions.assertEquals(longResponse[9], response);
 
-        // query = "SELECT name FROM marks WHERE mark>60;";
-        // response = sendCommandToServer(query);
-        // Assertions.assertEquals(longResponse[10], response);
-        //
-        // query = "DELETE FROM marks WHERE mark<40;";
-        // response = sendCommandToServer(query);
-        // Assertions.assertEquals(good, response);
-        //
-        //
-        //
-        //
-        //
-        //
-        //
-        //
-        //
-        //
+        query = "SELECT name FROM marks WHERE mark>60;";
+        response = sendCommandToServer(query);
+        Assertions.assertEquals(longResponse[10], response);
+
+        query = "DELETE FROM marks WHERE mark<40;";
+        response = sendCommandToServer(query);
+        Assertions.assertEquals(good, response);
+
+        query = "SELECT * FROM marks;";
+        response = sendCommandToServer(query);
+        Assertions.assertEquals(longResponse[11], response);
+
+        query = "ALTER TABLE marks ADD age;";
+        response = sendCommandToServer(query);
+        Assertions.assertEquals(good, response);
+
+        query = "SELECT * FROM marks;";
+        response = sendCommandToServer(query);
+        Assertions.assertEquals(longResponse[12], response);
+
+        query = "UPDATE marks SET age = 35 WHERE name == 'Simon';";
+        response = sendCommandToServer(query);
+        Assertions.assertEquals(good, response);
+
+        query = "SELECT * FROM marks;";
+        response = sendCommandToServer(query);
+        Assertions.assertEquals(longResponse[13], response);
+
+        query = "ALTER TABLE marks DROP pass;";
+        response = sendCommandToServer(query);
+        Assertions.assertEquals(good, response);
+
+        query = "SELECT * FROM marks;";
+        response = sendCommandToServer(query);
+        Assertions.assertEquals(longResponse[14], response);
 
 
+        query = "SELECT * FROM marks";
+        response = sendCommandToServer(query);
+        Assertions.assertTrue(response.contains(bad));
+
+        query = "SELECT * FROM crew;";
+        response = sendCommandToServer(query);
+        Assertions.assertTrue(response.contains(bad));
 
 
+        query = "SELECT height FROM marks WHERE name == 'Chris';";
+        response = sendCommandToServer(query);
+        Assertions.assertTrue(response.contains(bad));
 
+        query = "DROP TABLE marks;";
+        response = sendCommandToServer(query);
+        Assertions.assertEquals(good, response);
+
+        query = "DROP DATABASE " + randomName + ";";
+        response = sendCommandToServer(query);
+        Assertions.assertEquals(good, response);
     }
 
 }

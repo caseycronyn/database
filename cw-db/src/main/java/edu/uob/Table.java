@@ -212,7 +212,11 @@ public class Table {
     public void addNewAttribute(String name) throws FileNotFoundException {
         Attribute attribute = new Attribute(name, "NULL", attributes.size());
         attributes.add(attribute);
-        writeTableToFileFromMemory();
+        for (Row row : rows) {
+            Token token = new Token(null, attributes.size());
+            row.addAttributeToValueMap(name, token);
+        }
+        updateTable();
     }
 
 
@@ -252,7 +256,6 @@ public class Table {
 
     // this needs to be changed so we spit the text back
     public String filterTableWithAttributesAndCondition(List<Token> selectedAttributes, List<Token> condition) {
-        StringBuilder output = new StringBuilder();
         if (selectedAttributes == null) {
             selectedAttributes = new ArrayList<>();
             for (Attribute attribute : attributes) {
@@ -260,6 +263,7 @@ public class Table {
                 selectedAttributes.add(token);
             }
         }
+        StringBuilder output = new StringBuilder();
         StringBuilder firstLine = new StringBuilder();
         for (int i = 0; i < selectedAttributes.size(); i++) {
             firstLine.append(selectedAttributes.get(i).getValue());
@@ -275,7 +279,9 @@ public class Table {
                 // loop through attributes in order
                 for (Token attribute : selectedAttributes) {
                     String attributeValue = row.attributesToTokens.get(attribute.getValue()).getValue();
-                    orderedValues.add(attributeValue);
+                    if (attributeValue != null) {
+                        orderedValues.add(attributeValue);
+                    }
                 }
                 String joinedLine = String.join("\t", orderedValues);
                 output.append(joinedLine).append("\n");
@@ -284,6 +290,25 @@ public class Table {
         }
         return output.toString();
         // System.out.println(output);
+    }
+
+
+    boolean attributesExist(List<Token> attributeList) {
+        for (Token attribute : attributeList) {
+            if (attributeExists(attribute.getValue())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    boolean attributeExists(String attributeName) {
+        for (Attribute attribute : attributes) {
+            if (attribute.getName().equals(attributeName)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     void printTable() {

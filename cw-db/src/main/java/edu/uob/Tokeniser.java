@@ -6,7 +6,7 @@ import java.util.Arrays;
 // Maybe use regular expressions for a subset of this
 // normalise this input so that it's all the same. takes a string and turns it into an array of token
 public class Tokeniser {
-    String[] specialCharacters = {"(", ")", ",", ";"};
+    String[] specialCharacters = {"(", ")", ",", ";", "==", ">", "<", ">=", "<=", "!=", "LIKE"};
     ArrayList<String> tokens = new ArrayList<String>();
 
     // Treats text inside single quotes as a single token

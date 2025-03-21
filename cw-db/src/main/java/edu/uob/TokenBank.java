@@ -130,7 +130,6 @@ public class TokenBank {
 
     Token nextToken () {
         if (currentTokenPosition >= tokens.size() - 1) {
-            System.out.println("No more tokens");
             return null;
         }
         currentTokenPosition++;

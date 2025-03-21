@@ -138,3 +138,5 @@ need to add relevant permissions for all methods and variables
 
 
 de chatgpt the method for joins
+
+perhaps i can get rid of some indices notes??

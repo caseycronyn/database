@@ -18,10 +18,13 @@ public class SelectCommand implements DBCommand {
         }
 
         List<Token> attributeNames = tokenBank.getTokenTypeFromFragment("attributeName", "selectCommand", "from");
+        if (!table.attributesExist(attributeNames)) {
+            return "[ERROR]: attributes not found";
+        }
         List<Token> condition = null;
         if (tokenBank.tokenExistsInQuery("where")) {
             condition = tokenBank.getTokenTypeFromFragment("condition", "where", "terminator");
         }
-        return "[OK]\n" + table.getTableAsSting();
+        return "[OK]\n" + table.filterTableWithAttributesAndCondition(attributeNames, condition);
     }
 }

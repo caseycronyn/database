@@ -14,8 +14,9 @@ public class DropDatabase implements DBCommand {
         server.databases.remove(databaseName);
         File file = new File(server.getStorageFolderPath() + File.separator + databaseName);
         server.deleteDirectory(file);
-        if (!file.delete()) {
-            System.out.println("Error deleting " + databaseName);
+        boolean deletion = file.delete();
+        if (!deletion) {
+            return ("[ERROR] deleting " + databaseName);
         }
         return "[OK]";
     }
