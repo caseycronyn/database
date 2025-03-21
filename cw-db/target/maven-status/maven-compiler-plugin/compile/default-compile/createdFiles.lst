@@ -1,5 +1,3 @@
-edu/uob/Tokeniser.class
-edu/uob/CreateDatabase.class
 edu/uob/DBCommand.class
 edu/uob/TokenBank.class
-edu/uob/Parser.class
+edu/uob/UpdateCommand.class

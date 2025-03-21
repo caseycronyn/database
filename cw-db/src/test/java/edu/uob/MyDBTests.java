@@ -1,23 +1,16 @@
 package edu.uob;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.fail;
 import static org.junit.jupiter.api.Assertions.assertTimeoutPreemptively;
 
-import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import java.time.Duration;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-import java.util.stream.Stream;
 
 
 public class MyDBTests {
@@ -305,7 +298,7 @@ public class MyDBTests {
     @ValueSource(strings = {"!", ".", "", "⛈", "🤠", "!a", ",1", "⛈t", "🤠5"})
     void testValueTokens(String name) {
         String response = sendCommandToServer("UPDATE marks SET mark = 98 WHERE name == " + name + ";");
-        assertTrue(response.contains("[ERROR] found during lexing"), "value token not set properly due to bad input");
+        assertTrue(response.contains("[ERROR]"), "value token not set properly due to bad input");
     }
 
     @ParameterizedTest
@@ -314,6 +307,7 @@ public class MyDBTests {
             "joinCommand tableOneName and tableTwoName attributeOneName and attributeTwoName terminator"})
     void testWrongqueriesMap(String query) {
         sendCommandToServer(query);
+        assertTrue(sendCommandToServer(query).contains("[ERROR]"));
     }
 
     // transcript

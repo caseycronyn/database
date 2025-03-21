@@ -4,18 +4,15 @@ package edu.uob;
 public class Lexer {
     TokenBank tokenBank;
 
-    Lexer(TokenBank tokenBank) throws Exception {
+    Lexer(TokenBank tokenBank) {
         this.tokenBank = tokenBank;
         setup();
     }
 
-    void checkForNullTokens() throws Exception {
+    void checkForNullTokens() throws NullPointerException {
         for (Token token : tokenBank.getTokens()) {
             if (token.getTokenType() == null) {
-                // System.out.print("token types: ");
-                // tokenBank.printTokenTypes();
-                // tokenBank.printTokenNames();
-                throw new Exception("Some tokens are null");
+                throw new NullTokenException("Token with null type found. Token details: " + token.getValue());
             }
         }
     }
@@ -291,7 +288,6 @@ public class Lexer {
             }
         }
 
-        // parentheses is passed in
         // lexers all parentheses
         void parenthesesLexer () {
             boolean parenthesesOpen = false;
@@ -315,7 +311,7 @@ public class Lexer {
                 token = tokenBank.nextToken();
             }
             if (openParenthesisCount != closeParenthesisCount) {
-                throw new java.lang.Error("error: help! no closing parentheses");
+                throw new UnbalancedParenthesesException("Unbalanced parentheses detected in Lexer ");
             }
             tokenBank.setCurrentTokenToPosition(initialTokenPosition);
         }
@@ -358,17 +354,10 @@ public class Lexer {
             return (token.getValue().equals("DROP") || token.getValue().equals("ADD"));
         }
 
-        void checkIfValidQuery() throws Exception {
-            if (!tokenBank.tokenQueryIsValid()) {
-                throw new Exception("token query is not in a valid order");
-            }
-        }
-
-        void setup () throws Exception {
+        void setup () {
             lexTokens();
             tokenBank.initialise();
             checkForNullTokens();
-            // checkIfValidQuery();
         }
 }
 

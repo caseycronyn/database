@@ -1,19 +1,12 @@
 package edu.uob;
 
 public class CreateDatabase implements DBCommand {
-    TokenBank localtokenBank;
-    String databaseName;
     @Override
-    public DBCommand parse(TokenBank tokenBank) {
-        return this;
-    }
-
-    @Override
-    public String executeCommand(DBServer server, TokenBank tokenBank){
+    public String executeCommand(DatabaseManager databaseManager, TokenBank tokenBank){
         String databaseName = tokenBank.getTokenFromType("databaseName").getValue();
-        if (!server.databaseExists(databaseName)) {
-            Database database = new Database(databaseName, server.getStorageFolderPath());
-            server.databases.put(databaseName, database);
+        if (!databaseManager.databaseExists(databaseName)) {
+            Database database = new Database(databaseName, databaseManager.getStorageFolderPath());
+            databaseManager.databases.put(databaseName, database);
         }
         return "[OK]";
     }

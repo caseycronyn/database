@@ -1,17 +1,10 @@
 package edu.uob;
 
-public class UseCommand extends Parser {
-    TokenBank tokenBank;
+public class UseCommand implements DBCommand {
     @Override
-    public DBCommand parse(TokenBank tokenBank) {
-        this.tokenBank = tokenBank;
-        return this;
-    }
-
-    @Override
-    public String executeCommand(DBServer server, TokenBank tokenBank) {
+    public String executeCommand(DatabaseManager dbManager, TokenBank tokenBank) {
         String databaseName = tokenBank.getTokenFromType("databaseName").getValue();
-        server.setCurrentDatabase(databaseName);
+        dbManager.setCurrentDatabase(databaseName);
         return "[OK]";
     }
 }

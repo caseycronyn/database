@@ -4,13 +4,8 @@ import java.util.List;
 
 public class SelectAllCommand implements DBCommand {
     @Override
-    public DBCommand parse(TokenBank tokenBank) {
-        return this;
-    }
-
-    @Override
-    public String executeCommand(DBServer server, TokenBank tokenBank) {
-        Database database = server.databases.get(server.getCurrentDatabase());
+    public String executeCommand(DatabaseManager dbManager, TokenBank tokenBank) {
+        Database database = dbManager.getCurrentDatabase();
         String tableName = tokenBank.getTokenFromType("tableName").getValue();
         Table table = database.tables.get(tableName);
         if (table == null) {

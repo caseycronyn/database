@@ -5,17 +5,12 @@ import java.util.List;
 
 public class UpdateCommand implements DBCommand {
     @Override
-    public DBCommand parse(TokenBank tokenBank) {
-        return this;
-    }
-
-    @Override
-    public String executeCommand(DBServer server, TokenBank tokenBank) throws FileNotFoundException {
-        List<Token> nameVauePairs = tokenBank.getTokenTypeFromFragment("nameValuePairs", "set", "where");
+    public String executeCommand(DatabaseManager dbManager, TokenBank tokenBank) throws FileNotFoundException {
+        List<Token> nameValuePairs = tokenBank.getTokenTypeFromFragment("nameValuePairs", "set", "where");
         List<Token> condition = tokenBank.getTokenTypeFromFragment("condition", "where", "terminator");
         String tableName = tokenBank.getTokenFromType("tableName").getValue();
-        Table table = server.databases.get(server.getCurrentDatabase()).tables.get(tableName);
-        table.changeValuesInTableWhereCondition(nameVauePairs, condition);
+        Table table = dbManager.getCurrentDatabase().tables.get(tableName);
+        table.changeValuesInTableWhereCondition(nameValuePairs, condition);
         table.filterTableWithAttributesAndCondition(null, null);
         return "[OK]";
     }

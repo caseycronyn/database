@@ -12,7 +12,7 @@ import java.util.Map;
 public class Database {
     HashMap<String, Table> tables = new HashMap<>();
     String name;
-    private final String storageFolderPath;
+    String storageFolderPath;
     Integer ID;
 
     Database (String name, String storageFolderPath) {
@@ -29,6 +29,10 @@ public class Database {
 
     boolean tableExists(String tableName) {
         return tables.containsKey(tableName);
+    }
+
+    String getName() {
+        return name;
     }
 
     void initialiseDatabase() {

@@ -14,10 +14,19 @@ public class TokenBank {
     Map<String, Token> tokenToTypeMap;
     String query;
 
-    TokenBank(ArrayList<String> tokenNames) {
+    TokenBank(String command) throws Exception {
+        StringTokeniser stringTokeniser = new StringTokeniser();
+        ArrayList<String> tokenNames = stringTokeniser.getListOfTokens(command);
         setTokens(tokenNames);
         currentTokenPosition = 0;
+
+        Lexer lexer = new Lexer(this);
+        lexer.setup();
     }
+    // TokenBank(ArrayList<String> tokenNames) {
+    //     setTokens(tokenNames);
+    //     currentTokenPosition = 0;
+    // }
 
     void initialise() {
         tokenQueries = createTokenQueries();

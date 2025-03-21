@@ -4,20 +4,14 @@ import java.io.FileNotFoundException;
 import java.util.List;
 
 public class CreateTableWithAttributes implements DBCommand{
-
     @Override
-    public DBCommand parse(TokenBank tokenBank) {
-        return this;
-    }
-
-    @Override
-    public String executeCommand(DBServer server, TokenBank tokenBank) throws FileNotFoundException {
+    public String executeCommand(DatabaseManager databaseManager, TokenBank tokenBank) throws FileNotFoundException {
         String tableName = tokenBank.getTokenFromType("tableName").getValue();
-        String databaseName = server.getCurrentDatabase();
+        Database database = databaseManager.getCurrentDatabase();
         List<Token> attributes = tokenBank.getTokenTypeFromFragment("attributeName", "openParenthesis", "closeParenthesis");
-        Table table = new Table(tableName, databaseName, server.getStorageFolderPath());
+        Table table = new Table(tableName, database.getName(), databaseManager.getStorageFolderPath());
         table.addAttributesToTable(attributes);
-        server.databases.get(databaseName).tables.put(tableName, table);
+        database.tables.put(tableName, table);
         return "[OK]";
     }
 }

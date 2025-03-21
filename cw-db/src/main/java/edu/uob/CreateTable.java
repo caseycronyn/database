@@ -4,21 +4,16 @@ import java.io.IOException;
 
 public class CreateTable implements DBCommand{
     @Override
-    public DBCommand parse(TokenBank tokenBank) {
-        return this;
-    }
-
-    @Override
-    public String executeCommand(DBServer server, TokenBank tokenBank) {
+    public String executeCommand(DatabaseManager databaseManager, TokenBank tokenBank) {
         String tableName = tokenBank.getTokenFromType("tableName").getValue();
-        String databaseName = server.getCurrentDatabase();
-        Table table = new Table(tableName, databaseName, server.getStorageFolderPath());
+        Database database = databaseManager.getCurrentDatabase();
+        Table table = new Table(tableName, database.getName(), databaseManager.getStorageFolderPath());
         try {
             table.writeEmptyTableToFile();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        server.databases.get(databaseName).tables.put(tableName, table);
+        database.tables.put(tableName, table);
         return "[OK]";
     }
 }

@@ -4,16 +4,11 @@ import java.io.FileNotFoundException;
 
 public class AlterTable implements DBCommand {
     @Override
-    public DBCommand parse(TokenBank tokenBank) {
-        return this;
-    }
-
-    @Override
-    public String executeCommand(DBServer server, TokenBank tokenBank) throws FileNotFoundException {
+    public String executeCommand(DatabaseManager databaseManager, TokenBank tokenBank) throws FileNotFoundException {
         String alterationType = tokenBank.getTokenFromType("alterationType").getValue();
         String tableName = tokenBank.getTokenFromType("tableName").getValue();
         String attributeName = tokenBank.getTokenFromType("attributeName").getValue();
-        Table table = server.databases.get(server.getCurrentDatabase()).tables.get(tableName);
+        Table table = databaseManager.getCurrentDatabase().tables.get(tableName);
 
         if (alterationType.equals("ADD")) {
             table.addNewAttribute(attributeName);
