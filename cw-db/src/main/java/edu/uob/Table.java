@@ -227,7 +227,6 @@ public class Table {
     public void addRowToTable(List<Token> valueList, Integer newID) throws FileNotFoundException {
         Row row = new Row(valueList, newID, this);
         rows.add(row);
-        checkAndSetValueTypes();
         updateTable();
     }
 
@@ -236,22 +235,12 @@ public class Table {
     }
 
     Row getRowByIndices(int index) {
-        int match = -1;
         for (Row row : rows) {
             if (row.getValueFromAttribute("id").getIntegerValue() == index) {
                 return row;
             }
         }
         return null;
-    }
-
-    // TODO
-    public void checkAndSetValueTypes() {
-        for (Attribute attribute : attributes) {
-            ArrayList<String> valueTypes = new ArrayList<>();
-            for (int i = 1; i < rows.size(); i++) {
-            }
-        }
     }
 
     // this needs to be changed so we spit the text back
@@ -311,23 +300,15 @@ public class Table {
         return false;
     }
 
-    void printTable() {
-        System.out.println(filterTableWithAttributesAndCondition(null, null));
-    }
-
-    String getTableAsSting() {
-        return filterTableWithAttributesAndCondition(null, null);
-    }
-
     boolean conditionIsMet(List<Token> condition, Row row) {
         if (condition == null) return true;
-        int orPosition = evaluateBooleanSubExpression(condition, row, "OR");
+        int orPosition = evaluateBooleanSubExpression(condition, "OR");
         if (orPosition != -1) {
             List<Token> leftHandSide = condition.subList(0, orPosition);
             List<Token> rightHandSide = condition.subList(orPosition + 1, condition.size());
             return (conditionIsMet(leftHandSide, row) || conditionIsMet(rightHandSide, row));
         }
-        int andPosition = evaluateBooleanSubExpression(condition, row, "AND");
+        int andPosition = evaluateBooleanSubExpression(condition, "AND");
         if (andPosition != -1) {
             List<Token> leftHandSide = condition.subList(0, andPosition);
             List<Token> rightHandSide = condition.subList(andPosition + 1, condition.size());
@@ -341,7 +322,7 @@ public class Table {
 
 
 
-    int evaluateBooleanSubExpression(List<Token> condition, Row row, String operator) {
+    int evaluateBooleanSubExpression(List<Token> condition, String operator) {
         //  find boolean operator only if at top level
         int depth = 0;
         boolean booleanOperatorFound = false;
@@ -359,26 +340,6 @@ public class Table {
             return position;
         }
         return -1;
-    }
-
-    List<Token> evaluateParentheses(List<Token> condition) {
-        int openParenthesesCount = 0;
-        int closeParenthesesCount = 0;
-        boolean openParentheses = false;
-        for (int i = 0; i < condition.size(); i++) {
-            if (condition.get(i).getValue().equals("(")) {
-                openParenthesesCount++;
-                openParentheses = true;
-            }
-            else if (openParentheses && condition.get(i).getValue().equals(")")) {
-                closeParenthesesCount++;
-            }
-            if (openParenthesesCount == closeParenthesesCount) {
-                condition.subList(1, i);
-            }
-        }
-        // no parentheses
-        return condition;
     }
 
     boolean tertiaryCondition(List<Token> condition, Row row) {

@@ -23,10 +23,6 @@ public class TokenBank {
         Lexer lexer = new Lexer(this);
         lexer.setup();
     }
-    // TokenBank(ArrayList<String> tokenNames) {
-    //     setTokens(tokenNames);
-    //     currentTokenPosition = 0;
-    // }
 
     void initialise() {
         tokenQueries = createTokenQueries();
@@ -43,21 +39,21 @@ public class TokenBank {
         return getTokenFromType;
     }
 
-    boolean tokenQueryIsValid() {
-        for (String pattern : tokenQueries.values()) {
-            if (pattern.contains(query)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     String getPatternFromTokenQueriesMap(String key) {
         return tokenQueries.get(key);
     }
 
     Token getTokenFromType(String tokenType) {
         return tokenToTypeMap.get(tokenType);
+    }
+
+    boolean tokenValueExists(String tokenName) {
+        for (Token token : tokens) {
+            if (token.getValue().equals(tokenName)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     boolean tokenExistsInQuery(String tokenType) {
@@ -73,14 +69,12 @@ public class TokenBank {
         Map<String, String> tokenKeys = new HashMap<>();
         tokenKeys.put("use", "useCommand databaseName terminator");
         tokenKeys.put("create database", "createCommand databaseSelector databaseName terminator");
-        tokenKeys.put("create table",  "createCommand tableSelector tableName terminator");
-        tokenKeys.put("create table with attributes", "createCommand tableSelector tableName");
+        tokenKeys.put("create table",  "createCommand tableSelector tableName");
         tokenKeys.put("drop database", "dropCommand databaseSelector databaseName terminator");
         tokenKeys.put("drop table", "dropCommand tableSelector tableName terminator");
         tokenKeys.put("alter", "alterCommand tableSelector tableName alterationType attributeName terminator");
         tokenKeys.put("insert", "insertCommand into tableName values");
         tokenKeys.put("select", "attributeName from tableName");
-        tokenKeys.put("select all", "selectCommand wildAttributeSymbol from tableName");
         tokenKeys.put("select with condition", "selectCommand wildAttributeSymbol from tableName ... ");
         tokenKeys.put("update", "updateCommand tableName set attributeName equals");
         tokenKeys.put("delete", "deleteCommand from tableName where");

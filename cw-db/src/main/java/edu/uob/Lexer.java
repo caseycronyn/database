@@ -189,9 +189,7 @@ public class Lexer {
             Token token = tokenBank.getCurrentToken();
             while (!token.getValue().equalsIgnoreCase("FROM")) {
                 if (token.isWildAttributeList()) {
-                    if (token.getValue().equals("*")) {
-                        token.setTokenType("wildAttributeSymbol");
-                    } else token.setTokenType("attributeName");
+                    token.setTokenType("attributeName");
                 } else if (token.getValue().equals(",")) {
                     token.setTokenType("comma");
                 }

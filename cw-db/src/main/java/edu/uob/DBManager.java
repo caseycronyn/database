@@ -7,7 +7,7 @@ import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 
-public class DatabaseManager {
+public class DBManager {
     private final String storageFolderPath;
     Map<String, Database> databases;
     Database currentDatabase;
@@ -37,7 +37,7 @@ public class DatabaseManager {
         }
     }
 
-    public DatabaseManager() {
+    public DBManager() {
         this.databases = new HashMap<>();
         this.currentDatabase = null;
 

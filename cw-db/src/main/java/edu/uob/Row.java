@@ -46,14 +46,6 @@ public class Row extends TokenBank {
         attributesToTokens.put(replacementName, returnedToken);
     }
 
-    void changeAttributeName(String attributeName, String newAttributeName) {
-        for (Attribute attribute : table.getAttributes()) {
-            if (attribute.getName().equals(attributeName)) {
-                attribute.setName(newAttributeName);
-            }
-        }
-    }
-
     void addValueToRow(String attributeName, Token value) {
         attributesToTokens.put(attributeName, value);
     }

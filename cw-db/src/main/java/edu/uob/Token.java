@@ -5,7 +5,7 @@ import java.util.regex.Pattern;
 
 public class Token {
     private String value, tokenType;
-    private Integer position;
+    private final Integer position;
     String[] whiteSpaceSymbols, nonWhiteSpaceSymbols, commandArray, commandTypeArray, symbolArray, comparatorArray;
     String commandType, plainText, tableOrDatabase, alterationType, stringLiteral, booleanLiteral, floatLiteral, integerLiteral, symbol, wildAttributeList, comparator, parentheses, booleanOperator;
 
@@ -37,10 +37,6 @@ public class Token {
 
     boolean isComparator() {
         return checkForPattern(comparator);
-    }
-
-    boolean isBooleanLiteral() {
-        return checkForPattern(booleanLiteral);
     }
 
     boolean isBooleanOperator() {
@@ -117,10 +113,6 @@ public class Token {
 
     int getPosition() {
         return position;
-    }
-
-    void setPosition(int position) {
-        this.position = position;
     }
 
     int getIntegerValue() {

@@ -6,43 +6,37 @@ public class DbCommandFactory {
         tokenBank.initialise();
         String query = tokenBank.getCurrentQueryAsTokenTypes();
         if (query.equals(tokenBank.getPatternFromTokenQueriesMap("use"))) {
-            return new UseCommand();
+            return new CommandUser();
         }
         else if (query.equals(tokenBank.getPatternFromTokenQueriesMap("create database"))) {
-            return new CreateDatabase();
+            return new DBCreator();
         }
-        else if (query.equals(tokenBank.getPatternFromTokenQueriesMap("create table"))) {
-            return new CreateTable();
-        }
-        else if (query.contains(tokenBank.getPatternFromTokenQueriesMap("create table with attributes")) && tokenBank.getTokens().size() > 4) {
-            return new CreateTableWithAttributes();
+        else if (query.contains(tokenBank.getPatternFromTokenQueriesMap("create table"))) {
+            return new TableCreator();
         }
         else if (query.equals(tokenBank.getPatternFromTokenQueriesMap("drop database"))) {
-            return new DropDatabase();
+            return new DBDeleter();
         }
         else if (query.equals(tokenBank.getPatternFromTokenQueriesMap("drop table"))) {
-            return new DropTable();
+            return new TableDropper();
         }
         else if (query.equals(tokenBank.getPatternFromTokenQueriesMap("alter"))) {
-            return new AlterTable();
+            return new TableAlterer();
         }
         else if (query.contains(tokenBank.getPatternFromTokenQueriesMap("insert"))) {
-            return new InsertCommand();
+            return new CommandInserter();
         }
         else if (query.contains(tokenBank.getPatternFromTokenQueriesMap("select"))) {
-            return new SelectCommand();
-        }
-        else if (query.contains(tokenBank.getPatternFromTokenQueriesMap("select all"))) {
-            return new SelectAllCommand();
+            return new CommandSelector();
         }
         else if (query.contains(tokenBank.getPatternFromTokenQueriesMap("update"))) {
-            return new UpdateCommand();
+            return new CommandUpdater();
         }
         else if (query.contains(tokenBank.getPatternFromTokenQueriesMap("delete"))) {
-            return new DeleteCommand();
+            return new CommandDeleter();
         }
         else if (query.equals(tokenBank.getPatternFromTokenQueriesMap("join"))) {
-            return new JoinCommand();
+            return new CommandJoiner();
         }
         else {
             throw new Exception("Something has gone wrong in the parsing stage");

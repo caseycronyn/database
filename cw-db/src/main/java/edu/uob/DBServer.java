@@ -7,7 +7,7 @@ import java.net.Socket;
 /** This class implements the DB server. */
 public class DBServer {
     private static final char END_OF_TRANSMISSION = 4;
-    private final DatabaseManager databaseManager;
+    private final DBManager DBManager;
 
     public static void main(String args[]) throws IOException {
         DBServer server = new DBServer();
@@ -19,9 +19,9 @@ public class DBServer {
     * KEEP this signature otherwise we won't be able to mark your submission correctly.
     */
     public DBServer() {
-        databaseManager = new DatabaseManager();
+        DBManager = new DBManager();
         try {
-            databaseManager.initialiseServer();
+            DBManager.initialiseServer();
         }
         catch(Exception e) {
             throw new RuntimeException("Can't initialise server "+ e);
@@ -39,7 +39,7 @@ public class DBServer {
             TokenBank tokenBank = new TokenBank(command);
             DbCommandFactory parser = new DbCommandFactory();
             DBCommand commandResult = parser.createCommand(tokenBank);
-            return commandResult.executeCommand(this.databaseManager, tokenBank);
+            return commandResult.executeCommand(this.DBManager, tokenBank);
         }
         catch (Exception e) {
             return String.format("[ERROR]: %s", e.getMessage());

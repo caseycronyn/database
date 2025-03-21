@@ -1,8 +1,8 @@
 package edu.uob;
 
-public class JoinCommand implements DBCommand{
+public class CommandJoiner implements DBCommand{
     @Override
-    public String executeCommand(DatabaseManager dbManager, TokenBank tokenBank) {
+    public String executeCommand(DBManager dbManager, TokenBank tokenBank) {
         String tableOneName = tokenBank.getTokenFromType("tableOneName").getValue();
         String tableTwoName = tokenBank.getTokenFromType("tableTwoName").getValue();
         String joinOne = tokenBank.getTokenFromType("attributeOneName").getValue();
