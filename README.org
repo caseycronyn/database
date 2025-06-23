@@ -1,0 +1,32 @@
+* Database
+
+To run the database you'll need JDK and Maven.
+The commands should work for Linux and macOS, they may be slightly different on Windows.
+
+Change directory into cw-db. Then run =./mvnw exec:java@server= to start the server.
+Then in a new terminal instance, to start the client with =./mvnw exec:java@client=. This should now be running the prompt.
+
+The Database persistently stores data in the local file system.
+
+The query language supports the following commands: ~USE, CREATE, INSERT, SELECT, UPDATE, ALTER, DELETE, DROP, JOIN~
+
+** Example
+
+With the following commands, each line should return =[OK]=:
+
+#+begin_src sql
+CREATE DATABASE markbook;
+USE markbook;
+CREATE TABLE marks (name, mark, pass);
+INSERT INTO marks VALUES ('Jenny', 20, TRUE);
+INSERT INTO marks VALUES ('Rob', 35, FALSE);
+SELECT * FROM marks;
+#+end_src
+
+This last command should return:
+
+#+begin_example
+id	name	mark	pass
+3	Jenny	20	TRUE
+4	Rob	35	FALSE
+#+end_example
