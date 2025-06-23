@@ -1,10 +1,11 @@
 * Database
 
 To run the database you'll need JDK and Maven.
-The commands should work for Linux and macOS, they may be slightly different on Windows.
+The commands should work for Linux and macOS (they may be slightly different on Windows).
 
-Change directory into cw-db. Then run =./mvnw exec:java@server= to start the server.
-Then in a new terminal instance, to start the client with =./mvnw exec:java@client=. This should now be running the prompt.
+1. After cloning the repo, change directory into cw-db.
+2. Run =./mvnw exec:java@server= to start the server.
+3. In a new terminal instance, start the client with =./mvnw exec:java@client=. This should now be running the prompt.
 
 The Database persistently stores data in the local file system.
 
